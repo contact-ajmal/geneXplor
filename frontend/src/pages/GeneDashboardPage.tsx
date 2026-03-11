@@ -1,11 +1,10 @@
-import { useState, lazy, Suspense, useMemo, useCallback } from 'react';
+import { useState, lazy, Suspense, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { AlertCircle, Dna, Search, GitCompare } from 'lucide-react';
 import { fetchGene } from '../lib/api';
 import type { GeneDashboardResponse } from '../lib/api';
-import SkeletonLoader from '../components/ui/SkeletonLoader';
 import ScrollReveal from '../components/ui/ScrollReveal';
 import GeneHeader from '../components/gene/GeneHeader';
 import GeneOverviewCard from '../components/gene/GeneOverviewCard';
@@ -13,9 +12,12 @@ import ProteinInfoCard from '../components/gene/ProteinInfoCard';
 import ProteinVariantMap from '../components/gene/ProteinVariantMap';
 import VariantTable from '../components/gene/VariantTable';
 import VariantDetailModal from '../components/gene/VariantDetailModal';
+import ExportToolbar from '../components/gene/ExportToolbar';
 import DiseaseAssociations from '../components/gene/DiseaseAssociations';
 import ResearchPublications from '../components/gene/ResearchPublications';
 import DataSourcesFooter from '../components/gene/DataSourcesFooter';
+import ToastContainer from '../components/ui/Toast';
+import type { ToastMessage } from '../components/ui/Toast';
 import AnimatedButton from '../components/ui/AnimatedButton';
 import LoadingPage from './LoadingPage';
 
@@ -26,9 +28,25 @@ export default function GeneDashboardPage() {
   const upperSymbol = symbol?.toUpperCase() || '';
   const [diseaseFilter, setDiseaseFilter] = useState<string | undefined>(undefined);
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
+  const [filteredVariantIds, setFilteredVariantIds] = useState<string[] | null>(null);
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const toastIdRef = useRef(0);
 
   const handleVariantClick = useCallback((variantId: string) => {
     setSelectedVariantId(variantId);
+  }, []);
+
+  const showToast = useCallback((type: 'success' | 'error' | 'info', message: string) => {
+    const id = String(++toastIdRef.current);
+    setToasts(prev => [...prev, { id, type, message }]);
+  }, []);
+
+  const dismissToast = useCallback((id: string) => {
+    setToasts(prev => prev.filter(t => t.id !== id));
+  }, []);
+
+  const handleFilteredIdsChange = useCallback((ids: string[]) => {
+    setFilteredVariantIds(ids);
   }, []);
 
   const { data, isLoading, error, refetch } = useQuery<GeneDashboardResponse, Error>({
@@ -101,100 +119,126 @@ export default function GeneDashboardPage() {
       {/* Page Header */}
       <GeneHeader gene={gene} metadata={metadata} />
 
+      {/* Export Toolbar */}
+      <ExportToolbar
+        gene={gene}
+        clinvarVariants={variants?.variants || []}
+        gnomadVariants={allele_frequencies?.variants || []}
+        protein={protein}
+        metadata={metadata}
+        filteredVariantIds={filteredVariantIds}
+        onToast={showToast}
+      />
+
       {/* Section 1: Gene Overview */}
       <div className="space-y-6">
         <ScrollReveal>
-          <GeneOverviewCard gene={gene} delay={0} />
+          <div id="export-gene-overview">
+            <GeneOverviewCard gene={gene} delay={0} />
+          </div>
         </ScrollReveal>
 
         {/* Section 2: Protein Information */}
         <ScrollReveal delay={0.05}>
-          {protein ? (
-            <ProteinInfoCard protein={protein} delay={0} />
-          ) : (
-            <UnavailableSection
-              title="Protein Information"
-              message="No protein information available for this gene"
-            />
-          )}
+          <div id="export-protein-info">
+            {protein ? (
+              <ProteinInfoCard protein={protein} delay={0} />
+            ) : (
+              <UnavailableSection
+                title="Protein Information"
+                message="No protein information available for this gene"
+              />
+            )}
+          </div>
         </ScrollReveal>
 
         {/* Section 3: Protein Variant Map (Hero) */}
         {protein && (variants || allele_frequencies) ? (
           <ScrollReveal delay={0.1}>
-            <ProteinVariantMap
-              protein={protein}
-              clinvarVariants={variants?.variants || []}
-              gnomadVariants={allele_frequencies?.variants || []}
-              delay={0}
-              onVariantClick={handleVariantClick}
-            />
+            <div id="export-variant-map">
+              <ProteinVariantMap
+                protein={protein}
+                clinvarVariants={variants?.variants || []}
+                gnomadVariants={allele_frequencies?.variants || []}
+                delay={0}
+                onVariantClick={handleVariantClick}
+              />
+            </div>
           </ScrollReveal>
         ) : null}
 
         {/* Section 4: Variant Table */}
         <ScrollReveal delay={0.15}>
-          {variants && variants.variants.length > 0 ? (
-            <VariantTable
-              clinvarVariants={variants.variants}
-              gnomadVariants={allele_frequencies?.variants || []}
-              delay={0}
-              significanceFilter={diseaseFilter}
-              onVariantClick={handleVariantClick}
-            />
-          ) : (
-            <UnavailableSection
-              title="Variant Table"
-              message="No clinical variants found for this gene"
-            />
-          )}
-        </ScrollReveal>
-
-        {/* Section 4.5: Variant Analytics (NEW — between table and diseases) */}
-        {variants && variants.variants.length > 0 && (
-          <ScrollReveal delay={0.2}>
-            <Suspense fallback={
-              <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
-                <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
-                <div className="h-48 rounded skeleton-shimmer" />
-              </div>
-            }>
-              <VariantAnalytics
+          <div id="export-variant-table">
+            {variants && variants.variants.length > 0 ? (
+              <VariantTable
                 clinvarVariants={variants.variants}
                 gnomadVariants={allele_frequencies?.variants || []}
                 delay={0}
-                onSignificanceClick={handleSignificanceFilter}
+                significanceFilter={diseaseFilter}
+                onVariantClick={handleVariantClick}
+                onFilteredIdsChange={handleFilteredIdsChange}
               />
-            </Suspense>
+            ) : (
+              <UnavailableSection
+                title="Variant Table"
+                message="No clinical variants found for this gene"
+              />
+            )}
+          </div>
+        </ScrollReveal>
+
+        {/* Section 4.5: Variant Analytics */}
+        {variants && variants.variants.length > 0 && (
+          <ScrollReveal delay={0.2}>
+            <div id="export-variant-analytics">
+              <Suspense fallback={
+                <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                  <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
+                  <div className="h-48 rounded skeleton-shimmer" />
+                </div>
+              }>
+                <VariantAnalytics
+                  clinvarVariants={variants.variants}
+                  gnomadVariants={allele_frequencies?.variants || []}
+                  delay={0}
+                  onSignificanceClick={handleSignificanceFilter}
+                />
+              </Suspense>
+            </div>
           </ScrollReveal>
         )}
 
         {/* Section 5: Disease Associations */}
         {variants && variants.diseases.length > 0 ? (
           <ScrollReveal delay={0.25}>
-            <DiseaseAssociations
-              diseases={variants.diseases}
-              geneSymbol={gene.gene_symbol}
-              onDiseaseClick={(name) => setDiseaseFilter(name)}
-              delay={0}
-            />
+            <div id="export-disease-associations">
+              <DiseaseAssociations
+                diseases={variants.diseases}
+                geneSymbol={gene.gene_symbol}
+                onDiseaseClick={(name) => setDiseaseFilter(name)}
+                delay={0}
+              />
+            </div>
           </ScrollReveal>
         ) : null}
 
         {/* Section 6: Research Publications */}
         <ScrollReveal delay={0.3}>
-          {publications && publications.articles.length > 0 ? (
-            <ResearchPublications
-              articles={publications.articles}
-              totalResults={publications.total_results}
-              delay={0}
-            />
-          ) : (
-            <UnavailableSection
-              title="Recent Publications"
-              message="No publications found for this gene"
-            />
-          )}
+          <div id="export-publications">
+            {publications && publications.articles.length > 0 ? (
+              <ResearchPublications
+                articles={publications.articles}
+                totalResults={publications.total_results}
+                delay={0}
+              />
+            ) : (
+              <UnavailableSection
+                title="Recent Publications"
+                message="No publications found for this gene"
+              />
+            )}
+          </div>
         </ScrollReveal>
 
         {/* Gene Comparison Teaser */}
@@ -222,6 +266,9 @@ export default function GeneDashboardPage() {
         protein={protein}
         onClose={() => setSelectedVariantId(null)}
       />
+
+      {/* Toast notifications */}
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
     </div>
   );
 }

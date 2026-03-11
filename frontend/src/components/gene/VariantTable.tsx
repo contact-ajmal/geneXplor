@@ -1,4 +1,4 @@
-import { useState, useMemo, Fragment } from 'react';
+import { useState, useMemo, useEffect, Fragment } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   useReactTable,
@@ -21,6 +21,7 @@ interface VariantTableProps {
   delay?: number;
   significanceFilter?: string;
   onVariantClick?: (variantId: string) => void;
+  onFilteredIdsChange?: (ids: string[]) => void;
 }
 
 interface TableVariant {
@@ -72,7 +73,7 @@ const CONSEQUENCE_OPTIONS = [
   'Inframe insertion',
 ];
 
-export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 0, significanceFilter, onVariantClick }: VariantTableProps) {
+export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 0, significanceFilter, onVariantClick, onFilteredIdsChange }: VariantTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [sigFilter, setSigFilter] = useState<string[]>(significanceFilter ? [significanceFilter] : []);
@@ -127,6 +128,11 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
 
     return data;
   }, [tableData, sigFilter, consequenceFilter, afThreshold]);
+
+  // Notify parent of filtered variant IDs for CSV export
+  useEffect(() => {
+    onFilteredIdsChange?.(filteredData.map(v => v.variant_id));
+  }, [filteredData, onFilteredIdsChange]);
 
   // Update sigFilter when external filter changes
   useMemo(() => {
