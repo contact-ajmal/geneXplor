@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session
 from app.core.redis import get_redis
-from app.schemas.gene_schema import GeneResponse, HealthResponse
-from app.services.gene_aggregator_service import get_gene_data
+from app.schemas.gene_schema import GeneDashboardResponse, HealthResponse
+from app.services.gene_aggregator_service import get_gene_dashboard
 from app.utils.exceptions import InvalidGeneSymbolError
 
 router = APIRouter()
@@ -40,14 +40,14 @@ async def health_check(session: AsyncSession = Depends(get_session)) -> HealthRe
     )
 
 
-@router.get("/gene/{symbol}", response_model=GeneResponse)
+@router.get("/gene/{symbol}", response_model=GeneDashboardResponse)
 async def get_gene(
     symbol: str,
     session: AsyncSession = Depends(get_session),
-) -> GeneResponse:
+) -> GeneDashboardResponse:
     symbol_upper = symbol.upper().strip()
 
     if not GENE_SYMBOL_PATTERN.match(symbol_upper):
         raise InvalidGeneSymbolError(symbol)
 
-    return await get_gene_data(symbol_upper, session)
+    return await get_gene_dashboard(symbol_upper, session)

@@ -35,3 +35,29 @@ async def fetch_json(url: str, params: dict | None = None, headers: dict | None 
     response = await client.get(url, params=params, headers=headers)
     response.raise_for_status()
     return response.json()
+
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=8),
+    retry=retry_if_exception_type((httpx.ConnectError, httpx.ReadTimeout, httpx.ConnectTimeout)),
+    reraise=True,
+)
+async def post_json(url: str, json_body: dict, headers: dict | None = None) -> dict | list:
+    client = get_http_client()
+    response = await client.post(url, json=json_body, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=8),
+    retry=retry_if_exception_type((httpx.ConnectError, httpx.ReadTimeout, httpx.ConnectTimeout)),
+    reraise=True,
+)
+async def fetch_text(url: str, params: dict | None = None, headers: dict | None = None) -> str:
+    client = get_http_client()
+    response = await client.get(url, params=params, headers=headers)
+    response.raise_for_status()
+    return response.text
