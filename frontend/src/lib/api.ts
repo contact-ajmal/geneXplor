@@ -113,12 +113,29 @@ export interface PubMedData {
   total_results: number;
 }
 
+export interface PathwayEntry {
+  id: string;
+  name: string;
+  source: string;
+  category: string;
+  description: string;
+  url: string;
+  gene_count: number;
+  sub_events: string[];
+}
+
+export interface PathwayData {
+  pathways: PathwayEntry[];
+  total_pathways: number;
+}
+
 export interface DataSourceStatus {
   ensembl: boolean;
   uniprot: boolean;
   clinvar: boolean;
   gnomad: boolean;
   pubmed: boolean;
+  pathways: boolean;
 }
 
 export interface ResponseMetadata {
@@ -134,6 +151,7 @@ export interface GeneDashboardResponse {
   variants: ClinVarData | null;
   allele_frequencies: GnomADData | null;
   publications: PubMedData | null;
+  pathways: PathwayData | null;
   metadata: ResponseMetadata;
 }
 

@@ -107,6 +107,24 @@ class PubMedData(BaseModel):
     total_results: int = 0
 
 
+# --- Pathways ---
+
+class PathwayEntry(BaseModel):
+    id: str
+    name: str
+    source: str = ""
+    category: str = ""
+    description: str = ""
+    url: str = ""
+    gene_count: int = 0
+    sub_events: list[str] = []
+
+
+class PathwayData(BaseModel):
+    pathways: list[PathwayEntry] = []
+    total_pathways: int = 0
+
+
 # --- Aggregated Dashboard Response ---
 
 class DataSourceStatus(BaseModel):
@@ -115,6 +133,7 @@ class DataSourceStatus(BaseModel):
     clinvar: bool = False
     gnomad: bool = False
     pubmed: bool = False
+    pathways: bool = False
 
 
 class ResponseMetadata(BaseModel):
@@ -132,6 +151,7 @@ class GeneDashboardResponse(BaseModel):
     variants: ClinVarData | None = None
     allele_frequencies: GnomADData | None = None
     publications: PubMedData | None = None
+    pathways: PathwayData | None = None
     metadata: ResponseMetadata
 
 

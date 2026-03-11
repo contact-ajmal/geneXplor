@@ -13,6 +13,7 @@ const SOURCE_INFO: Record<string, { name: string; url: string }> = {
   clinvar: { name: 'ClinVar', url: 'https://www.ncbi.nlm.nih.gov/clinvar/' },
   gnomad: { name: 'gnomAD', url: 'https://gnomad.broadinstitute.org' },
   pubmed: { name: 'PubMed', url: 'https://pubmed.ncbi.nlm.nih.gov' },
+  pathways: { name: 'Reactome / KEGG', url: 'https://reactome.org' },
 };
 
 export default function DataSourcesFooter({ metadata, delay = 0 }: DataSourcesFooterProps) {

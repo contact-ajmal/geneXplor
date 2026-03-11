@@ -15,6 +15,7 @@ import VariantDetailModal from '../components/gene/VariantDetailModal';
 import ExportToolbar from '../components/gene/ExportToolbar';
 import DiseaseAssociations from '../components/gene/DiseaseAssociations';
 import ResearchPublications from '../components/gene/ResearchPublications';
+import BiologicalPathways from '../components/gene/BiologicalPathways';
 import DataSourcesFooter from '../components/gene/DataSourcesFooter';
 import ToastContainer from '../components/ui/Toast';
 import type { ToastMessage } from '../components/ui/Toast';
@@ -112,7 +113,7 @@ export default function GeneDashboardPage() {
 
   if (!data || !data.gene) return null;
 
-  const { gene, protein, variants, allele_frequencies, publications, metadata } = data;
+  const { gene, protein, variants, allele_frequencies, publications, pathways, metadata } = data;
 
   return (
     <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
@@ -241,8 +242,26 @@ export default function GeneDashboardPage() {
           </div>
         </ScrollReveal>
 
-        {/* Gene Comparison Teaser */}
+        {/* Section 7: Biological Pathways */}
         <ScrollReveal delay={0.35}>
+          {pathways && pathways.pathways.length > 0 ? (
+            <div id="export-pathways">
+              <BiologicalPathways
+                pathways={pathways}
+                geneSymbol={gene.gene_symbol}
+                delay={0}
+              />
+            </div>
+          ) : (
+            <UnavailableSection
+              title="Biological Pathways"
+              message={`No pathway information available for ${gene.gene_symbol}. Pathway data is sourced from Reactome and KEGG.`}
+            />
+          )}
+        </ScrollReveal>
+
+        {/* Gene Comparison Teaser */}
+        <ScrollReveal delay={0.4}>
           <div className="rounded-2xl border border-dashed border-space-500/30 p-6 text-center">
             <GitCompare className="w-8 h-8 text-text-muted/40 mx-auto mb-3" />
             <p className="text-text-muted text-sm font-body mb-2">Compare with another gene</p>
