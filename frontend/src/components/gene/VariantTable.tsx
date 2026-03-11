@@ -20,6 +20,7 @@ interface VariantTableProps {
   gnomadVariants: GnomADVariant[];
   delay?: number;
   significanceFilter?: string;
+  onVariantClick?: (variantId: string) => void;
 }
 
 interface TableVariant {
@@ -71,7 +72,7 @@ const CONSEQUENCE_OPTIONS = [
   'Inframe insertion',
 ];
 
-export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 0, significanceFilter }: VariantTableProps) {
+export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 0, significanceFilter, onVariantClick }: VariantTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [sigFilter, setSigFilter] = useState<string[]>(significanceFilter ? [significanceFilter] : []);
@@ -316,7 +317,13 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
             {table.getRowModel().rows.map((row, i) => (
               <Fragment key={row.id}>
                 <tr
-                  onClick={() => setExpandedRow(expandedRow === row.id ? null : row.id)}
+                  onClick={() => {
+                    if (onVariantClick) {
+                      onVariantClick(row.original.variant_id);
+                    } else {
+                      setExpandedRow(expandedRow === row.id ? null : row.id);
+                    }
+                  }}
                   className={`
                     cursor-pointer transition-all duration-200
                     ${i % 2 === 0 ? 'bg-transparent' : 'bg-space-800/20'}

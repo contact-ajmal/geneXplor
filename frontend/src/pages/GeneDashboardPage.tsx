@@ -12,6 +12,7 @@ import GeneOverviewCard from '../components/gene/GeneOverviewCard';
 import ProteinInfoCard from '../components/gene/ProteinInfoCard';
 import ProteinVariantMap from '../components/gene/ProteinVariantMap';
 import VariantTable from '../components/gene/VariantTable';
+import VariantDetailModal from '../components/gene/VariantDetailModal';
 import DiseaseAssociations from '../components/gene/DiseaseAssociations';
 import ResearchPublications from '../components/gene/ResearchPublications';
 import DataSourcesFooter from '../components/gene/DataSourcesFooter';
@@ -24,6 +25,11 @@ export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
   const upperSymbol = symbol?.toUpperCase() || '';
   const [diseaseFilter, setDiseaseFilter] = useState<string | undefined>(undefined);
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
+
+  const handleVariantClick = useCallback((variantId: string) => {
+    setSelectedVariantId(variantId);
+  }, []);
 
   const { data, isLoading, error, refetch } = useQuery<GeneDashboardResponse, Error>({
     queryKey: ['gene', upperSymbol],
@@ -121,6 +127,7 @@ export default function GeneDashboardPage() {
               clinvarVariants={variants?.variants || []}
               gnomadVariants={allele_frequencies?.variants || []}
               delay={0}
+              onVariantClick={handleVariantClick}
             />
           </ScrollReveal>
         ) : null}
@@ -133,6 +140,7 @@ export default function GeneDashboardPage() {
               gnomadVariants={allele_frequencies?.variants || []}
               delay={0}
               significanceFilter={diseaseFilter}
+              onVariantClick={handleVariantClick}
             />
           ) : (
             <UnavailableSection
@@ -205,6 +213,15 @@ export default function GeneDashboardPage() {
       <ScrollReveal delay={0.4}>
         <DataSourcesFooter metadata={metadata} delay={0} />
       </ScrollReveal>
+
+      {/* Variant Detail Modal */}
+      <VariantDetailModal
+        variantId={selectedVariantId}
+        clinvarVariants={variants?.variants || []}
+        gnomadVariants={allele_frequencies?.variants || []}
+        protein={protein}
+        onClose={() => setSelectedVariantId(null)}
+      />
     </div>
   );
 }

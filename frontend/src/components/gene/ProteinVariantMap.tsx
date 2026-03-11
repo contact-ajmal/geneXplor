@@ -8,6 +8,7 @@ interface ProteinVariantMapProps {
   clinvarVariants: ClinVarVariant[];
   gnomadVariants: GnomADVariant[];
   delay?: number;
+  onVariantClick?: (variantId: string) => void;
 }
 
 const SIGNIFICANCE_COLORS: Record<string, string> = {
@@ -56,7 +57,7 @@ function parseProteinPosition(hgvsp: string): number | null {
   return match ? parseInt(match[1], 10) : null;
 }
 
-export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVariants, delay = 0 }: ProteinVariantMapProps) {
+export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVariants, delay = 0, onVariantClick }: ProteinVariantMapProps) {
   const [hoveredVariant, setHoveredVariant] = useState<MappedVariant | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<MappedVariant | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
@@ -344,7 +345,11 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
                   onMouseLeave={() => setHoveredVariant(null)}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedVariant(selectedVariant?.id === variant.id ? null : variant);
+                    if (onVariantClick) {
+                      onVariantClick(variant.id);
+                    } else {
+                      setSelectedVariant(selectedVariant?.id === variant.id ? null : variant);
+                    }
                   }}
                   className="cursor-pointer"
                 >
