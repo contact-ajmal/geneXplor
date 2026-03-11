@@ -39,7 +39,8 @@ function PublicationCard({ article, index }: { article: PubMedArticle; index: nu
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      className="p-4 rounded-lg bg-space-800/40 border border-space-600/20 hover:border-cyan/15 transition-all group"
+      whileHover={{ y: -2, transition: { duration: 0.2 } }}
+      className="p-4 rounded-lg bg-space-800/40 border border-space-600/20 hover:border-cyan/15 hover:shadow-[0_4px_20px_rgba(0,212,255,0.06)] transition-all group"
     >
       <a
         href={article.pubmed_link}

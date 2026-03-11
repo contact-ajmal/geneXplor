@@ -42,7 +42,7 @@ export default function DiseaseAssociations({ diseases, geneSymbol, onDiseaseCli
               <GlowBadge
                 color="magenta"
                 onClick={onDiseaseClick ? () => onDiseaseClick(disease.disease_name) : undefined}
-                className="text-xs"
+                className="text-xs hover:scale-105 hover:-translate-y-0.5 transition-transform"
               >
                 {disease.disease_name.length > 40
                   ? disease.disease_name.slice(0, 40) + '…'

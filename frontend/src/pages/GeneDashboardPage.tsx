@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense, useMemo, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { AlertCircle, Dna, Search } from 'lucide-react';
+import { AlertCircle, Dna, Search, GitCompare } from 'lucide-react';
 import { fetchGene } from '../lib/api';
 import type { GeneDashboardResponse } from '../lib/api';
 import SkeletonLoader from '../components/ui/SkeletonLoader';
+import ScrollReveal from '../components/ui/ScrollReveal';
 import GeneHeader from '../components/gene/GeneHeader';
 import GeneOverviewCard from '../components/gene/GeneOverviewCard';
 import ProteinInfoCard from '../components/gene/ProteinInfoCard';
@@ -15,6 +16,9 @@ import DiseaseAssociations from '../components/gene/DiseaseAssociations';
 import ResearchPublications from '../components/gene/ResearchPublications';
 import DataSourcesFooter from '../components/gene/DataSourcesFooter';
 import AnimatedButton from '../components/ui/AnimatedButton';
+import LoadingPage from './LoadingPage';
+
+const VariantAnalytics = lazy(() => import('../components/gene/VariantAnalytics'));
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
@@ -27,61 +31,13 @@ export default function GeneDashboardPage() {
     enabled: upperSymbol.length > 0,
   });
 
-  // ── Loading State ──
+  const handleSignificanceFilter = useCallback((sig: string) => {
+    setDiseaseFilter(sig);
+  }, []);
+
+  // ── Loading State: Full-screen loading page ──
   if (isLoading) {
-    return (
-      <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
-        >
-          <div className="relative w-14 h-14 mx-auto mb-4">
-            <Dna
-              className="w-14 h-14 text-cyan"
-              style={{ animation: 'spin-slow 2s linear infinite' }}
-            />
-          </div>
-          <p className="text-text-secondary font-mono text-sm mb-2">
-            Decoding <span className="text-cyan">{upperSymbol}</span>...
-          </p>
-          <p className="text-text-muted text-xs font-body">
-            Aggregating data from 5 sources
-          </p>
-        </motion.div>
-
-        {/* Skeleton dashboard */}
-        <div className="space-y-4 mt-8">
-          {/* Header skeleton */}
-          <div className="space-y-3">
-            <div className="h-10 w-40 rounded skeleton-shimmer" />
-            <div className="h-5 w-80 rounded skeleton-shimmer" />
-            <div className="h-4 w-60 rounded skeleton-shimmer" />
-          </div>
-
-          {/* Overview card */}
-          <SkeletonLoader variant="card" lines={4} />
-
-          {/* Protein card */}
-          <SkeletonLoader variant="card" lines={5} />
-
-          {/* Variant map */}
-          <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
-            <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
-            <div className="h-48 rounded skeleton-shimmer" />
-          </div>
-
-          {/* Variant table */}
-          <SkeletonLoader variant="card" lines={6} />
-
-          {/* Grid: diseases + publications */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SkeletonLoader variant="card" lines={4} />
-            <SkeletonLoader variant="card" lines={4} />
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingPage symbol={upperSymbol} />;
   }
 
   // ── Error: Gene Not Found ──
@@ -141,89 +97,125 @@ export default function GeneDashboardPage() {
 
       {/* Section 1: Gene Overview */}
       <div className="space-y-6">
-        <GeneOverviewCard gene={gene} delay={0.05} />
+        <ScrollReveal>
+          <GeneOverviewCard gene={gene} delay={0} />
+        </ScrollReveal>
 
         {/* Section 2: Protein Information */}
-        {protein ? (
-          <ProteinInfoCard protein={protein} delay={0.1} />
-        ) : (
-          <UnavailableSection
-            title="Protein Information"
-            message="No protein information available for this gene"
-            delay={0.1}
-          />
-        )}
+        <ScrollReveal delay={0.05}>
+          {protein ? (
+            <ProteinInfoCard protein={protein} delay={0} />
+          ) : (
+            <UnavailableSection
+              title="Protein Information"
+              message="No protein information available for this gene"
+            />
+          )}
+        </ScrollReveal>
 
         {/* Section 3: Protein Variant Map (Hero) */}
         {protein && (variants || allele_frequencies) ? (
-          <ProteinVariantMap
-            protein={protein}
-            clinvarVariants={variants?.variants || []}
-            gnomadVariants={allele_frequencies?.variants || []}
-            delay={0.15}
-          />
+          <ScrollReveal delay={0.1}>
+            <ProteinVariantMap
+              protein={protein}
+              clinvarVariants={variants?.variants || []}
+              gnomadVariants={allele_frequencies?.variants || []}
+              delay={0}
+            />
+          </ScrollReveal>
         ) : null}
 
         {/* Section 4: Variant Table */}
-        {variants && variants.variants.length > 0 ? (
-          <VariantTable
-            clinvarVariants={variants.variants}
-            gnomadVariants={allele_frequencies?.variants || []}
-            delay={0.2}
-            significanceFilter={diseaseFilter}
-          />
-        ) : (
-          <UnavailableSection
-            title="Variant Table"
-            message="No clinical variants found for this gene"
-            delay={0.2}
-          />
+        <ScrollReveal delay={0.15}>
+          {variants && variants.variants.length > 0 ? (
+            <VariantTable
+              clinvarVariants={variants.variants}
+              gnomadVariants={allele_frequencies?.variants || []}
+              delay={0}
+              significanceFilter={diseaseFilter}
+            />
+          ) : (
+            <UnavailableSection
+              title="Variant Table"
+              message="No clinical variants found for this gene"
+            />
+          )}
+        </ScrollReveal>
+
+        {/* Section 4.5: Variant Analytics (NEW — between table and diseases) */}
+        {variants && variants.variants.length > 0 && (
+          <ScrollReveal delay={0.2}>
+            <Suspense fallback={
+              <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
+                <div className="h-48 rounded skeleton-shimmer" />
+              </div>
+            }>
+              <VariantAnalytics
+                clinvarVariants={variants.variants}
+                gnomadVariants={allele_frequencies?.variants || []}
+                delay={0}
+                onSignificanceClick={handleSignificanceFilter}
+              />
+            </Suspense>
+          </ScrollReveal>
         )}
 
         {/* Section 5: Disease Associations */}
         {variants && variants.diseases.length > 0 ? (
-          <DiseaseAssociations
-            diseases={variants.diseases}
-            geneSymbol={gene.gene_symbol}
-            onDiseaseClick={(name) => setDiseaseFilter(name)}
-            delay={0.25}
-          />
+          <ScrollReveal delay={0.25}>
+            <DiseaseAssociations
+              diseases={variants.diseases}
+              geneSymbol={gene.gene_symbol}
+              onDiseaseClick={(name) => setDiseaseFilter(name)}
+              delay={0}
+            />
+          </ScrollReveal>
         ) : null}
 
         {/* Section 6: Research Publications */}
-        {publications && publications.articles.length > 0 ? (
-          <ResearchPublications
-            articles={publications.articles}
-            totalResults={publications.total_results}
-            delay={0.3}
-          />
-        ) : (
-          <UnavailableSection
-            title="Recent Publications"
-            message="No publications found for this gene"
-            delay={0.3}
-          />
-        )}
+        <ScrollReveal delay={0.3}>
+          {publications && publications.articles.length > 0 ? (
+            <ResearchPublications
+              articles={publications.articles}
+              totalResults={publications.total_results}
+              delay={0}
+            />
+          ) : (
+            <UnavailableSection
+              title="Recent Publications"
+              message="No publications found for this gene"
+            />
+          )}
+        </ScrollReveal>
+
+        {/* Gene Comparison Teaser */}
+        <ScrollReveal delay={0.35}>
+          <div className="rounded-2xl border border-dashed border-space-500/30 p-6 text-center">
+            <GitCompare className="w-8 h-8 text-text-muted/40 mx-auto mb-3" />
+            <p className="text-text-muted text-sm font-body mb-2">Compare with another gene</p>
+            <p className="text-text-muted/60 text-xs font-body">
+              Side-by-side comparison coming soon
+            </p>
+          </div>
+        </ScrollReveal>
       </div>
 
       {/* Section 7: Data Sources Footer */}
-      <DataSourcesFooter metadata={metadata} delay={0.35} />
+      <ScrollReveal delay={0.4}>
+        <DataSourcesFooter metadata={metadata} delay={0} />
+      </ScrollReveal>
     </div>
   );
 }
 
-function UnavailableSection({ title, message, delay = 0 }: { title: string; message: string; delay?: number }) {
+function UnavailableSection({ title, message }: { title: string; message: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay }}
-      className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center"
-    >
+    <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
       <h2 className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
         {title}
       </h2>
       <p className="text-text-muted text-sm font-body">{message}</p>
-    </motion.div>
+    </div>
   );
 }

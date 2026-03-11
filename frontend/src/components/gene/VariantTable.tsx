@@ -318,9 +318,11 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
                 <tr
                   onClick={() => setExpandedRow(expandedRow === row.id ? null : row.id)}
                   className={`
-                    cursor-pointer transition-colors duration-150
+                    cursor-pointer transition-all duration-200
                     ${i % 2 === 0 ? 'bg-transparent' : 'bg-space-800/20'}
-                    ${expandedRow === row.id ? 'bg-cyan/5' : 'hover:bg-cyan/[0.03]'}
+                    ${expandedRow === row.id
+                      ? 'bg-cyan/5 shadow-[inset_0_0_20px_rgba(0,212,255,0.04)]'
+                      : 'hover:bg-cyan/[0.03] hover:shadow-[inset_0_0_30px_rgba(0,212,255,0.03)]'}
                   `}
                 >
                   {row.getVisibleCells().map(cell => (

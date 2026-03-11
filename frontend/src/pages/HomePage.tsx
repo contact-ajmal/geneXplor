@@ -1,9 +1,13 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Search, Database, Dna, FlaskConical, Activity, BookOpen } from 'lucide-react';
+import { Search, Database, Dna, FlaskConical, Activity, BookOpen, Clock, X } from 'lucide-react';
 import DecodeText from '../components/ui/DecodeText';
 import GlowBadge from '../components/ui/GlowBadge';
+import { useSearchHistory } from '../hooks/useSearchHistory';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { fetchGene } from '../lib/api';
 
 const POPULAR_GENES = ['TP53', 'BRCA1', 'EGFR', 'CFTR', 'BRAF', 'APOE', 'HTT', 'HBB'];
 
@@ -26,21 +30,30 @@ const DATA_SOURCES = [
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchInput, setSearchInput] = useState('');
+  const [debouncedInput, setDebouncedInput] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
+  const { history, addSearch, clearHistory } = useSearchHistory();
+
+  // Debounce search input (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedInput(searchInput), 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
   const filtered = useMemo(() => {
-    const q = searchInput.trim().toUpperCase();
+    const q = debouncedInput.trim().toUpperCase();
     if (!q) return [];
     return GENE_SUGGESTIONS.filter((g) => g.startsWith(q)).slice(0, 8);
-  }, [searchInput]);
+  }, [debouncedInput]);
 
   useEffect(() => {
     setSelectedIndex(-1);
-  }, [searchInput]);
+  }, [debouncedInput]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -57,13 +70,40 @@ export default function HomePage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const doSearch = (symbol: string) => {
+  // Prefetch popular genes on idle
+  useEffect(() => {
+    if ('requestIdleCallback' in window) {
+      const id = requestIdleCallback(() => {
+        POPULAR_GENES.slice(0, 3).forEach(gene => {
+          queryClient.prefetchQuery({
+            queryKey: ['gene', gene],
+            queryFn: () => fetchGene(gene),
+            staleTime: 5 * 60 * 1000,
+          });
+        });
+      });
+      return () => cancelIdleCallback(id);
+    }
+  }, [queryClient]);
+
+  // Keyboard shortcuts
+  const shortcuts = useMemo(() => ({
+    'mod+k': () => inputRef.current?.focus(),
+    'escape': () => {
+      inputRef.current?.blur();
+      setShowSuggestions(false);
+    },
+  }), []);
+  useKeyboardShortcuts(shortcuts);
+
+  const doSearch = useCallback((symbol: string) => {
     const s = symbol.trim().toUpperCase();
     if (s) {
+      addSearch(s);
       setShowSuggestions(false);
       navigate(`/gene/${s}`);
     }
-  };
+  }, [navigate, addSearch]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,7 +164,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 1.0 }}
-          className="relative max-w-xl mx-auto mb-10"
+          className="relative max-w-xl mx-auto mb-4"
         >
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
@@ -148,16 +188,20 @@ export default function HomePage() {
                          focus:shadow-[0_0_30px_rgba(0,212,255,0.15)]
                          transition-all duration-300"
             />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2
-                         px-5 py-2 rounded-lg font-body font-semibold text-sm
-                         bg-gradient-to-r from-cyan to-cyan-dim text-space-900
-                         hover:shadow-[0_0_24px_rgba(0,212,255,0.35)]
-                         transition-all duration-200 cursor-pointer border-none"
-            >
-              Search
-            </button>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-text-muted/50 border border-space-500/30 bg-space-800/30">
+                {navigator.platform.includes('Mac') ? '\u2318' : 'Ctrl'}K
+              </kbd>
+              <button
+                type="submit"
+                className="px-5 py-2 rounded-lg font-body font-semibold text-sm
+                           bg-gradient-to-r from-cyan to-cyan-dim text-space-900
+                           hover:shadow-[0_0_24px_rgba(0,212,255,0.35)]
+                           transition-all duration-200 cursor-pointer border-none"
+              >
+                Search
+              </button>
+            </div>
           </div>
 
           {/* Autocomplete Dropdown */}
@@ -189,6 +233,41 @@ export default function HomePage() {
           )}
         </motion.form>
 
+        {/* Search History */}
+        {history.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 1.1 }}
+            className="max-w-xl mx-auto mb-8"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <Clock className="w-3 h-3 text-text-muted" />
+              <span className="text-text-muted text-xs font-body">Recent searches</span>
+              <button
+                onClick={clearHistory}
+                className="ml-auto text-text-muted/50 hover:text-text-muted text-[10px] font-body cursor-pointer transition-colors"
+              >
+                Clear
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {history.map(gene => (
+                <button
+                  key={gene}
+                  onClick={() => doSearch(gene)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono
+                             bg-space-700/40 border border-space-600/30 text-text-secondary
+                             hover:border-cyan/30 hover:text-cyan transition-all cursor-pointer"
+                >
+                  {gene}
+                  <X className="w-2.5 h-2.5 opacity-40" />
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* Popular Genes */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -209,7 +288,7 @@ export default function HomePage() {
               >
                 <GlowBadge
                   color="cyan"
-                  onClick={() => navigate(`/gene/${gene}`)}
+                  onClick={() => doSearch(gene)}
                 >
                   {gene}
                 </GlowBadge>

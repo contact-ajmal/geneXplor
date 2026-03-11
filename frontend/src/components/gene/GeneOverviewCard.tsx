@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import type { EnsemblGeneData } from '../../lib/api';
 import GlassCard from '../ui/GlassCard';
 import GlowBadge from '../ui/GlowBadge';
+import CountUp from '../ui/CountUp';
 
 interface GeneOverviewCardProps {
   gene: EnsemblGeneData;
@@ -29,7 +30,7 @@ export default function GeneOverviewCard({ gene, delay = 0 }: GeneOverviewCardPr
         </StatCell>
         <StatCell label="Transcripts">
           <span className="text-xl font-mono text-text-primary font-semibold">
-            {gene.transcript_count}
+            <CountUp end={gene.transcript_count} />
           </span>
         </StatCell>
         <StatCell label="Chromosome">
@@ -39,7 +40,7 @@ export default function GeneOverviewCard({ gene, delay = 0 }: GeneOverviewCardPr
         </StatCell>
         <StatCell label="Gene Length">
           <span className="text-xl font-mono text-text-primary font-semibold">
-            {(geneLength / 1000).toFixed(1)}
+            <CountUp end={parseFloat((geneLength / 1000).toFixed(1))} decimals={1} />
             <span className="text-sm text-text-muted ml-1">kb</span>
           </span>
         </StatCell>
