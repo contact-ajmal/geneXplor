@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "@fontsource/outfit/400.css";
+@import "@fontsource/outfit/600.css";
+@import "@fontsource/outfit/700.css";
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+
+@theme {
+  --color-space-900: #0a0e1a;
+  --color-space-800: #0f1628;
+  --color-space-700: #141b2d;
+  --color-space-600: #1a2332;
+  --color-cyan: #00d4ff;
+  --color-magenta: #ff3366;
+  --color-helix-green: #00ff88;
+  --color-amber: #ffaa00;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+
+  --font-family-heading: "Outfit", sans-serif;
+  --font-family-body: "Plus Jakarta Sans", sans-serif;
+  --font-family-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-space-900);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+}
+
+code, pre, .mono {
+  font-family: var(--font-family-mono);
+}
