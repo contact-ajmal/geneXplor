@@ -9,6 +9,8 @@ import type { ToastMessage } from './components/ui/Toast';
 import HomePage from './pages/HomePage';
 
 const GeneDashboardPage = lazy(() => import('./pages/GeneDashboardPage'));
+const ComparePage = lazy(() => import('./pages/ComparePage'));
+const CompareResultPage = lazy(() => import('./pages/CompareResultPage'));
 
 function DashboardFallback() {
   return (
@@ -78,6 +80,8 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/gene/:symbol" element={<GeneDashboardPage />} />
+              <Route path="/compare" element={<ComparePage />} />
+              <Route path="/compare/:symbolA/:symbolB" element={<CompareResultPage />} />
             </Routes>
           </Suspense>
         </main>

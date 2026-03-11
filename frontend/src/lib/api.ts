@@ -170,6 +170,16 @@ export interface HealthResponse {
 
 // ── API Calls ──
 
+export const fetchCompareGenes = async (
+  symbolA: string,
+  symbolB: string,
+): Promise<[GeneDashboardResponse, GeneDashboardResponse]> => {
+  const { data } = await api.get<GeneDashboardResponse[]>('/gene/compare', {
+    params: { genes: `${symbolA},${symbolB}` },
+  });
+  return [data[0], data[1]];
+};
+
 export const fetchGene = async (symbol: string): Promise<GeneDashboardResponse> => {
   const { data } = await api.get<GeneDashboardResponse>(`/gene/${symbol}`);
   return data;

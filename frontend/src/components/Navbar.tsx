@@ -1,7 +1,7 @@
-import { useState, useRef, useCallback, useMemo } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Dna, Search, Moon, Sun } from 'lucide-react';
+import { Dna, Search, Moon, Sun, GitCompare } from 'lucide-react';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 
 interface NavbarProps {
@@ -89,6 +89,21 @@ export default function Navbar({ darkMode, onToggleDarkMode }: NavbarProps) {
               </kbd>
             </div>
           </motion.form>
+        )}
+
+        {/* Compare button */}
+        {showSearch && (
+          <motion.button
+            onClick={() => navigate('/compare')}
+            whileTap={{ scale: 0.9 }}
+            className="p-2 rounded-lg text-text-secondary hover:text-cyan hover:bg-cyan/[0.05]
+                       transition-colors cursor-pointer bg-transparent border-none flex items-center gap-1.5"
+            aria-label="Compare genes"
+            title="Compare genes"
+          >
+            <GitCompare className="w-4 h-4" />
+            <span className="hidden sm:inline text-xs font-body">Compare</span>
+          </motion.button>
         )}
 
         {/* Dark/light toggle */}

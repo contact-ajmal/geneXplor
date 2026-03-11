@@ -1,6 +1,7 @@
+import asyncio
 import re
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session
@@ -39,6 +40,27 @@ async def health_check(session: AsyncSession = Depends(get_session)) -> HealthRe
         redis=redis_status,
         version="0.1.0",
     )
+
+
+@router.get("/gene/compare", response_model=list[GeneDashboardResponse])
+async def compare_genes(
+    genes: str = Query(..., description="Comma-separated gene symbols (e.g. TP53,BRCA1)"),
+    session: AsyncSession = Depends(get_session),
+) -> list[GeneDashboardResponse]:
+    symbols = [s.strip().upper() for s in genes.split(",") if s.strip()]
+
+    if len(symbols) != 2:
+        raise InvalidGeneSymbolError("Provide exactly two comma-separated gene symbols")
+
+    for sym in symbols:
+        if not GENE_SYMBOL_PATTERN.match(sym):
+            raise InvalidGeneSymbolError(sym)
+
+    results = await asyncio.gather(
+        get_gene_dashboard(symbols[0], session),
+        get_gene_dashboard(symbols[1], session),
+    )
+    return list(results)
 
 
 @router.get("/gene/{symbol}", response_model=GeneDashboardResponse)

@@ -1,8 +1,8 @@
 import { useState, lazy, Suspense, useCallback, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { AlertCircle, Dna, Search, GitCompare } from 'lucide-react';
+import { AlertCircle, Dna, Search, GitCompare, ArrowRight } from 'lucide-react';
 import { fetchGene } from '../lib/api';
 import type { GeneDashboardResponse } from '../lib/api';
 import ScrollReveal from '../components/ui/ScrollReveal';
@@ -27,6 +27,7 @@ const VariantAnalytics = lazy(() => import('../components/gene/VariantAnalytics'
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
+  const navigate = useNavigate();
   const upperSymbol = symbol?.toUpperCase() || '';
   const [diseaseFilter, setDiseaseFilter] = useState<string | undefined>(undefined);
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
@@ -268,15 +269,9 @@ export default function GeneDashboardPage() {
           )}
         </ScrollReveal>
 
-        {/* Gene Comparison Teaser */}
+        {/* Gene Comparison CTA */}
         <ScrollReveal delay={0.4}>
-          <div className="rounded-2xl border border-dashed border-space-500/30 p-6 text-center">
-            <GitCompare className="w-8 h-8 text-text-muted/40 mx-auto mb-3" />
-            <p className="text-text-muted text-sm font-body mb-2">Compare with another gene</p>
-            <p className="text-text-muted/60 text-xs font-body">
-              Side-by-side comparison coming soon
-            </p>
-          </div>
+          <CompareWithSection symbol={upperSymbol} onNavigate={navigate} />
         </ScrollReveal>
       </div>
 
@@ -296,6 +291,63 @@ export default function GeneDashboardPage() {
 
       {/* Toast notifications */}
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+    </div>
+  );
+}
+
+function CompareWithSection({
+  symbol,
+  onNavigate,
+}: {
+  symbol: string;
+  onNavigate: (path: string) => void;
+}) {
+  const [compareGene, setCompareGene] = useState('');
+
+  const handleCompare = () => {
+    const other = compareGene.trim().toUpperCase();
+    if (other && other !== symbol) {
+      onNavigate(`/compare/${symbol}/${other}`);
+    }
+  };
+
+  return (
+    <div className="rounded-2xl border border-cyan/[0.08] p-6 glass-bg backdrop-blur-xl">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        <div className="flex items-center gap-3 shrink-0">
+          <GitCompare className="w-6 h-6 text-cyan" />
+          <div>
+            <p className="text-sm font-heading font-semibold text-text-primary">
+              Compare <span className="font-mono text-cyan">{symbol}</span> with another gene
+            </p>
+            <p className="text-text-muted text-xs font-body">Side-by-side comparison</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 flex-1 max-w-sm w-full">
+          <input
+            type="text"
+            value={compareGene}
+            onChange={(e) => setCompareGene(e.target.value.toUpperCase())}
+            onKeyDown={(e) => e.key === 'Enter' && handleCompare()}
+            placeholder="e.g. BRCA1"
+            className="flex-1 px-3 py-2 rounded-lg text-sm font-mono
+              bg-space-800/60 border border-space-600/60 text-text-primary
+              placeholder:text-text-muted/50
+              focus:outline-none focus:border-cyan/30 focus:ring-1 focus:ring-cyan/20
+              transition-all"
+          />
+          <AnimatedButton
+            variant="primary"
+            onClick={handleCompare}
+            disabled={!compareGene.trim() || compareGene.trim().toUpperCase() === symbol}
+          >
+            <span className="flex items-center gap-1.5">
+              Compare
+              <ArrowRight className="w-3.5 h-3.5" />
+            </span>
+          </AnimatedButton>
+        </div>
+      </div>
     </div>
   );
 }
