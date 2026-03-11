@@ -1,65 +1,129 @@
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { AlertCircle, Dna } from 'lucide-react';
+import { AlertCircle, Dna, Search } from 'lucide-react';
 import { fetchGene } from '../lib/api';
 import type { GeneDashboardResponse } from '../lib/api';
-import GlassCard from '../components/ui/GlassCard';
-import GlowBadge from '../components/ui/GlowBadge';
 import SkeletonLoader from '../components/ui/SkeletonLoader';
+import GeneHeader from '../components/gene/GeneHeader';
+import GeneOverviewCard from '../components/gene/GeneOverviewCard';
+import ProteinInfoCard from '../components/gene/ProteinInfoCard';
+import ProteinVariantMap from '../components/gene/ProteinVariantMap';
+import VariantTable from '../components/gene/VariantTable';
+import DiseaseAssociations from '../components/gene/DiseaseAssociations';
+import ResearchPublications from '../components/gene/ResearchPublications';
+import DataSourcesFooter from '../components/gene/DataSourcesFooter';
+import AnimatedButton from '../components/ui/AnimatedButton';
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
   const upperSymbol = symbol?.toUpperCase() || '';
+  const [diseaseFilter, setDiseaseFilter] = useState<string | undefined>(undefined);
 
-  const { data, isLoading, error } = useQuery<GeneDashboardResponse, Error>({
+  const { data, isLoading, error, refetch } = useQuery<GeneDashboardResponse, Error>({
     queryKey: ['gene', upperSymbol],
     queryFn: () => fetchGene(upperSymbol),
     enabled: upperSymbol.length > 0,
   });
 
+  // ── Loading State ──
   if (isLoading) {
     return (
-      <div className="max-w-6xl mx-auto px-6 pt-20">
+      <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-20"
+          className="text-center py-12"
         >
-          <div className="relative w-12 h-12 mx-auto mb-4">
+          <div className="relative w-14 h-14 mx-auto mb-4">
             <Dna
-              className="w-12 h-12 text-cyan"
+              className="w-14 h-14 text-cyan"
               style={{ animation: 'spin-slow 2s linear infinite' }}
             />
           </div>
-          <p className="text-text-secondary font-mono text-sm">
-            Decoding {upperSymbol}...
+          <p className="text-text-secondary font-mono text-sm mb-2">
+            Decoding <span className="text-cyan">{upperSymbol}</span>...
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
-            <SkeletonLoader variant="card" lines={4} />
-            <SkeletonLoader variant="card" lines={3} />
-            <SkeletonLoader variant="card" lines={5} />
-            <SkeletonLoader variant="card" lines={3} />
-          </div>
+          <p className="text-text-muted text-xs font-body">
+            Aggregating data from 5 sources
+          </p>
         </motion.div>
+
+        {/* Skeleton dashboard */}
+        <div className="space-y-4 mt-8">
+          {/* Header skeleton */}
+          <div className="space-y-3">
+            <div className="h-10 w-40 rounded skeleton-shimmer" />
+            <div className="h-5 w-80 rounded skeleton-shimmer" />
+            <div className="h-4 w-60 rounded skeleton-shimmer" />
+          </div>
+
+          {/* Overview card */}
+          <SkeletonLoader variant="card" lines={4} />
+
+          {/* Protein card */}
+          <SkeletonLoader variant="card" lines={5} />
+
+          {/* Variant map */}
+          <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+            <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
+            <div className="h-48 rounded skeleton-shimmer" />
+          </div>
+
+          {/* Variant table */}
+          <SkeletonLoader variant="card" lines={6} />
+
+          {/* Grid: diseases + publications */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SkeletonLoader variant="card" lines={4} />
+            <SkeletonLoader variant="card" lines={4} />
+          </div>
+        </div>
       </div>
     );
   }
 
+  // ── Error: Gene Not Found ──
   if (error) {
     return (
-      <div className="max-w-2xl mx-auto px-6 pt-24">
+      <div className="max-w-2xl mx-auto px-6 pt-32 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-5 rounded-xl bg-magenta/10 border border-magenta/30 flex items-start gap-3"
+          transition={{ duration: 0.5 }}
         >
-          <AlertCircle className="w-5 h-5 text-magenta flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-magenta text-sm font-body font-semibold mb-1">
+          {/* DNA illustration */}
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            <Dna className="w-20 h-20 text-magenta/40" />
+          </div>
+
+          <div className="p-6 rounded-2xl bg-magenta/5 border border-magenta/20 mb-6">
+            <AlertCircle className="w-6 h-6 text-magenta mx-auto mb-3" />
+            <h2 className="text-lg font-heading font-semibold text-text-primary mb-2">
               Gene not found
+            </h2>
+            <p className="text-text-secondary text-sm font-body mb-4">
+              Gene &lsquo;<span className="font-mono text-cyan">{upperSymbol}</span>&rsquo; was not found.
+              Try searching for <span className="font-mono text-cyan">TP53</span>,{' '}
+              <span className="font-mono text-cyan">BRCA1</span>, or{' '}
+              <span className="font-mono text-cyan">EGFR</span>.
             </p>
-            <p className="text-magenta/80 text-sm font-body">{error.message}</p>
+            <p className="text-text-muted text-xs font-body">{error.message}</p>
+          </div>
+
+          <div className="flex items-center justify-center gap-3">
+            <Link to="/">
+              <AnimatedButton variant="primary">
+                <span className="flex items-center gap-2">
+                  <Search className="w-4 h-4" />
+                  Back to search
+                </span>
+              </AnimatedButton>
+            </Link>
+            <AnimatedButton variant="secondary" onClick={() => refetch()}>
+              Retry
+            </AnimatedButton>
           </div>
         </motion.div>
       </div>
@@ -68,154 +132,98 @@ export default function GeneDashboardPage() {
 
   if (!data || !data.gene) return null;
 
-  const gene = data.gene;
+  const { gene, protein, variants, allele_frequencies, publications, metadata } = data;
 
   return (
     <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
-      {/* Gene Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="mb-8"
-      >
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-heading font-bold text-text-primary">
-            <span className="font-mono text-cyan">{gene.gene_symbol}</span>
-          </h1>
-          <GlowBadge color={data.metadata.cached ? 'green' : 'cyan'}>
-            {data.metadata.cached ? 'Cached' : 'Live'}
-          </GlowBadge>
-          <GlowBadge color="muted">{gene.biotype}</GlowBadge>
-        </div>
-        <p className="text-text-secondary font-body text-lg">{gene.description}</p>
-      </motion.div>
+      {/* Page Header */}
+      <GeneHeader gene={gene} metadata={metadata} />
 
-      {/* Info Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        <GlassCard delay={0.05}>
-          <h3 className="text-xs text-text-muted uppercase tracking-wider font-body mb-3">
-            Genomic Location
-          </h3>
-          <div className="space-y-2">
-            <InfoRow label="Ensembl ID" value={gene.ensembl_id} />
-            <InfoRow
-              label="Coordinates"
-              value={`Chr${gene.chromosome}:${gene.start.toLocaleString()}-${gene.end.toLocaleString()}`}
-            />
-            <InfoRow label="Strand" value={gene.strand === 1 ? 'Forward (+)' : 'Reverse (-)'} />
-            <InfoRow
-              label="Length"
-              value={`${((gene.end - gene.start) / 1000).toFixed(1)} kb`}
-            />
-            <InfoRow label="Transcripts" value={gene.transcript_count.toString()} />
-          </div>
-        </GlassCard>
+      {/* Section 1: Gene Overview */}
+      <div className="space-y-6">
+        <GeneOverviewCard gene={gene} delay={0.05} />
 
-        {data.protein && (
-          <GlassCard delay={0.1}>
-            <h3 className="text-xs text-text-muted uppercase tracking-wider font-body mb-3">
-              Protein
-            </h3>
-            <div className="space-y-2">
-              <InfoRow label="UniProt" value={data.protein.uniprot_id} />
-              <InfoRow label="Name" value={data.protein.protein_name} />
-              <InfoRow label="Length" value={`${data.protein.protein_length} aa`} />
-              <InfoRow label="Domains" value={data.protein.domains.length.toString()} />
-            </div>
-            {data.protein.function_description && (
-              <p className="text-text-secondary text-xs mt-3 leading-relaxed line-clamp-3">
-                {data.protein.function_description}
-              </p>
-            )}
-          </GlassCard>
+        {/* Section 2: Protein Information */}
+        {protein ? (
+          <ProteinInfoCard protein={protein} delay={0.1} />
+        ) : (
+          <UnavailableSection
+            title="Protein Information"
+            message="No protein information available for this gene"
+            delay={0.1}
+          />
         )}
 
-        {data.variants && (
-          <GlassCard delay={0.15}>
-            <h3 className="text-xs text-text-muted uppercase tracking-wider font-body mb-3">
-              Clinical Variants
-            </h3>
-            <div className="space-y-2">
-              <InfoRow label="ClinVar Variants" value={data.variants.variants.length.toString()} />
-              <InfoRow label="Diseases" value={data.variants.diseases.length.toString()} />
-              {data.allele_frequencies && (
-                <InfoRow
-                  label="gnomAD Variants"
-                  value={data.allele_frequencies.total_variants.toLocaleString()}
-                />
-              )}
-            </div>
-            {data.variants.diseases.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-3">
-                {data.variants.diseases.slice(0, 3).map((d) => (
-                  <GlowBadge key={d.disease_name} color="magenta">
-                    {d.disease_name.length > 25
-                      ? d.disease_name.slice(0, 25) + '...'
-                      : d.disease_name}
-                  </GlowBadge>
-                ))}
-              </div>
-            )}
-          </GlassCard>
+        {/* Section 3: Protein Variant Map (Hero) */}
+        {protein && (variants || allele_frequencies) ? (
+          <ProteinVariantMap
+            protein={protein}
+            clinvarVariants={variants?.variants || []}
+            gnomadVariants={allele_frequencies?.variants || []}
+            delay={0.15}
+          />
+        ) : null}
+
+        {/* Section 4: Variant Table */}
+        {variants && variants.variants.length > 0 ? (
+          <VariantTable
+            clinvarVariants={variants.variants}
+            gnomadVariants={allele_frequencies?.variants || []}
+            delay={0.2}
+            significanceFilter={diseaseFilter}
+          />
+        ) : (
+          <UnavailableSection
+            title="Variant Table"
+            message="No clinical variants found for this gene"
+            delay={0.2}
+          />
+        )}
+
+        {/* Section 5: Disease Associations */}
+        {variants && variants.diseases.length > 0 ? (
+          <DiseaseAssociations
+            diseases={variants.diseases}
+            geneSymbol={gene.gene_symbol}
+            onDiseaseClick={(name) => setDiseaseFilter(name)}
+            delay={0.25}
+          />
+        ) : null}
+
+        {/* Section 6: Research Publications */}
+        {publications && publications.articles.length > 0 ? (
+          <ResearchPublications
+            articles={publications.articles}
+            totalResults={publications.total_results}
+            delay={0.3}
+          />
+        ) : (
+          <UnavailableSection
+            title="Recent Publications"
+            message="No publications found for this gene"
+            delay={0.3}
+          />
         )}
       </div>
 
-      {/* Publications */}
-      {data.publications && data.publications.articles.length > 0 && (
-        <GlassCard delay={0.2} className="mb-8">
-          <h3 className="text-xs text-text-muted uppercase tracking-wider font-body mb-4">
-            Recent Publications ({data.publications.total_results.toLocaleString()} total)
-          </h3>
-          <div className="space-y-3">
-            {data.publications.articles.slice(0, 5).map((article) => (
-              <a
-                key={article.pmid}
-                href={article.pubmed_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block p-3 rounded-lg bg-space-800/50 border border-space-600/30
-                           hover:border-cyan/20 hover:bg-space-700/40 transition-all group"
-              >
-                <p className="text-text-primary text-sm font-body leading-snug group-hover:text-cyan transition-colors">
-                  {article.title}
-                </p>
-                <p className="text-text-muted text-xs mt-1 font-mono">
-                  {article.authors} &middot; {article.journal} ({article.year})
-                </p>
-              </a>
-            ))}
-          </div>
-        </GlassCard>
-      )}
-
-      {/* Data Sources Footer */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="flex items-center justify-center gap-4 text-text-muted text-xs font-mono"
-      >
-        {Object.entries(data.metadata.data_sources).map(([source, ok]) => (
-          <span key={source} className="flex items-center gap-1">
-            <span
-              className={`w-1.5 h-1.5 rounded-full ${ok ? 'bg-helix-green' : 'bg-magenta'}`}
-            />
-            {source}
-          </span>
-        ))}
-      </motion.div>
+      {/* Section 7: Data Sources Footer */}
+      <DataSourcesFooter metadata={metadata} delay={0.35} />
     </div>
   );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function UnavailableSection({ title, message, delay = 0 }: { title: string; message: string; delay?: number }) {
   return (
-    <div className="flex items-baseline justify-between gap-2">
-      <span className="text-text-muted text-xs font-body">{label}</span>
-      <span className="text-text-primary text-sm font-mono truncate max-w-[60%] text-right" title={value}>
-        {value}
-      </span>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay }}
+      className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center"
+    >
+      <h2 className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
+        {title}
+      </h2>
+      <p className="text-text-muted text-sm font-body">{message}</p>
+    </motion.div>
   );
 }
