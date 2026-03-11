@@ -155,6 +155,14 @@ class GeneDashboardResponse(BaseModel):
     metadata: ResponseMetadata
 
 
+# --- AI Summary ---
+
+class GeneSummaryResponse(BaseModel):
+    summary: str
+    generated_at: str
+    source: str = "template"
+
+
 # --- Health ---
 
 class HealthResponse(BaseModel):

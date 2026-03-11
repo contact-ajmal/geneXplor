@@ -23,5 +23,11 @@ class Settings(BaseSettings):
     pubmed_base_url: str = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
     ncbi_api_key: str = ""
 
+    # AI Summary (optional)
+    llm_api_url: str = ""
+    llm_api_key: str = ""
+    llm_model: str = "gpt-4"
+    ai_summary_enabled: bool = True
+
 
 settings = Settings()

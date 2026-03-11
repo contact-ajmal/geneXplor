@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session
 from app.core.redis import get_redis
-from app.schemas.gene_schema import GeneDashboardResponse, HealthResponse
+from app.schemas.gene_schema import GeneDashboardResponse, GeneSummaryResponse, HealthResponse
+from app.services.ai_summary_service import generate_gene_summary
 from app.services.gene_aggregator_service import get_gene_dashboard
 from app.utils.exceptions import InvalidGeneSymbolError
 
@@ -51,3 +52,21 @@ async def get_gene(
         raise InvalidGeneSymbolError(symbol)
 
     return await get_gene_dashboard(symbol_upper, session)
+
+
+@router.get("/gene/{symbol}/summary", response_model=GeneSummaryResponse)
+async def get_gene_summary(
+    symbol: str,
+    session: AsyncSession = Depends(get_session),
+) -> GeneSummaryResponse:
+    symbol_upper = symbol.upper().strip()
+
+    if not GENE_SYMBOL_PATTERN.match(symbol_upper):
+        raise InvalidGeneSymbolError(symbol)
+
+    # Get the full dashboard data first (uses cache)
+    dashboard = await get_gene_dashboard(symbol_upper, session)
+    dashboard_dict = dashboard.model_dump()
+
+    result = await generate_gene_summary(dashboard_dict)
+    return GeneSummaryResponse(**result)

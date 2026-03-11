@@ -7,6 +7,7 @@ import { fetchGene } from '../lib/api';
 import type { GeneDashboardResponse } from '../lib/api';
 import ScrollReveal from '../components/ui/ScrollReveal';
 import GeneHeader from '../components/gene/GeneHeader';
+import AiGeneSummary from '../components/gene/AiGeneSummary';
 import GeneOverviewCard from '../components/gene/GeneOverviewCard';
 import ProteinInfoCard from '../components/gene/ProteinInfoCard';
 import ProteinVariantMap from '../components/gene/ProteinVariantMap';
@@ -131,9 +132,16 @@ export default function GeneDashboardPage() {
         onToast={showToast}
       />
 
-      {/* Section 1: Gene Overview */}
+      {/* Section 0: AI Gene Summary */}
       <div className="space-y-6">
         <ScrollReveal>
+          <div id="export-ai-summary">
+            <AiGeneSummary geneSymbol={gene.gene_symbol} delay={0} />
+          </div>
+        </ScrollReveal>
+
+        {/* Section 1: Gene Overview */}
+        <ScrollReveal delay={0.05}>
           <div id="export-gene-overview">
             <GeneOverviewCard gene={gene} delay={0} />
           </div>

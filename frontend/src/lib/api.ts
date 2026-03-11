@@ -155,6 +155,12 @@ export interface GeneDashboardResponse {
   metadata: ResponseMetadata;
 }
 
+export interface GeneSummaryResponse {
+  summary: string;
+  generated_at: string;
+  source: 'ai' | 'template';
+}
+
 export interface HealthResponse {
   status: string;
   database: string;
@@ -166,6 +172,11 @@ export interface HealthResponse {
 
 export const fetchGene = async (symbol: string): Promise<GeneDashboardResponse> => {
   const { data } = await api.get<GeneDashboardResponse>(`/gene/${symbol}`);
+  return data;
+};
+
+export const fetchGeneSummary = async (symbol: string): Promise<GeneSummaryResponse> => {
+  const { data } = await api.get<GeneSummaryResponse>(`/gene/${symbol}/summary`);
   return data;
 };
 
