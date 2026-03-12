@@ -53,6 +53,10 @@ class ClinVarVariant(BaseModel):
     condition: str = ""
     review_status: str = ""
     variant_type: str = ""
+    date_created: str = ""
+    date_last_evaluated: str = ""
+    submitter_name: str = ""
+    submission_count: int = 0
 
 
 class DiseaseAssociation(BaseModel):
@@ -61,9 +65,39 @@ class DiseaseAssociation(BaseModel):
     associated_variants: list[str] = []
 
 
+class NotableVariant(BaseModel):
+    variant_id: str
+    title: str = ""
+    significance: str = ""
+    submitter: str = ""
+
+
+class TimelineBucket(BaseModel):
+    date: str  # YYYY-MM
+    total_new_variants: int = 0
+    by_significance: dict[str, int] = {}
+    cumulative_variants: int = 0
+    notable_variants: list[NotableVariant] = []
+
+
+class TimelineData(BaseModel):
+    buckets: list[TimelineBucket] = []
+    first_submission_date: str = ""
+    peak_month: str = ""
+    peak_month_count: int = 0
+    submission_rate_trend: str = "stable"  # accelerating / stable / decelerating
+    recent_12mo_count: int = 0
+    total_submissions: int = 0
+    unique_submitters: int = 0
+    most_active_submitter: str = ""
+    date_range_start: str = ""
+    date_range_end: str = ""
+
+
 class ClinVarData(BaseModel):
     variants: list[ClinVarVariant] = []
     diseases: list[DiseaseAssociation] = []
+    timeline: TimelineData | None = None
 
 
 # --- gnomAD ---

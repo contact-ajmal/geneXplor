@@ -63,6 +63,10 @@ export interface ClinVarVariant {
   condition: string;
   review_status: string;
   variant_type: string;
+  date_created: string;
+  date_last_evaluated: string;
+  submitter_name: string;
+  submission_count: number;
 }
 
 export interface DiseaseAssociation {
@@ -71,9 +75,39 @@ export interface DiseaseAssociation {
   associated_variants: string[];
 }
 
+export interface NotableVariant {
+  variant_id: string;
+  title: string;
+  significance: string;
+  submitter: string;
+}
+
+export interface TimelineBucket {
+  date: string;
+  total_new_variants: number;
+  by_significance: Record<string, number>;
+  cumulative_variants: number;
+  notable_variants: NotableVariant[];
+}
+
+export interface TimelineData {
+  buckets: TimelineBucket[];
+  first_submission_date: string;
+  peak_month: string;
+  peak_month_count: number;
+  submission_rate_trend: string;
+  recent_12mo_count: number;
+  total_submissions: number;
+  unique_submitters: number;
+  most_active_submitter: string;
+  date_range_start: string;
+  date_range_end: string;
+}
+
 export interface ClinVarData {
   variants: ClinVarVariant[];
   diseases: DiseaseAssociation[];
+  timeline: TimelineData | null;
 }
 
 export interface PopulationFrequency {

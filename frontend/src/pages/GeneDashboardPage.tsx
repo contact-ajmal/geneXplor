@@ -26,6 +26,7 @@ import LoadingPage from './LoadingPage';
 const VariantAnalytics = lazy(() => import('../components/gene/VariantAnalytics'));
 const ProteinStructureViewer = lazy(() => import('../components/viz/ProteinStructureViewer'));
 const InteractionNetwork = lazy(() => import('../components/viz/InteractionNetwork'));
+const VariantTimeline = lazy(() => import('../components/viz/VariantTimeline'));
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
@@ -236,6 +237,29 @@ export default function GeneDashboardPage() {
                   gnomadVariants={allele_frequencies?.variants || []}
                   delay={0}
                   onSignificanceClick={handleSignificanceFilter}
+                />
+              </Suspense>
+            </div>
+          </ScrollReveal>
+        )}
+
+        {/* Section 4.7: Variant Discovery Timeline */}
+        {variants && variants.timeline && variants.timeline.buckets.length > 0 && (
+          <ScrollReveal delay={0.22}>
+            <div id="export-variant-timeline">
+              <Suspense
+                fallback={
+                  <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                    <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
+                    <div className="h-[380px] rounded skeleton-shimmer" />
+                  </div>
+                }
+              >
+                <VariantTimeline
+                  timeline={variants.timeline}
+                  geneSymbol={gene.gene_symbol}
+                  onVariantClick={handleVariantClick}
+                  delay={0}
                 />
               </Suspense>
             </div>
