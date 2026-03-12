@@ -19,6 +19,7 @@ import CountUp from '../components/ui/CountUp';
 import LoadingPage from './LoadingPage';
 
 const PopulationMap = lazy(() => import('../components/viz/PopulationMap'));
+const VariantImpactSimulator = lazy(() => import('../components/viz/VariantImpactSimulator'));
 
 // ── Plain language helpers ──
 
@@ -411,6 +412,8 @@ export default function GeneStoryPage() {
         <VariantsChapter
           gene={gene}
           variants={variants}
+          gnomadVariants={allele_frequencies?.variants || []}
+          protein={protein}
           setActive={setActiveChapter}
         />
       )}
@@ -690,9 +693,11 @@ function FunctionChapter({ gene, protein, setActive }: {
 // Chapter 3: Variants
 // ═══════════════════════════════════════════════════════════
 
-function VariantsChapter({ gene, variants, setActive }: {
+function VariantsChapter({ gene, variants, gnomadVariants, protein, setActive }: {
   gene: EnsemblGeneData;
   variants: ClinVarData;
+  gnomadVariants: GnomADVariant[];
+  protein: UniProtData | null;
   setActive: (id: string) => void;
 }) {
   const ref = useChapterInView('variants', setActive);
@@ -700,6 +705,16 @@ function VariantsChapter({ gene, variants, setActive }: {
   const distribution = getSignificanceDistribution(variants);
   const topDiseases = variants.diseases.slice(0, 5);
   const remainingDiseases = variants.diseases.length - 5;
+
+  // Find top pathogenic variant for the simulator
+  const topPathogenicVariant = useMemo(() => {
+    return variants.variants.find(v =>
+      v.clinical_significance.toLowerCase().includes('pathogenic') &&
+      !v.clinical_significance.toLowerCase().includes('likely')
+    ) || variants.variants.find(v =>
+      v.clinical_significance.toLowerCase().includes('pathogenic')
+    ) || null;
+  }, [variants]);
 
   return (
     <section
@@ -797,6 +812,31 @@ function VariantsChapter({ gene, variants, setActive }: {
                 </p>
               )}
             </div>
+          )}
+
+          {/* Variant Impact Simulator for top pathogenic variant */}
+          {topPathogenicVariant && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="mt-10"
+            >
+              <Suspense fallback={
+                <div className="h-[400px] rounded-2xl skeleton-shimmer" />
+              }>
+                <VariantImpactSimulator
+                  variantId={topPathogenicVariant.variant_id}
+                  clinvarVariants={variants.variants}
+                  gnomadVariants={gnomadVariants}
+                  protein={protein}
+                  diseases={variants.diseases}
+                  autoPlay
+                  embedded={false}
+                />
+              </Suspense>
+            </motion.div>
           )}
         </motion.div>
       </div>

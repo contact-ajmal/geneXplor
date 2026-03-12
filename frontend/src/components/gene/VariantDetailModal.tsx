@@ -1,17 +1,20 @@
 import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, Star, Globe } from 'lucide-react';
-import type { ClinVarVariant, GnomADVariant, UniProtData, PopulationFrequency } from '../../lib/api';
+import { X, ExternalLink, Star, Globe, Zap } from 'lucide-react';
+import type { ClinVarVariant, GnomADVariant, UniProtData, PopulationFrequency, DiseaseAssociation } from '../../lib/api';
 import GlowBadge from '../ui/GlowBadge';
 import AnimatedButton from '../ui/AnimatedButton';
 
 const PopulationMap = lazy(() => import('../viz/PopulationMap'));
+const VariantImpactSimulator = lazy(() => import('../viz/VariantImpactSimulator'));
 
 interface VariantDetailModalProps {
   variantId: string | null;
   clinvarVariants: ClinVarVariant[];
   gnomadVariants: GnomADVariant[];
   protein: UniProtData | null;
+  diseases?: DiseaseAssociation[];
+  initialTab?: 'details' | 'impact' | 'population';
   onClose: () => void;
 }
 
@@ -132,14 +135,16 @@ export default function VariantDetailModal({
   clinvarVariants,
   gnomadVariants,
   protein,
+  diseases = [],
+  initialTab,
   onClose,
 }: VariantDetailModalProps) {
-  const [activeTab, setActiveTab] = useState<'details' | 'population'>('details');
+  const [activeTab, setActiveTab] = useState<'details' | 'population' | 'impact'>('details');
 
   // Reset tab when variant changes
   useEffect(() => {
-    setActiveTab('details');
-  }, [variantId]);
+    setActiveTab(initialTab || 'details');
+  }, [variantId, initialTab]);
 
   // Escape key handler
   const handleKeyDown = useCallback(
@@ -314,6 +319,16 @@ export default function VariantDetailModal({
                   Details
                 </button>
                 <button
+                  onClick={() => setActiveTab('impact')}
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body font-semibold transition-all cursor-pointer
+                    ${activeTab === 'impact'
+                      ? 'bg-cyan/[0.12] text-cyan border border-cyan/20'
+                      : 'text-text-muted hover:text-text-secondary border border-transparent'}`}
+                >
+                  <Zap className="w-3 h-3" />
+                  Impact
+                </button>
+                <button
                   onClick={() => setActiveTab('population')}
                   className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body font-semibold transition-all cursor-pointer
                     ${activeTab === 'population'
@@ -321,9 +336,25 @@ export default function VariantDetailModal({
                       : 'text-text-muted hover:text-text-secondary border border-transparent'}`}
                 >
                   <Globe className="w-3 h-3" />
-                  Population Map
+                  Population
                 </button>
               </div>
+
+              {/* ── Impact Simulator Tab ── */}
+              {activeTab === 'impact' && (
+                <Suspense fallback={
+                  <div className="h-[400px] rounded-xl skeleton-shimmer" />
+                }>
+                  <VariantImpactSimulator
+                    variantId={variant.variant_id}
+                    clinvarVariants={clinvarVariants}
+                    gnomadVariants={gnomadVariants}
+                    protein={protein}
+                    diseases={diseases}
+                    embedded
+                  />
+                </Suspense>
+              )}
 
               {/* ── Population Map Tab ── */}
               {activeTab === 'population' && (

@@ -10,7 +10,7 @@ import {
   createColumnHelper,
   type SortingState,
 } from '@tanstack/react-table';
-import { ChevronDown, ChevronUp, ChevronsUpDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronUp, ChevronsUpDown, ChevronLeft, ChevronRight, Zap } from 'lucide-react';
 import type { ClinVarVariant, GnomADVariant, PopulationFrequency } from '../../lib/api';
 import GlassCard from '../ui/GlassCard';
 import GlowBadge from '../ui/GlowBadge';
@@ -21,6 +21,7 @@ interface VariantTableProps {
   delay?: number;
   significanceFilter?: string;
   onVariantClick?: (variantId: string) => void;
+  onSimulateClick?: (variantId: string) => void;
   onFilteredIdsChange?: (ids: string[]) => void;
 }
 
@@ -73,7 +74,7 @@ const CONSEQUENCE_OPTIONS = [
   'Inframe insertion',
 ];
 
-export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 0, significanceFilter, onVariantClick, onFilteredIdsChange }: VariantTableProps) {
+export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 0, significanceFilter, onVariantClick, onSimulateClick, onFilteredIdsChange }: VariantTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [sigFilter, setSigFilter] = useState<string[]>(significanceFilter ? [significanceFilter] : []);
@@ -183,7 +184,23 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
         );
       },
     }),
-  ], []);
+    ...(onSimulateClick ? [columnHelper.display({
+      id: 'simulate',
+      header: '',
+      cell: ({ row }) => (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onSimulateClick(row.original.variant_id);
+          }}
+          className="p-1.5 rounded-lg bg-cyan/[0.06] border border-cyan/10 text-cyan/60 hover:text-cyan hover:border-cyan/30 hover:bg-cyan/10 hover:shadow-[0_0_8px_rgba(0,212,255,0.15)] transition-all cursor-pointer"
+          title="Simulate Impact"
+        >
+          <Zap className="w-3.5 h-3.5" />
+        </button>
+      ),
+    })] : []),
+  ], [onSimulateClick]);
 
   const table = useReactTable({
     data: filteredData,

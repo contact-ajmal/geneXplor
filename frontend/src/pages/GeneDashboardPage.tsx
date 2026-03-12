@@ -39,7 +39,15 @@ export default function GeneDashboardPage() {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const toastIdRef = useRef(0);
 
+  const [openOnImpactTab, setOpenOnImpactTab] = useState(false);
+
   const handleVariantClick = useCallback((variantId: string) => {
+    setOpenOnImpactTab(false);
+    setSelectedVariantId(variantId);
+  }, []);
+
+  const handleSimulateClick = useCallback((variantId: string) => {
+    setOpenOnImpactTab(true);
     setSelectedVariantId(variantId);
   }, []);
 
@@ -229,6 +237,7 @@ export default function GeneDashboardPage() {
                 delay={0}
                 significanceFilter={diseaseFilter}
                 onVariantClick={handleVariantClick}
+                onSimulateClick={handleSimulateClick}
                 onFilteredIdsChange={handleFilteredIdsChange}
               />
             ) : (
@@ -396,7 +405,9 @@ export default function GeneDashboardPage() {
         clinvarVariants={variants?.variants || []}
         gnomadVariants={allele_frequencies?.variants || []}
         protein={protein}
-        onClose={() => setSelectedVariantId(null)}
+        diseases={variants?.diseases || []}
+        initialTab={openOnImpactTab ? 'impact' : 'details'}
+        onClose={() => { setSelectedVariantId(null); setOpenOnImpactTab(false); }}
       />
 
       {/* Toast notifications */}
