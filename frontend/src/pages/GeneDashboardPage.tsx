@@ -24,6 +24,7 @@ import AnimatedButton from '../components/ui/AnimatedButton';
 import LoadingPage from './LoadingPage';
 
 const VariantAnalytics = lazy(() => import('../components/gene/VariantAnalytics'));
+const ProteinStructureViewer = lazy(() => import('../components/viz/ProteinStructureViewer'));
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
@@ -115,7 +116,7 @@ export default function GeneDashboardPage() {
 
   if (!data || !data.gene) return null;
 
-  const { gene, protein, variants, allele_frequencies, publications, pathways, metadata } = data;
+  const { gene, protein, variants, allele_frequencies, publications, pathways, structure, metadata } = data;
 
   return (
     <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
@@ -161,6 +162,27 @@ export default function GeneDashboardPage() {
             )}
           </div>
         </ScrollReveal>
+
+        {/* Section 2.5: 3D Protein Structure */}
+        {structure && (
+          <ScrollReveal delay={0.08}>
+            <div id="export-protein-structure">
+              <Suspense fallback={
+                <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                  <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
+                  <div className="h-[350px] md:h-[450px] lg:h-[600px] rounded skeleton-shimmer" />
+                </div>
+              }>
+                <ProteinStructureViewer
+                  structure={structure}
+                  geneSymbol={gene.gene_symbol}
+                  onVariantClick={handleVariantClick}
+                  delay={0}
+                />
+              </Suspense>
+            </div>
+          </ScrollReveal>
+        )}
 
         {/* Section 3: Protein Variant Map (Hero) */}
         {protein && (variants || allele_frequencies) ? (

@@ -16,6 +16,7 @@ from app.schemas.gene_schema import (
     PathwayData,
     PubMedData,
     ResponseMetadata,
+    StructureData,
     UniProtData,
 )
 from app.services.clinvar_service import fetch_clinvar_variants
@@ -23,6 +24,7 @@ from app.services.ensembl_service import fetch_ensembl_gene
 from app.services.gnomad_service import fetch_gnomad_variants
 from app.services.pathway_service import fetch_pathways
 from app.services.pubmed_service import fetch_pubmed_articles
+from app.services.structure_service import fetch_structure_data
 from app.services.uniprot_service import fetch_uniprot_protein
 from app.utils.cache_utils import cache_get, cache_set
 
@@ -88,6 +90,19 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
         logger.error("Pathways failed for %s: %s", symbol, pathway_result)
         pathway_result = None
 
+    # Fetch structure data (depends on uniprot_id + variants)
+    uniprot_id = uniprot_result.get("uniprot_id") if isinstance(uniprot_result, dict) else None
+    try:
+        structure_result = await fetch_structure_data(
+            symbol,
+            uniprot_id,
+            clinvar_result.get("variants") if isinstance(clinvar_result, dict) else None,
+            gnomad_result.get("variants") if isinstance(gnomad_result, dict) else None,
+        )
+    except Exception as exc:
+        logger.error("Structure failed for %s: %s", symbol, exc)
+        structure_result = None
+
     now = datetime.now(timezone.utc).isoformat()
 
     payload = {
@@ -97,6 +112,7 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
         "gnomad": gnomad_result,
         "pubmed": pubmed_result,
         "pathways": pathway_result,
+        "structure": structure_result,
         "fetched_at": now,
     }
 
@@ -126,6 +142,7 @@ def _build_response_from_payload(
     gnomad_data = payload.get("gnomad")
     pubmed_data = payload.get("pubmed")
     pathway_data = payload.get("pathways")
+    structure_data = payload.get("structure")
     fetched_at = payload.get("fetched_at", datetime.now(timezone.utc).isoformat())
 
     return GeneDashboardResponse(
@@ -136,6 +153,7 @@ def _build_response_from_payload(
         allele_frequencies=GnomADData(**gnomad_data) if gnomad_data else None,
         publications=PubMedData(**pubmed_data) if pubmed_data else None,
         pathways=PathwayData(**pathway_data) if pathway_data else None,
+        structure=StructureData(**structure_data) if structure_data else None,
         metadata=ResponseMetadata(
             fetched_at=fetched_at,
             cached=is_cached,
@@ -146,6 +164,8 @@ def _build_response_from_payload(
                 gnomad=gnomad_data is not None,
                 pubmed=pubmed_data is not None,
                 pathways=pathway_data is not None,
+                structure=structure_data is not None
+                and structure_data.get("structure_available", False),
             ),
         ),
     )

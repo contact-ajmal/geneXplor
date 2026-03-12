@@ -125,6 +125,27 @@ class PathwayData(BaseModel):
     total_pathways: int = 0
 
 
+# --- Structure ---
+
+class VariantResidue(BaseModel):
+    residue_number: int
+    amino_acid_change: str = ""
+    clinical_significance: str = ""
+    allele_frequency: float | None = None
+    variant_id: str = ""
+
+
+class StructureData(BaseModel):
+    structure_available: bool = False
+    source: str = ""
+    structure_url: str = ""
+    uniprot_id: str = ""
+    mean_confidence: float = 0.0
+    model_version: str = ""
+    alphafold_url: str = ""
+    variant_residues: list[VariantResidue] = []
+
+
 # --- Aggregated Dashboard Response ---
 
 class DataSourceStatus(BaseModel):
@@ -134,6 +155,7 @@ class DataSourceStatus(BaseModel):
     gnomad: bool = False
     pubmed: bool = False
     pathways: bool = False
+    structure: bool = False
 
 
 class ResponseMetadata(BaseModel):
@@ -152,6 +174,7 @@ class GeneDashboardResponse(BaseModel):
     allele_frequencies: GnomADData | None = None
     publications: PubMedData | None = None
     pathways: PathwayData | None = None
+    structure: StructureData | None = None
     metadata: ResponseMetadata
 
 

@@ -129,6 +129,25 @@ export interface PathwayData {
   total_pathways: number;
 }
 
+export interface VariantResidue {
+  residue_number: number;
+  amino_acid_change: string;
+  clinical_significance: string;
+  allele_frequency: number | null;
+  variant_id: string;
+}
+
+export interface StructureData {
+  structure_available: boolean;
+  source: string;
+  structure_url: string;
+  uniprot_id: string;
+  mean_confidence: number;
+  model_version: string;
+  alphafold_url: string;
+  variant_residues: VariantResidue[];
+}
+
 export interface DataSourceStatus {
   ensembl: boolean;
   uniprot: boolean;
@@ -136,6 +155,7 @@ export interface DataSourceStatus {
   gnomad: boolean;
   pubmed: boolean;
   pathways: boolean;
+  structure: boolean;
 }
 
 export interface ResponseMetadata {
@@ -152,6 +172,7 @@ export interface GeneDashboardResponse {
   allele_frequencies: GnomADData | null;
   publications: PubMedData | null;
   pathways: PathwayData | null;
+  structure: StructureData | null;
   metadata: ResponseMetadata;
 }
 

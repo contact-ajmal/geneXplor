@@ -241,3 +241,27 @@ html.light .input-bg,
 .light .input-bg {
   background: rgba(241, 245, 249, 0.9);
 }
+
+/* ── PDBe-Molstar viewer overrides ── */
+.msp-plugin {
+  position: absolute !important;
+  inset: 0;
+  background: transparent !important;
+}
+.msp-plugin canvas {
+  border-radius: 0.75rem;
+  touch-action: pan-y !important;
+}
+/* Prevent Mol* expanded layout from hijacking the page */
+.msp-plugin .msp-layout-expanded {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+}
+/* Hide only the fullscreen/expand button — it locks the page */
+.msp-plugin button[title="Toggle Full Screen"],
+.msp-plugin button[title="Toggle Expanded"] {
+  display: none !important;
+}
