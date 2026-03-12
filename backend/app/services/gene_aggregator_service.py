@@ -13,6 +13,7 @@ from app.schemas.gene_schema import (
     EnsemblGeneData,
     GeneDashboardResponse,
     GnomADData,
+    InteractionData,
     PathwayData,
     PubMedData,
     ResponseMetadata,
@@ -22,6 +23,7 @@ from app.schemas.gene_schema import (
 from app.services.clinvar_service import fetch_clinvar_variants
 from app.services.ensembl_service import fetch_ensembl_gene
 from app.services.gnomad_service import fetch_gnomad_variants
+from app.services.interaction_service import fetch_interactions
 from app.services.pathway_service import fetch_pathways
 from app.services.pubmed_service import fetch_pubmed_articles
 from app.services.structure_service import fetch_structure_data
@@ -65,10 +67,19 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
         fetch_gnomad_variants(symbol),
         fetch_pubmed_articles(symbol),
         fetch_pathways(symbol),
+        fetch_interactions(symbol),
         return_exceptions=True,
     )
 
-    ensembl_result, uniprot_result, clinvar_result, gnomad_result, pubmed_result, pathway_result = results
+    (
+        ensembl_result,
+        uniprot_result,
+        clinvar_result,
+        gnomad_result,
+        pubmed_result,
+        pathway_result,
+        interaction_result,
+    ) = results
 
     # Handle individual failures — log exceptions, set to None
     if isinstance(ensembl_result, Exception):
@@ -89,6 +100,9 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
     if isinstance(pathway_result, Exception):
         logger.error("Pathways failed for %s: %s", symbol, pathway_result)
         pathway_result = None
+    if isinstance(interaction_result, Exception):
+        logger.error("Interactions failed for %s: %s", symbol, interaction_result)
+        interaction_result = None
 
     # Fetch structure data (depends on uniprot_id + variants)
     uniprot_id = uniprot_result.get("uniprot_id") if isinstance(uniprot_result, dict) else None
@@ -113,6 +127,7 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
         "pubmed": pubmed_result,
         "pathways": pathway_result,
         "structure": structure_result,
+        "interactions": interaction_result,
         "fetched_at": now,
     }
 
@@ -143,6 +158,7 @@ def _build_response_from_payload(
     pubmed_data = payload.get("pubmed")
     pathway_data = payload.get("pathways")
     structure_data = payload.get("structure")
+    interaction_data = payload.get("interactions")
     fetched_at = payload.get("fetched_at", datetime.now(timezone.utc).isoformat())
 
     return GeneDashboardResponse(
@@ -154,6 +170,7 @@ def _build_response_from_payload(
         publications=PubMedData(**pubmed_data) if pubmed_data else None,
         pathways=PathwayData(**pathway_data) if pathway_data else None,
         structure=StructureData(**structure_data) if structure_data else None,
+        interactions=InteractionData(**interaction_data) if interaction_data else None,
         metadata=ResponseMetadata(
             fetched_at=fetched_at,
             cached=is_cached,
@@ -166,6 +183,8 @@ def _build_response_from_payload(
                 pathways=pathway_data is not None,
                 structure=structure_data is not None
                 and structure_data.get("structure_available", False),
+                interactions=interaction_data is not None
+                and len(interaction_data.get("interactions", [])) > 0,
             ),
         ),
     )

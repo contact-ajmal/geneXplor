@@ -25,6 +25,7 @@ import LoadingPage from './LoadingPage';
 
 const VariantAnalytics = lazy(() => import('../components/gene/VariantAnalytics'));
 const ProteinStructureViewer = lazy(() => import('../components/viz/ProteinStructureViewer'));
+const InteractionNetwork = lazy(() => import('../components/viz/InteractionNetwork'));
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
@@ -116,7 +117,7 @@ export default function GeneDashboardPage() {
 
   if (!data || !data.gene) return null;
 
-  const { gene, protein, variants, allele_frequencies, publications, pathways, structure, metadata } = data;
+  const { gene, protein, variants, allele_frequencies, publications, pathways, structure, interactions, metadata } = data;
 
   return (
     <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
@@ -290,6 +291,28 @@ export default function GeneDashboardPage() {
             />
           )}
         </ScrollReveal>
+
+        {/* Section 7.5: Gene Interaction Network */}
+        {interactions && interactions.interactions.length > 0 && (
+          <ScrollReveal delay={0.38}>
+            <div id="export-interaction-network">
+              <Suspense
+                fallback={
+                  <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                    <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
+                    <div className="h-[500px] rounded skeleton-shimmer" />
+                  </div>
+                }
+              >
+                <InteractionNetwork
+                  interactions={interactions}
+                  geneSymbol={gene.gene_symbol}
+                  delay={0}
+                />
+              </Suspense>
+            </div>
+          </ScrollReveal>
+        )}
 
         {/* Gene Comparison CTA */}
         <ScrollReveal delay={0.4}>

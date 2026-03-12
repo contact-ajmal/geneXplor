@@ -148,6 +148,36 @@ export interface StructureData {
   variant_residues: VariantResidue[];
 }
 
+export interface InteractionEdge {
+  gene_a: string;
+  gene_b: string;
+  combined_score: number;
+  experimental_score: number;
+  database_score: number;
+  textmining_score: number;
+  coexpression_score: number;
+}
+
+export interface InteractionNode {
+  gene_symbol: string;
+  is_center: boolean;
+  interaction_count: number;
+}
+
+export interface EnrichmentTerm {
+  term: string;
+  description: string;
+  p_value: number;
+  category: string;
+}
+
+export interface InteractionData {
+  center_gene: string;
+  interactions: InteractionEdge[];
+  nodes: InteractionNode[];
+  enrichment: EnrichmentTerm[];
+}
+
 export interface DataSourceStatus {
   ensembl: boolean;
   uniprot: boolean;
@@ -156,6 +186,7 @@ export interface DataSourceStatus {
   pubmed: boolean;
   pathways: boolean;
   structure: boolean;
+  interactions: boolean;
 }
 
 export interface ResponseMetadata {
@@ -173,6 +204,7 @@ export interface GeneDashboardResponse {
   publications: PubMedData | null;
   pathways: PathwayData | null;
   structure: StructureData | null;
+  interactions: InteractionData | null;
   metadata: ResponseMetadata;
 }
 

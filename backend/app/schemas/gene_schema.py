@@ -146,6 +146,38 @@ class StructureData(BaseModel):
     variant_residues: list[VariantResidue] = []
 
 
+# --- Interactions ---
+
+class InteractionEdge(BaseModel):
+    gene_a: str
+    gene_b: str
+    combined_score: float = 0.0
+    experimental_score: float = 0.0
+    database_score: float = 0.0
+    textmining_score: float = 0.0
+    coexpression_score: float = 0.0
+
+
+class InteractionNode(BaseModel):
+    gene_symbol: str
+    is_center: bool = False
+    interaction_count: int = 0
+
+
+class EnrichmentTerm(BaseModel):
+    term: str
+    description: str = ""
+    p_value: float = 1.0
+    category: str = ""  # BP, MF, CC
+
+
+class InteractionData(BaseModel):
+    center_gene: str
+    interactions: list[InteractionEdge] = []
+    nodes: list[InteractionNode] = []
+    enrichment: list[EnrichmentTerm] = []
+
+
 # --- Aggregated Dashboard Response ---
 
 class DataSourceStatus(BaseModel):
@@ -156,6 +188,7 @@ class DataSourceStatus(BaseModel):
     pubmed: bool = False
     pathways: bool = False
     structure: bool = False
+    interactions: bool = False
 
 
 class ResponseMetadata(BaseModel):
@@ -175,6 +208,7 @@ class GeneDashboardResponse(BaseModel):
     publications: PubMedData | None = None
     pathways: PathwayData | None = None
     structure: StructureData | None = None
+    interactions: InteractionData | None = None
     metadata: ResponseMetadata
 
 
