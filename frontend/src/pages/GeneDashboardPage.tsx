@@ -2,7 +2,7 @@ import { useState, lazy, Suspense, useCallback, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { AlertCircle, Dna, Search, GitCompare, ArrowRight } from 'lucide-react';
+import { AlertCircle, Dna, Search, GitCompare, ArrowRight, BookOpen, LayoutDashboard } from 'lucide-react';
 import { fetchGene } from '../lib/api';
 import type { GeneDashboardResponse } from '../lib/api';
 import ScrollReveal from '../components/ui/ScrollReveal';
@@ -125,6 +125,23 @@ export default function GeneDashboardPage() {
     <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
       {/* Page Header */}
       <GeneHeader gene={gene} metadata={metadata} />
+
+      {/* Mode Toggle: Dashboard | Story */}
+      <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-1 rounded-lg border border-space-600/60 p-1 bg-space-800/60 backdrop-blur-sm">
+          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body bg-cyan/10 text-cyan border border-cyan/20">
+            <LayoutDashboard className="w-3.5 h-3.5" />
+            Dashboard
+          </span>
+          <Link
+            to={`/gene/${upperSymbol}/story`}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body text-text-secondary hover:text-text-primary transition-colors"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            Story
+          </Link>
+        </div>
+      </div>
 
       {/* Export Toolbar */}
       <ExportToolbar
