@@ -1,9 +1,11 @@
-import { useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, Star } from 'lucide-react';
+import { X, ExternalLink, Star, Globe } from 'lucide-react';
 import type { ClinVarVariant, GnomADVariant, UniProtData, PopulationFrequency } from '../../lib/api';
 import GlowBadge from '../ui/GlowBadge';
 import AnimatedButton from '../ui/AnimatedButton';
+
+const PopulationMap = lazy(() => import('../viz/PopulationMap'));
 
 interface VariantDetailModalProps {
   variantId: string | null;
@@ -132,6 +134,13 @@ export default function VariantDetailModal({
   protein,
   onClose,
 }: VariantDetailModalProps) {
+  const [activeTab, setActiveTab] = useState<'details' | 'population'>('details');
+
+  // Reset tab when variant changes
+  useEffect(() => {
+    setActiveTab('details');
+  }, [variantId]);
+
   // Escape key handler
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -292,6 +301,47 @@ export default function VariantDetailModal({
                   )}
                 </div>
               </div>
+
+              {/* ── Tab Bar ── */}
+              <div className="flex gap-1 p-0.5 rounded-lg bg-space-800/60 border border-space-600/20">
+                <button
+                  onClick={() => setActiveTab('details')}
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body font-semibold transition-all cursor-pointer
+                    ${activeTab === 'details'
+                      ? 'bg-cyan/[0.12] text-cyan border border-cyan/20'
+                      : 'text-text-muted hover:text-text-secondary border border-transparent'}`}
+                >
+                  Details
+                </button>
+                <button
+                  onClick={() => setActiveTab('population')}
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body font-semibold transition-all cursor-pointer
+                    ${activeTab === 'population'
+                      ? 'bg-cyan/[0.12] text-cyan border border-cyan/20'
+                      : 'text-text-muted hover:text-text-secondary border border-transparent'}`}
+                >
+                  <Globe className="w-3 h-3" />
+                  Population Map
+                </button>
+              </div>
+
+              {/* ── Population Map Tab ── */}
+              {activeTab === 'population' && (
+                <Suspense fallback={
+                  <div className="h-[400px] rounded-xl skeleton-shimmer" />
+                }>
+                  <PopulationMap
+                    gnomadVariants={gnomadVariants}
+                    clinvarVariants={clinvarVariants}
+                    initialVariantId={variant.variant_id}
+                    geneSymbol=""
+                    embedded
+                  />
+                </Suspense>
+              )}
+
+              {/* ── Details Tab ── */}
+              {activeTab === 'details' && <>
 
               {/* ── Section A: Variant Identity ── */}
               <Section title="Variant Identity">
@@ -509,6 +559,8 @@ export default function VariantDetailModal({
                   )}
                 </div>
               </Section>
+
+              </>}
             </div>
           </motion.div>
         </motion.div>

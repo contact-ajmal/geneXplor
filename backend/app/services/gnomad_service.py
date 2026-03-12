@@ -88,14 +88,18 @@ async def fetch_gnomad_variants(symbol: str) -> dict | None:
         # Population frequencies from exome data (compute AF from ac/an)
         pop_freqs = []
         for pop in (exome.get("populations") or []):
+            pop_id = pop.get("id", "")
+            if not pop_id:
+                continue
             pop_ac = pop.get("ac", 0) or 0
             pop_an = pop.get("an", 0) or 0
             pop_af = pop_ac / pop_an if pop_an > 0 else 0.0
-            if pop_af > 0:
-                pop_freqs.append({
-                    "population": pop.get("id", ""),
-                    "af": round(pop_af, 8),
-                })
+            pop_freqs.append({
+                "population": pop_id,
+                "af": round(pop_af, 8),
+                "ac": pop_ac,
+                "an": pop_an,
+            })
 
         parsed.append({
             "variant_id": v.get("variant_id", ""),

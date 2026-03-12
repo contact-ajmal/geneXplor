@@ -113,6 +113,8 @@ export interface ClinVarData {
 export interface PopulationFrequency {
   population: string;
   af: number;
+  ac: number;
+  an: number;
 }
 
 export interface GnomADVariant {

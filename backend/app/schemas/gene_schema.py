@@ -105,6 +105,8 @@ class ClinVarData(BaseModel):
 class PopulationFrequency(BaseModel):
     population: str
     af: float
+    ac: int = 0
+    an: int = 0
 
 
 class GnomADVariant(BaseModel):

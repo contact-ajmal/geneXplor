@@ -27,6 +27,7 @@ const VariantAnalytics = lazy(() => import('../components/gene/VariantAnalytics'
 const ProteinStructureViewer = lazy(() => import('../components/viz/ProteinStructureViewer'));
 const InteractionNetwork = lazy(() => import('../components/viz/InteractionNetwork'));
 const VariantTimeline = lazy(() => import('../components/viz/VariantTimeline'));
+const PopulationMap = lazy(() => import('../components/viz/PopulationMap'));
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
@@ -237,6 +238,29 @@ export default function GeneDashboardPage() {
                   gnomadVariants={allele_frequencies?.variants || []}
                   delay={0}
                   onSignificanceClick={handleSignificanceFilter}
+                />
+              </Suspense>
+            </div>
+          </ScrollReveal>
+        )}
+
+        {/* Section 4.6: Population Frequency Map */}
+        {allele_frequencies && allele_frequencies.variants.length > 0 && (
+          <ScrollReveal delay={0.21}>
+            <div id="export-population-map">
+              <Suspense
+                fallback={
+                  <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                    <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
+                    <div className="h-[400px] rounded skeleton-shimmer" />
+                  </div>
+                }
+              >
+                <PopulationMap
+                  gnomadVariants={allele_frequencies.variants}
+                  clinvarVariants={variants?.variants || []}
+                  geneSymbol={gene.gene_symbol}
+                  delay={0}
                 />
               </Suspense>
             </div>
