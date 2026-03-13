@@ -2,10 +2,11 @@ import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Search, Database, Dna, FlaskConical, Activity, BookOpen, Clock, X, TrendingUp } from 'lucide-react';
+import { Search, Database, Dna, FlaskConical, Activity, BookOpen, Clock, X, TrendingUp, Star, ArrowRight } from 'lucide-react';
 import DecodeText from '../components/ui/DecodeText';
 import GlowBadge from '../components/ui/GlowBadge';
 import { useSearchHistory } from '../hooks/useSearchHistory';
+import { useWatchlist } from '../hooks/useWatchlist';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
 import { fetchGene, fetchTrendingGenes } from '../lib/api';
 import type { TrendingGenesResponse } from '../lib/api';
@@ -39,6 +40,7 @@ export default function HomePage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const { history, addSearch, clearHistory } = useSearchHistory();
+  const { watchlist } = useWatchlist();
 
   // Fetch trending genes (cached for 7 days)
   const { data: trendingData } = useQuery<TrendingGenesResponse>({
@@ -278,6 +280,50 @@ export default function HomePage() {
                 </button>
               ))}
             </div>
+          </motion.div>
+        )}
+
+        {/* Your Watchlist */}
+        {watchlist.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 1.2 }}
+            className="mb-10"
+          >
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Star className="w-3.5 h-3.5 text-amber fill-amber" />
+              <p className="text-text-muted text-xs font-body uppercase tracking-widest">
+                Your Watchlist
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 mb-2">
+              {watchlist.slice(0, 5).map((entry, i) => (
+                <motion.div
+                  key={entry.gene_symbol}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 1.25 + i * 0.05 }}
+                >
+                  <GlowBadge
+                    color="amber"
+                    onClick={() => doSearch(entry.gene_symbol)}
+                  >
+                    <Star className="w-3 h-3 fill-amber" />
+                    {entry.gene_symbol}
+                  </GlowBadge>
+                </motion.div>
+              ))}
+            </div>
+            {watchlist.length > 5 && (
+              <button
+                onClick={() => navigate('/watchlist')}
+                className="text-amber/70 hover:text-amber text-xs font-body transition-colors cursor-pointer inline-flex items-center gap-1"
+              >
+                View All ({watchlist.length})
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            )}
           </motion.div>
         )}
 

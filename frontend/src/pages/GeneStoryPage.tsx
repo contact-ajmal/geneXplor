@@ -16,6 +16,7 @@ import DecodeText from '../components/ui/DecodeText';
 import GlowBadge from '../components/ui/GlowBadge';
 import AnimatedButton from '../components/ui/AnimatedButton';
 import CountUp from '../components/ui/CountUp';
+import WatchButton from '../components/gene/WatchButton';
 import LoadingPage from './LoadingPage';
 
 const PopulationMap = lazy(() => import('../components/viz/PopulationMap'));
@@ -392,7 +393,10 @@ export default function GeneStoryPage() {
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-body">Back to Dashboard</span>
         </button>
-        <ModeToggle symbol={upperSymbol} />
+        <div className="flex items-center gap-2">
+          <WatchButton symbol={upperSymbol} size="sm" />
+          <ModeToggle symbol={upperSymbol} />
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════

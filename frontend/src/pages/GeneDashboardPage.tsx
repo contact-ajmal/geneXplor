@@ -133,7 +133,7 @@ export default function GeneDashboardPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
       {/* Page Header */}
-      <GeneHeader gene={gene} metadata={metadata} />
+      <GeneHeader gene={gene} metadata={metadata} onToast={showToast} />
 
       {/* Mode Toggle: Dashboard | Story */}
       <div className="flex items-center gap-2 mb-6">

@@ -1,8 +1,9 @@
 import { useState, useRef, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Dna, Search, Moon, Sun, GitCompare, TrendingUp } from 'lucide-react';
+import { Dna, Search, Moon, Sun, GitCompare, TrendingUp, Star } from 'lucide-react';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useWatchlist } from '../hooks/useWatchlist';
 
 interface NavbarProps {
   darkMode: boolean;
@@ -15,6 +16,7 @@ export default function Navbar({ darkMode, onToggleDarkMode }: NavbarProps) {
   const location = useLocation();
   const showSearch = location.pathname !== '/';
   const inputRef = useRef<HTMLInputElement>(null);
+  const { count: watchlistCount } = useWatchlist();
 
   const handleNavSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,6 +122,25 @@ export default function Navbar({ darkMode, onToggleDarkMode }: NavbarProps) {
             <span className="hidden sm:inline text-xs font-body">Compare</span>
           </motion.button>
         )}
+
+        {/* Watchlist button */}
+        <motion.button
+          onClick={() => navigate('/watchlist')}
+          whileTap={{ scale: 0.9 }}
+          className="p-2 rounded-lg text-text-secondary hover:text-amber hover:bg-amber/[0.05]
+                     transition-colors cursor-pointer bg-transparent border-none flex items-center gap-1.5 relative"
+          aria-label="Watchlist"
+          title="Watchlist"
+        >
+          <Star className={`w-4 h-4 ${watchlistCount > 0 ? 'fill-amber text-amber' : ''}`} />
+          <span className="hidden sm:inline text-xs font-body">Watchlist</span>
+          {watchlistCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 flex items-center justify-center
+              px-1 rounded-full text-[9px] font-mono font-bold bg-amber text-space-900">
+              {watchlistCount}
+            </span>
+          )}
+        </motion.button>
 
         {/* Dark/light toggle */}
         <motion.button

@@ -4,13 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import type { EnsemblGeneData, ResponseMetadata } from '../../lib/api';
 import DecodeText from '../ui/DecodeText';
 import GlowBadge from '../ui/GlowBadge';
+import WatchButton from './WatchButton';
 
 interface GeneHeaderProps {
   gene: EnsemblGeneData;
   metadata: ResponseMetadata;
+  onToast?: (type: 'success' | 'error' | 'info', message: string) => void;
 }
 
-export default function GeneHeader({ gene, metadata }: GeneHeaderProps) {
+export default function GeneHeader({ gene, metadata, onToast }: GeneHeaderProps) {
   const navigate = useNavigate();
   const geneLength = gene.end - gene.start;
   const sources = metadata.data_sources;
@@ -34,13 +36,16 @@ export default function GeneHeader({ gene, metadata }: GeneHeaderProps) {
 
       {/* Gene symbol + name */}
       <div className="flex flex-wrap items-start gap-4 mb-3">
-        <h1 className="text-4xl md:text-5xl font-heading font-bold">
-          <DecodeText
-            text={gene.gene_symbol}
-            className="font-mono text-cyan"
-            speed={35}
-          />
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-4xl md:text-5xl font-heading font-bold">
+            <DecodeText
+              text={gene.gene_symbol}
+              className="font-mono text-cyan"
+              speed={35}
+            />
+          </h1>
+          <WatchButton symbol={gene.gene_symbol} onToast={onToast} />
+        </div>
         <div className="flex flex-wrap items-center gap-2 mt-2">
           <GlowBadge color="cyan">
             Chr {gene.chromosome}
