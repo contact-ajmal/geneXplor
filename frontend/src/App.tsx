@@ -10,6 +10,7 @@ import HomePage from './pages/HomePage';
 
 const GeneDashboardPage = lazy(() => import('./pages/GeneDashboardPage'));
 const GeneStoryPage = lazy(() => import('./pages/GeneStoryPage'));
+const TrendingPage = lazy(() => import('./pages/TrendingPage'));
 const ComparePage = lazy(() => import('./pages/ComparePage'));
 const CompareResultPage = lazy(() => import('./pages/CompareResultPage'));
 
@@ -82,6 +83,7 @@ export default function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/gene/:symbol" element={<GeneDashboardPage />} />
               <Route path="/gene/:symbol/story" element={<GeneStoryPage />} />
+              <Route path="/trending" element={<TrendingPage />} />
               <Route path="/compare" element={<ComparePage />} />
               <Route path="/compare/:symbolA/:symbolB" element={<CompareResultPage />} />
             </Routes>

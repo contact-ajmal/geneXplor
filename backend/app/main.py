@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes_gene import router as gene_router
+from app.api.routes_research import router as research_router
 from app.core.database import create_tables
 from app.core.redis import close_redis, get_redis
 from app.utils.http_client import close_http_client
@@ -45,3 +46,4 @@ app.add_middleware(
 )
 
 app.include_router(gene_router)
+app.include_router(research_router)

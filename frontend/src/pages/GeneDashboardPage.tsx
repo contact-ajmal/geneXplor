@@ -16,6 +16,7 @@ import VariantDetailModal from '../components/gene/VariantDetailModal';
 import ExportToolbar from '../components/gene/ExportToolbar';
 import DiseaseAssociations from '../components/gene/DiseaseAssociations';
 import ResearchPublications from '../components/gene/ResearchPublications';
+import ResearchPulseCard from '../components/gene/ResearchPulseCard';
 import BiologicalPathways from '../components/gene/BiologicalPathways';
 import DataSourcesFooter from '../components/gene/DataSourcesFooter';
 import ToastContainer from '../components/ui/Toast';
@@ -346,6 +347,11 @@ export default function GeneDashboardPage() {
               />
             )}
           </div>
+        </ScrollReveal>
+
+        {/* Section 6.5: Research Pulse */}
+        <ScrollReveal delay={0.32}>
+          <ResearchPulseCard geneSymbol={gene.gene_symbol} delay={0} />
         </ScrollReveal>
 
         {/* Section 7: Biological Pathways */}

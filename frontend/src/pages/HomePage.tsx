@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Search, Database, Dna, FlaskConical, Activity, BookOpen, Clock, X } from 'lucide-react';
+import { Search, Database, Dna, FlaskConical, Activity, BookOpen, Clock, X, TrendingUp } from 'lucide-react';
 import DecodeText from '../components/ui/DecodeText';
 import GlowBadge from '../components/ui/GlowBadge';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
-import { fetchGene } from '../lib/api';
+import { fetchGene, fetchTrendingGenes } from '../lib/api';
+import type { TrendingGenesResponse } from '../lib/api';
 
 const POPULAR_GENES = ['TP53', 'BRCA1', 'EGFR', 'CFTR', 'BRAF', 'APOE', 'HTT', 'HBB'];
 
@@ -38,6 +39,18 @@ export default function HomePage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const { history, addSearch, clearHistory } = useSearchHistory();
+
+  // Fetch trending genes (cached for 7 days)
+  const { data: trendingData } = useQuery<TrendingGenesResponse>({
+    queryKey: ['trending-genes'],
+    queryFn: fetchTrendingGenes,
+    staleTime: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  const topTrending = useMemo(() => {
+    if (!trendingData) return [];
+    return trendingData.trending.filter(g => g.last_12_months >= 5).slice(0, 5);
+  }, [trendingData]);
 
   // Debounce search input (300ms)
   useEffect(() => {
@@ -296,6 +309,44 @@ export default function HomePage() {
             ))}
           </div>
         </motion.div>
+
+        {/* Trending Now */}
+        {topTrending.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 1.5 }}
+            className="mb-14"
+          >
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <TrendingUp className="w-3.5 h-3.5 text-helix-green" />
+              <p className="text-text-muted text-xs font-body uppercase tracking-widest">
+                Trending now
+              </p>
+            </div>
+            <p className="text-text-muted/60 text-[10px] font-body mb-3">
+              Rising in research activity
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {topTrending.map((gene, i) => (
+                <motion.div
+                  key={gene.gene_symbol}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 1.6 + i * 0.05 }}
+                >
+                  <GlowBadge
+                    color="green"
+                    onClick={() => doSearch(gene.gene_symbol)}
+                  >
+                    <TrendingUp className="w-3 h-3" />
+                    {gene.gene_symbol}
+                  </GlowBadge>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* Data Sources Strip */}
         <motion.div

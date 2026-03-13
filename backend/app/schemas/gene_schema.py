@@ -256,6 +256,51 @@ class GeneSummaryResponse(BaseModel):
     source: str = "template"
 
 
+# --- Research Pulse ---
+
+class YearlyPublication(BaseModel):
+    year: int
+    count: int
+
+
+class ResearchPulseResponse(BaseModel):
+    gene_symbol: str
+    yearly_publications: list[YearlyPublication] = []
+    last_12_months: int = 0
+    prior_12_months: int = 0
+    trend_ratio: float = 1.0
+    trend_direction: str = "stable"
+    peak_year: int = 0
+    total_all_time: int = 0
+
+
+class TrendingGeneEntry(BaseModel):
+    gene_symbol: str
+    trend_ratio: float = 1.0
+    last_12_months: int = 0
+    prior_12_months: int = 0
+    trend_direction: str = "stable"
+    total_all_time: int = 0
+    peak_year: int = 0
+    category: str = ""
+    yearly_publications: list[YearlyPublication] = []
+
+
+class MostResearchedEntry(BaseModel):
+    gene_symbol: str
+    total_all_time: int = 0
+    last_12_months: int = 0
+    trend_direction: str = "stable"
+    category: str = ""
+
+
+class TrendingGenesResponse(BaseModel):
+    trending: list[TrendingGeneEntry] = []
+    most_researched: list[MostResearchedEntry] = []
+    categories: dict[str, str] = {}
+    generated_at: str = ""
+
+
 # --- Health ---
 
 class HealthResponse(BaseModel):

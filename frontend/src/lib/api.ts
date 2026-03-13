@@ -257,6 +257,51 @@ export interface HealthResponse {
   version: string;
 }
 
+// ── Research Pulse Types ──
+
+export interface YearlyPublication {
+  year: number;
+  count: number;
+}
+
+export interface ResearchPulseResponse {
+  gene_symbol: string;
+  yearly_publications: YearlyPublication[];
+  last_12_months: number;
+  prior_12_months: number;
+  trend_ratio: number;
+  trend_direction: 'rising' | 'stable' | 'declining';
+  peak_year: number;
+  total_all_time: number;
+}
+
+export interface TrendingGeneEntry {
+  gene_symbol: string;
+  trend_ratio: number;
+  last_12_months: number;
+  prior_12_months: number;
+  trend_direction: 'rising' | 'stable' | 'declining';
+  total_all_time: number;
+  peak_year: number;
+  category: string;
+  yearly_publications: YearlyPublication[];
+}
+
+export interface MostResearchedEntry {
+  gene_symbol: string;
+  total_all_time: number;
+  last_12_months: number;
+  trend_direction: 'rising' | 'stable' | 'declining';
+  category: string;
+}
+
+export interface TrendingGenesResponse {
+  trending: TrendingGeneEntry[];
+  most_researched: MostResearchedEntry[];
+  categories: Record<string, string>;
+  generated_at: string;
+}
+
 // ── API Calls ──
 
 export const fetchCompareGenes = async (
@@ -281,6 +326,16 @@ export const fetchGeneSummary = async (symbol: string): Promise<GeneSummaryRespo
 
 export const fetchHealth = async (): Promise<HealthResponse> => {
   const { data } = await api.get<HealthResponse>('/health');
+  return data;
+};
+
+export const fetchResearchPulse = async (symbol: string): Promise<ResearchPulseResponse> => {
+  const { data } = await api.get<ResearchPulseResponse>(`/research/pulse/${symbol}`);
+  return data;
+};
+
+export const fetchTrendingGenes = async (): Promise<TrendingGenesResponse> => {
+  const { data } = await api.get<TrendingGenesResponse>('/research/trending');
   return data;
 };
 
