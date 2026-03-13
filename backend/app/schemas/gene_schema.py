@@ -308,3 +308,102 @@ class HealthResponse(BaseModel):
     database: str
     redis: str
     version: str
+
+
+# --- Clinical Report ---
+
+
+class ReportGeneSummary(BaseModel):
+    gene_symbol: str
+    gene_name: str = ""
+    aliases: list[str] = []
+    chromosome: str = ""
+    cytogenetic_band: str = ""
+    coordinates: str = ""
+    ensembl_id: str = ""
+    omim_link: str = ""
+    function_summary: str = ""
+    inheritance_patterns: list[str] = []
+
+
+class ReportVariantEntry(BaseModel):
+    variant_id: str
+    hgvs_genomic: str = ""
+    hgvs_coding: str = ""
+    hgvs_protein: str = ""
+    variant_type: str = ""
+    consequence: str = ""
+    clinical_significance: str = ""
+    review_status: str = ""
+    review_stars: int = 0
+    allele_frequency: float | None = None
+    conditions: list[str] = []
+
+
+class ReportVariantSummary(BaseModel):
+    variants: list[ReportVariantEntry] = []
+    total_pathogenic: int = 0
+    total_likely_pathogenic: int = 0
+    total_vus: int = 0
+    total_benign: int = 0
+    total_likely_benign: int = 0
+
+
+class ReportDiseaseBlock(BaseModel):
+    disease_name: str
+    inheritance_pattern: str = ""
+    pathogenic_variant_count: int = 0
+    key_variants: list[str] = []
+
+
+class ReportPopulationFreqEntry(BaseModel):
+    variant_id: str
+    hgvs: str = ""
+    populations: dict[str, float] = {}
+    max_population: str = ""
+    max_af: float = 0.0
+    min_population: str = ""
+    min_af: float = 0.0
+
+
+class ReportProteinImpact(BaseModel):
+    domains: list[ProteinDomain] = []
+    domain_variant_counts: dict[str, int] = {}
+    hotspot_regions: list[str] = []
+
+
+class ReportResearchContext(BaseModel):
+    total_publications_5yr: int = 0
+    trend_direction: str = "stable"
+    key_references: list[PubMedArticle] = []
+
+
+class ReportMethodology(BaseModel):
+    data_sources: dict[str, str] = {}
+    genome_build: str = "GRCh38"
+    access_date: str = ""
+    filtering_criteria: list[str] = []
+    limitations: list[str] = []
+
+
+class ReportClinicalMetrics(BaseModel):
+    pathogenic_variant_burden: float = 0.0
+    vus_to_pathogenic_ratio: float = 0.0
+    actionability_score: str = "Unknown"
+    total_variants_analyzed: int = 0
+
+
+class ClinicalReportResponse(BaseModel):
+    gene_symbol: str
+    generated_at: str
+    report_sections: dict[str, bool] = {}
+    variant_filter: str = "all"
+    gene_summary: ReportGeneSummary | None = None
+    variant_summary: ReportVariantSummary | None = None
+    disease_associations: list[ReportDiseaseBlock] = []
+    population_frequencies: list[ReportPopulationFreqEntry] = []
+    protein_impact: ReportProteinImpact | None = None
+    research_context: ReportResearchContext | None = None
+    methodology: ReportMethodology | None = None
+    clinical_metrics: ReportClinicalMetrics | None = None
+    disclaimer: str = ""

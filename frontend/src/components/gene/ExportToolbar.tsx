@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Table, FileText, Link2, Loader2 } from 'lucide-react';
+import { Table, FileText, Link2, Loader2, ClipboardList } from 'lucide-react';
 import Papa from 'papaparse';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -12,6 +12,7 @@ import type {
   ResponseMetadata,
 } from '../../lib/api';
 import AnimatedButton from '../ui/AnimatedButton';
+import ClinicalReportModal from './ClinicalReportModal';
 
 interface ExportToolbarProps {
   gene: EnsemblGeneData;
@@ -38,6 +39,7 @@ export default function ExportToolbar({
   onToast,
 }: ExportToolbarProps) {
   const [pdfProgress, setPdfProgress] = useState<{ current: number; total: number } | null>(null);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   // ── CSV Export ──
   const handleExportCsv = useCallback(() => {
@@ -266,6 +268,13 @@ export default function ExportToolbar({
         </span>
       </AnimatedButton>
 
+      <AnimatedButton variant="ghost" onClick={() => setShowReportModal(true)}>
+        <span className="flex items-center gap-1.5 text-xs">
+          <ClipboardList className="w-3.5 h-3.5" />
+          Clinical Report
+        </span>
+      </AnimatedButton>
+
       {/* PDF progress bar */}
       <AnimatePresence>
         {pdfProgress && (
@@ -286,6 +295,13 @@ export default function ExportToolbar({
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Clinical Report Modal */}
+      <ClinicalReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        geneSymbol={gene.gene_symbol}
+        onToast={onToast}
+      />
     </motion.div>
   );
 }

@@ -302,6 +302,104 @@ export interface TrendingGenesResponse {
   generated_at: string;
 }
 
+// ── Clinical Report Types ──
+
+export interface ReportGeneSummary {
+  gene_symbol: string;
+  gene_name: string;
+  aliases: string[];
+  chromosome: string;
+  cytogenetic_band: string;
+  coordinates: string;
+  ensembl_id: string;
+  omim_link: string;
+  function_summary: string;
+  inheritance_patterns: string[];
+}
+
+export interface ReportVariantEntry {
+  variant_id: string;
+  hgvs_genomic: string;
+  hgvs_coding: string;
+  hgvs_protein: string;
+  variant_type: string;
+  consequence: string;
+  clinical_significance: string;
+  review_status: string;
+  review_stars: number;
+  allele_frequency: number | null;
+  conditions: string[];
+}
+
+export interface ReportVariantSummary {
+  variants: ReportVariantEntry[];
+  total_pathogenic: number;
+  total_likely_pathogenic: number;
+  total_vus: number;
+  total_benign: number;
+  total_likely_benign: number;
+}
+
+export interface ReportDiseaseBlock {
+  disease_name: string;
+  inheritance_pattern: string;
+  pathogenic_variant_count: number;
+  key_variants: string[];
+}
+
+export interface ReportPopulationFreqEntry {
+  variant_id: string;
+  hgvs: string;
+  populations: Record<string, number>;
+  max_population: string;
+  max_af: number;
+  min_population: string;
+  min_af: number;
+}
+
+export interface ReportProteinImpact {
+  domains: ProteinDomain[];
+  domain_variant_counts: Record<string, number>;
+  hotspot_regions: string[];
+}
+
+export interface ReportResearchContext {
+  total_publications_5yr: number;
+  trend_direction: string;
+  key_references: PubMedArticle[];
+}
+
+export interface ReportMethodology {
+  data_sources: Record<string, string>;
+  genome_build: string;
+  access_date: string;
+  filtering_criteria: string[];
+  limitations: string[];
+}
+
+export interface ReportClinicalMetrics {
+  pathogenic_variant_burden: number;
+  vus_to_pathogenic_ratio: number;
+  actionability_score: string;
+  total_variants_analyzed: number;
+}
+
+export interface ClinicalReportResponse {
+  gene_symbol: string;
+  generated_at: string;
+  report_sections: Record<string, boolean>;
+  variant_filter: string;
+  gene_summary: ReportGeneSummary | null;
+  variant_summary: ReportVariantSummary | null;
+  disease_associations: ReportDiseaseBlock[];
+  population_frequencies: ReportPopulationFreqEntry[];
+  protein_impact: ReportProteinImpact | null;
+  research_context: ReportResearchContext | null;
+  methodology: ReportMethodology | null;
+  clinical_metrics: ReportClinicalMetrics | null;
+  disclaimer: string;
+}
+
 // ── API Calls ──
 
 export const fetchCompareGenes = async (
@@ -336,6 +434,60 @@ export const fetchResearchPulse = async (symbol: string): Promise<ResearchPulseR
 
 export const fetchTrendingGenes = async (): Promise<TrendingGenesResponse> => {
   const { data } = await api.get<TrendingGenesResponse>('/research/trending');
+  return data;
+};
+
+export const fetchClinicalReport = async (
+  symbol: string,
+  options?: {
+    variant_filter?: string;
+    sections?: string[];
+  },
+): Promise<ClinicalReportResponse> => {
+  const params: Record<string, string> = { format: 'json' };
+  if (options?.variant_filter) params.variant_filter = options.variant_filter;
+  if (options?.sections?.length) params.sections = options.sections.join(',');
+  const { data } = await api.get<ClinicalReportResponse>(`/gene/${symbol}/report`, { params });
+  return data;
+};
+
+export const downloadClinicalReportPdf = async (
+  symbol: string,
+  options?: {
+    variant_filter?: string;
+    sections?: string[];
+  },
+): Promise<void> => {
+  const params: Record<string, string> = { format: 'pdf' };
+  if (options?.variant_filter) params.variant_filter = options.variant_filter;
+  if (options?.sections?.length) params.sections = options.sections.join(',');
+  const { data } = await api.get(`/gene/${symbol}/report`, {
+    params,
+    responseType: 'blob',
+  });
+  const blob = new Blob([data], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${symbol}_clinical_report.pdf`;
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
+export const downloadClinicalReportMarkdown = async (
+  symbol: string,
+  options?: {
+    variant_filter?: string;
+    sections?: string[];
+  },
+): Promise<string> => {
+  const params: Record<string, string> = { format: 'markdown' };
+  if (options?.variant_filter) params.variant_filter = options.variant_filter;
+  if (options?.sections?.length) params.sections = options.sections.join(',');
+  const { data } = await api.get(`/gene/${symbol}/report`, {
+    params,
+    responseType: 'text',
+  });
   return data;
 };
 
