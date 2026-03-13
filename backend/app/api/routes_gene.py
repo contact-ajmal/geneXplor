@@ -12,6 +12,7 @@ from app.schemas.gene_schema import (
     GeneDashboardResponse,
     GeneSummaryResponse,
     HealthResponse,
+    ReconciliationData,
 )
 from app.services.ai_summary_service import generate_gene_summary
 from app.services.gene_aggregator_service import get_gene_dashboard
@@ -166,6 +167,20 @@ async def get_gene_report(
         )
 
     return report
+
+
+@router.get("/gene/{symbol}/reconciliation", response_model=ReconciliationData)
+async def get_gene_reconciliation(
+    symbol: str,
+    session: AsyncSession = Depends(get_session),
+) -> ReconciliationData:
+    symbol_upper = symbol.upper().strip()
+    if not GENE_SYMBOL_PATTERN.match(symbol_upper):
+        raise InvalidGeneSymbolError(symbol)
+    dashboard = await get_gene_dashboard(symbol_upper, session)
+    if dashboard.reconciliation:
+        return dashboard.reconciliation
+    return ReconciliationData()
 
 
 def _report_to_markdown(report: ClinicalReportResponse) -> str:

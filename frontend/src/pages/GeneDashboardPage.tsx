@@ -29,6 +29,7 @@ const ProteinStructureViewer = lazy(() => import('../components/viz/ProteinStruc
 const InteractionNetwork = lazy(() => import('../components/viz/InteractionNetwork'));
 const VariantTimeline = lazy(() => import('../components/viz/VariantTimeline'));
 const PopulationMap = lazy(() => import('../components/viz/PopulationMap'));
+const ReconciliationPanel = lazy(() => import('../components/gene/ReconciliationPanel'));
 
 export default function GeneDashboardPage() {
   const { symbol } = useParams<{ symbol: string }>();
@@ -128,7 +129,7 @@ export default function GeneDashboardPage() {
 
   if (!data || !data.gene) return null;
 
-  const { gene, protein, variants, allele_frequencies, publications, pathways, structure, interactions, metadata } = data;
+  const { gene, protein, variants, allele_frequencies, publications, pathways, structure, interactions, reconciliation, metadata } = data;
 
   return (
     <div className="max-w-6xl mx-auto px-6 pt-20 pb-12">
@@ -235,6 +236,7 @@ export default function GeneDashboardPage() {
               <VariantTable
                 clinvarVariants={variants.variants}
                 gnomadVariants={allele_frequencies?.variants || []}
+                conflicts={reconciliation?.conflicts || []}
                 delay={0}
                 significanceFilter={diseaseFilter}
                 onVariantClick={handleVariantClick}
@@ -311,6 +313,26 @@ export default function GeneDashboardPage() {
                   geneSymbol={gene.gene_symbol}
                   onVariantClick={handleVariantClick}
                   delay={0}
+                />
+              </Suspense>
+            </div>
+          </ScrollReveal>
+        )}
+
+        {/* Section 4.8: Database Reconciliation */}
+        {reconciliation?.summary && (reconciliation.summary.conflicts_found > 0 || (variants && allele_frequencies)) && (
+          <ScrollReveal delay={0.23}>
+            <div id="export-reconciliation">
+              <Suspense fallback={
+                <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                  <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
+                  <div className="h-[300px] rounded skeleton-shimmer" />
+                </div>
+              }>
+                <ReconciliationPanel
+                  reconciliation={reconciliation}
+                  delay={0}
+                  onVariantClick={handleVariantClick}
                 />
               </Suspense>
             </div>

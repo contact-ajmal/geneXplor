@@ -16,6 +16,7 @@ from app.schemas.gene_schema import (
     InteractionData,
     PathwayData,
     PubMedData,
+    ReconciliationData,
     ResponseMetadata,
     StructureData,
     UniProtData,
@@ -26,6 +27,7 @@ from app.services.gnomad_service import fetch_gnomad_variants
 from app.services.interaction_service import fetch_interactions
 from app.services.pathway_service import fetch_pathways
 from app.services.pubmed_service import fetch_pubmed_articles
+from app.services.reconciliation_service import reconcile_variants
 from app.services.structure_service import fetch_structure_data
 from app.services.uniprot_service import fetch_uniprot_protein
 from app.utils.cache_utils import cache_get, cache_set
@@ -44,6 +46,7 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
     cached = await cache_get(redis_client, cache_key)
     if cached is not None:
         logger.info("Dashboard cache hit for %s", symbol)
+        cached = await _ensure_reconciliation(symbol, cached)
         return _build_response_from_payload(symbol, cached, is_cached=True)
 
     # 2. Check PostgreSQL cache
@@ -54,6 +57,7 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
     if db_row is not None:
         logger.info("Dashboard DB cache hit for %s", symbol)
         payload = db_row.json_data
+        payload = await _ensure_reconciliation(symbol, payload)
         await cache_set(redis_client, cache_key, payload)
         return _build_response_from_payload(symbol, payload, is_cached=True)
 
@@ -117,6 +121,15 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
         logger.error("Structure failed for %s: %s", symbol, exc)
         structure_result = None
 
+    # Reconcile ClinVar vs gnomAD
+    try:
+        reconciliation_result = await reconcile_variants(
+            symbol, clinvar_result, gnomad_result
+        )
+    except Exception as exc:
+        logger.error("Reconciliation failed for %s: %s", symbol, exc)
+        reconciliation_result = None
+
     now = datetime.now(timezone.utc).isoformat()
 
     payload = {
@@ -128,6 +141,7 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
         "pathways": pathway_result,
         "structure": structure_result,
         "interactions": interaction_result,
+        "reconciliation": reconciliation_result,
         "fetched_at": now,
     }
 
@@ -148,6 +162,20 @@ async def get_gene_dashboard(symbol: str, session: AsyncSession) -> GeneDashboar
     return _build_response_from_payload(symbol, payload, is_cached=False)
 
 
+async def _ensure_reconciliation(symbol: str, payload: dict) -> dict:
+    """Compute reconciliation data if missing from cached payload."""
+    if payload.get("reconciliation") is not None:
+        return payload
+    try:
+        reconciliation_result = await reconcile_variants(
+            symbol, payload.get("clinvar"), payload.get("gnomad")
+        )
+        payload["reconciliation"] = reconciliation_result
+    except Exception as exc:
+        logger.error("Reconciliation backfill failed for %s: %s", symbol, exc)
+    return payload
+
+
 def _build_response_from_payload(
     symbol: str, payload: dict, is_cached: bool
 ) -> GeneDashboardResponse:
@@ -159,6 +187,7 @@ def _build_response_from_payload(
     pathway_data = payload.get("pathways")
     structure_data = payload.get("structure")
     interaction_data = payload.get("interactions")
+    reconciliation_data = payload.get("reconciliation")
     fetched_at = payload.get("fetched_at", datetime.now(timezone.utc).isoformat())
 
     return GeneDashboardResponse(
@@ -171,6 +200,7 @@ def _build_response_from_payload(
         pathways=PathwayData(**pathway_data) if pathway_data else None,
         structure=StructureData(**structure_data) if structure_data else None,
         interactions=InteractionData(**interaction_data) if interaction_data else None,
+        reconciliation=ReconciliationData(**reconciliation_data) if reconciliation_data else None,
         metadata=ResponseMetadata(
             fetched_at=fetched_at,
             cached=is_cached,

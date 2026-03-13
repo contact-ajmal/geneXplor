@@ -214,6 +214,39 @@ export interface InteractionData {
   enrichment: EnrichmentTerm[];
 }
 
+// ── Reconciliation Types ──
+
+export interface ReconciliationConflict {
+  variant_id: string;
+  hgvs: string;
+  conflict_type: string;
+  severity: 'HIGH' | 'MEDIUM' | 'LOW';
+  clinvar_significance: string;
+  clinvar_review_status: string;
+  clinvar_last_evaluated: string;
+  gnomad_af: number;
+  gnomad_population_afs: Record<string, number>;
+  explanation: string;
+  recommendation: string;
+  external_links: Record<string, string>;
+}
+
+export interface ReconciliationSummary {
+  total_variants_reconciled: number;
+  conflicts_found: number;
+  by_severity: Record<string, number>;
+  by_type: Record<string, number>;
+  reconciliation_score: number;
+  variants_in_both_databases: number;
+  variants_clinvar_only: number;
+  variants_gnomad_only: number;
+}
+
+export interface ReconciliationData {
+  conflicts: ReconciliationConflict[];
+  summary: ReconciliationSummary;
+}
+
 export interface DataSourceStatus {
   ensembl: boolean;
   uniprot: boolean;
@@ -241,6 +274,7 @@ export interface GeneDashboardResponse {
   pathways: PathwayData | null;
   structure: StructureData | null;
   interactions: InteractionData | null;
+  reconciliation: ReconciliationData | null;
   metadata: ResponseMetadata;
 }
 

@@ -10,19 +10,21 @@ import {
   createColumnHelper,
   type SortingState,
 } from '@tanstack/react-table';
-import { ChevronDown, ChevronUp, ChevronsUpDown, ChevronLeft, ChevronRight, Zap } from 'lucide-react';
-import type { ClinVarVariant, GnomADVariant, PopulationFrequency } from '../../lib/api';
+import { ChevronDown, ChevronUp, ChevronsUpDown, ChevronLeft, ChevronRight, Zap, AlertTriangle } from 'lucide-react';
+import type { ClinVarVariant, GnomADVariant, PopulationFrequency, ReconciliationConflict } from '../../lib/api';
 import GlassCard from '../ui/GlassCard';
 import GlowBadge from '../ui/GlowBadge';
 
 interface VariantTableProps {
   clinvarVariants: ClinVarVariant[];
   gnomadVariants: GnomADVariant[];
+  conflicts?: ReconciliationConflict[];
   delay?: number;
   significanceFilter?: string;
   onVariantClick?: (variantId: string) => void;
   onSimulateClick?: (variantId: string) => void;
   onFilteredIdsChange?: (ids: string[]) => void;
+  showConflictsOnly?: boolean;
 }
 
 interface TableVariant {
@@ -34,6 +36,8 @@ interface TableVariant {
   population_frequencies: PopulationFrequency[];
   title: string;
   condition: string;
+  conflict_severity: string | null;
+  conflict_description: string;
 }
 
 function formatConsequence(consequence: string): string {
@@ -74,12 +78,26 @@ const CONSEQUENCE_OPTIONS = [
   'Inframe insertion',
 ];
 
-export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 0, significanceFilter, onVariantClick, onSimulateClick, onFilteredIdsChange }: VariantTableProps) {
+export default function VariantTable({ clinvarVariants, gnomadVariants, conflicts = [], delay = 0, significanceFilter, onVariantClick, onSimulateClick, onFilteredIdsChange, showConflictsOnly: initialConflictsOnly = false }: VariantTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expandedRow, setExpandedRow] = useState<string | null>(null);
   const [sigFilter, setSigFilter] = useState<string[]>(significanceFilter ? [significanceFilter] : []);
   const [consequenceFilter, setConsequenceFilter] = useState<string[]>([]);
   const [afThreshold, setAfThreshold] = useState<number>(1);
+  const [conflictsOnly, setConflictsOnly] = useState(initialConflictsOnly);
+
+  // Build conflict lookup
+  const conflictMap = useMemo(() => {
+    const map = new Map<string, { severity: string; description: string }>();
+    for (const c of conflicts) {
+      const existing = map.get(c.variant_id);
+      // Keep the highest severity
+      if (!existing || (c.severity === 'HIGH' && existing.severity !== 'HIGH') || (c.severity === 'MEDIUM' && existing.severity === 'LOW')) {
+        map.set(c.variant_id, { severity: c.severity, description: c.explanation });
+      }
+    }
+    return map;
+  }, [conflicts]);
 
   // Merge ClinVar + gnomAD data
   const tableData = useMemo(() => {
@@ -90,6 +108,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
 
     const result: TableVariant[] = clinvarVariants.map(cv => {
       const gv = gnomadMap.get(cv.variant_id);
+      const conflict = conflictMap.get(cv.variant_id);
       return {
         variant_id: cv.variant_id,
         position: gv?.position || 0,
@@ -99,11 +118,13 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
         population_frequencies: gv?.population_frequencies || [],
         title: cv.title,
         condition: cv.condition,
+        conflict_severity: conflict?.severity || null,
+        conflict_description: conflict?.description || '',
       };
     });
 
     return result;
-  }, [clinvarVariants, gnomadVariants]);
+  }, [clinvarVariants, gnomadVariants, conflictMap]);
 
   // Apply filters
   const filteredData = useMemo(() => {
@@ -127,8 +148,12 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
       data = data.filter(v => v.allele_frequency === 0 || v.allele_frequency <= afThreshold);
     }
 
+    if (conflictsOnly) {
+      data = data.filter(v => v.conflict_severity !== null);
+    }
+
     return data;
-  }, [tableData, sigFilter, consequenceFilter, afThreshold]);
+  }, [tableData, sigFilter, consequenceFilter, afThreshold, conflictsOnly]);
 
   // Notify parent of filtered variant IDs for CSV export
   useEffect(() => {
@@ -184,6 +209,22 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
         );
       },
     }),
+    ...(conflicts.length > 0 ? [columnHelper.accessor('conflict_severity', {
+      header: 'Conflict',
+      cell: info => {
+        const severity = info.getValue();
+        if (!severity) return <span className="text-text-muted text-xs">—</span>;
+        const colors: Record<string, string> = { HIGH: '#ff3366', MEDIUM: '#ffaa00', LOW: '#64748b' };
+        return (
+          <div className="relative group">
+            <AlertTriangle className="w-4 h-4" style={{ color: colors[severity] || '#64748b' }} />
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-space-800 border border-space-600/50 text-text-secondary text-[10px] font-body w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-lg">
+              {info.row.original.conflict_description}
+            </div>
+          </div>
+        );
+      },
+    })] : []),
     ...(onSimulateClick ? [columnHelper.display({
       id: 'simulate',
       header: '',
@@ -200,7 +241,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
         </button>
       ),
     })] : []),
-  ], [onSimulateClick]);
+  ], [onSimulateClick, conflicts.length]);
 
   const table = useReactTable({
     data: filteredData,
@@ -308,6 +349,22 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, delay = 
             {afThreshold >= 1 ? 'All' : afThreshold.toExponential(0)}
           </span>
         </div>
+
+        {/* Conflicts-only toggle */}
+        {conflicts.length > 0 && (
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={conflictsOnly}
+              onChange={e => setConflictsOnly(e.target.checked)}
+              className="accent-amber w-3.5 h-3.5"
+            />
+            <span className="text-text-muted text-xs font-body whitespace-nowrap flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3 text-amber" />
+              Conflicts only
+            </span>
+          </label>
+        )}
       </div>
 
       {/* Table */}

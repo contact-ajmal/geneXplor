@@ -214,6 +214,39 @@ class InteractionData(BaseModel):
     enrichment: list[EnrichmentTerm] = []
 
 
+# --- Reconciliation ---
+
+class ReconciliationConflict(BaseModel):
+    variant_id: str
+    hgvs: str = ""
+    conflict_type: str
+    severity: str  # HIGH, MEDIUM, LOW
+    clinvar_significance: str = ""
+    clinvar_review_status: str = ""
+    clinvar_last_evaluated: str = ""
+    gnomad_af: float = 0.0
+    gnomad_population_afs: dict[str, float] = {}
+    explanation: str = ""
+    recommendation: str = ""
+    external_links: dict[str, str] = {}
+
+
+class ReconciliationSummary(BaseModel):
+    total_variants_reconciled: int = 0
+    conflicts_found: int = 0
+    by_severity: dict[str, int] = {}
+    by_type: dict[str, int] = {}
+    reconciliation_score: float = 100.0
+    variants_in_both_databases: int = 0
+    variants_clinvar_only: int = 0
+    variants_gnomad_only: int = 0
+
+
+class ReconciliationData(BaseModel):
+    conflicts: list[ReconciliationConflict] = []
+    summary: ReconciliationSummary = ReconciliationSummary()
+
+
 # --- Aggregated Dashboard Response ---
 
 class DataSourceStatus(BaseModel):
@@ -245,6 +278,7 @@ class GeneDashboardResponse(BaseModel):
     pathways: PathwayData | None = None
     structure: StructureData | None = None
     interactions: InteractionData | None = None
+    reconciliation: ReconciliationData | None = None
     metadata: ResponseMetadata
 
 

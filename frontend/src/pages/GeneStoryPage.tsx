@@ -374,7 +374,7 @@ export default function GeneStoryPage() {
     );
   }
 
-  const { gene, protein, variants, allele_frequencies, publications, interactions } = data;
+  const { gene, protein, variants, allele_frequencies, publications, interactions, reconciliation } = data;
 
   return (
     <article className="relative">
@@ -418,6 +418,7 @@ export default function GeneStoryPage() {
           variants={variants}
           gnomadVariants={allele_frequencies?.variants || []}
           protein={protein}
+          conflictCount={reconciliation?.summary.conflicts_found || 0}
           setActive={setActiveChapter}
         />
       )}
@@ -697,11 +698,12 @@ function FunctionChapter({ gene, protein, setActive }: {
 // Chapter 3: Variants
 // ═══════════════════════════════════════════════════════════
 
-function VariantsChapter({ gene, variants, gnomadVariants, protein, setActive }: {
+function VariantsChapter({ gene, variants, gnomadVariants, protein, conflictCount = 0, setActive }: {
   gene: EnsemblGeneData;
   variants: ClinVarData;
   gnomadVariants: GnomADVariant[];
   protein: UniProtData | null;
+  conflictCount?: number;
   setActive: (id: string) => void;
 }) {
   const ref = useChapterInView('variants', setActive);
@@ -816,6 +818,25 @@ function VariantsChapter({ gene, variants, gnomadVariants, protein, setActive }:
                 </p>
               )}
             </div>
+          )}
+
+          {/* Database conflict note */}
+          {conflictCount > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="mt-8 p-4 rounded-xl bg-amber/[0.06] border border-amber/15"
+            >
+              <p className="text-amber/90 text-sm font-body">
+                <span className="font-semibold">Note:</span>{' '}
+                <span className="font-mono text-amber">{conflictCount}</span>{' '}
+                variant{conflictCount !== 1 ? 's' : ''} in this gene{' '}
+                {conflictCount !== 1 ? 'have' : 'has'} conflicting interpretations between
+                ClinVar and gnomAD, suggesting ongoing research is needed.
+              </p>
+            </motion.div>
           )}
 
           {/* Variant Impact Simulator for top pathogenic variant */}
