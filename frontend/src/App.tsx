@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import DNAHelix from './components/ui/DNAHelix';
@@ -8,7 +8,19 @@ import ToastContainer from './components/ui/Toast';
 import type { ToastMessage } from './components/ui/Toast';
 import HomePage from './pages/HomePage';
 
-const GeneDashboardPage = lazy(() => import('./pages/GeneDashboardPage'));
+const DashboardLayout = lazy(() => import('./components/dashboard/DashboardLayout'));
+const OverviewTab = lazy(() => import('./pages/tabs/OverviewTab'));
+const ProteinTab = lazy(() => import('./pages/tabs/ProteinTab'));
+const VariantsTab = lazy(() => import('./pages/tabs/VariantsTab'));
+const PopulationTab = lazy(() => import('./pages/tabs/PopulationTab'));
+const ReconciliationTab = lazy(() => import('./pages/tabs/ReconciliationTab'));
+const TimelineTab = lazy(() => import('./pages/tabs/TimelineTab'));
+const InteractionsTab = lazy(() => import('./pages/tabs/InteractionsTab'));
+const PathwaysTab = lazy(() => import('./pages/tabs/PathwaysTab'));
+const PublicationsTab = lazy(() => import('./pages/tabs/PublicationsTab'));
+const DiseasesTab = lazy(() => import('./pages/tabs/DiseasesTab'));
+const SimulatorTab = lazy(() => import('./pages/tabs/SimulatorTab'));
+const ReportTab = lazy(() => import('./pages/tabs/ReportTab'));
 const GeneStoryPage = lazy(() => import('./pages/GeneStoryPage'));
 const TrendingPage = lazy(() => import('./pages/TrendingPage'));
 const ComparePage = lazy(() => import('./pages/ComparePage'));
@@ -34,6 +46,15 @@ function DashboardFallback() {
   );
 }
 
+function ConditionalFooter() {
+  const location = useLocation();
+  // Hide footer on gene dashboard pages (they have their own full-height layout)
+  if (location.pathname.match(/^\/gene\/[^/]+(\/|$)/) && !location.pathname.endsWith('/story')) {
+    return null;
+  }
+  return <Footer />;
+}
+
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {
     try {
@@ -50,7 +71,6 @@ export default function App() {
     try {
       localStorage.setItem('genexplor_theme', darkMode ? 'dark' : 'light');
     } catch { /* ignore */ }
-    // Apply theme class to html element so body background updates
     if (darkMode) {
       document.documentElement.classList.remove('light');
       document.documentElement.classList.add('dark');
@@ -67,7 +87,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className={`noise-overlay min-h-screen flex flex-col ${darkMode ? 'dark' : 'light'}`}>
-        {/* Background layers — hidden in light mode */}
         {darkMode && (
           <>
             <DNAHelix opacity={0.1} />
@@ -75,14 +94,29 @@ export default function App() {
           </>
         )}
 
-        {/* App shell */}
         <Navbar darkMode={darkMode} onToggleDarkMode={() => setDarkMode(!darkMode)} />
 
-        <main className="flex-1 relative z-10 pt-14">
+        <main className="flex-1 relative z-10 pt-14 flex flex-col min-h-0">
           <Suspense fallback={<DashboardFallback />}>
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/gene/:symbol" element={<GeneDashboardPage />} />
+
+              {/* Gene Dashboard with tab routing */}
+              <Route path="/gene/:symbol" element={<DashboardLayout />}>
+                <Route index element={<OverviewTab />} />
+                <Route path="protein" element={<ProteinTab />} />
+                <Route path="variants" element={<VariantsTab />} />
+                <Route path="population" element={<PopulationTab />} />
+                <Route path="reconciliation" element={<ReconciliationTab />} />
+                <Route path="timeline" element={<TimelineTab />} />
+                <Route path="interactions" element={<InteractionsTab />} />
+                <Route path="pathways" element={<PathwaysTab />} />
+                <Route path="publications" element={<PublicationsTab />} />
+                <Route path="diseases" element={<DiseasesTab />} />
+                <Route path="simulator" element={<SimulatorTab />} />
+                <Route path="report" element={<ReportTab />} />
+              </Route>
+
               <Route path="/gene/:symbol/story" element={<GeneStoryPage />} />
               <Route path="/trending" element={<TrendingPage />} />
               <Route path="/compare" element={<ComparePage />} />
@@ -92,9 +126,7 @@ export default function App() {
           </Suspense>
         </main>
 
-        <Footer />
-
-        {/* Toast notifications */}
+        <ConditionalFooter />
         <ToastContainer toasts={toasts} onDismiss={dismissToast} />
       </div>
     </BrowserRouter>

@@ -479,7 +479,7 @@ export default function WatchlistPage() {
 
       {/* ── CARDS VIEW ── */}
       {viewMode === 'cards' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredWatchlist.map((entry, i) => {
             const geneData = geneDataMap.get(entry.gene_symbol);
             const queryState = geneQueries[watchlist.findIndex((w) => w.gene_symbol === entry.gene_symbol)];

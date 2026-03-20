@@ -10,16 +10,48 @@ interface ProteinInfoCardProps {
 
 const DOMAIN_COLORS = ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#a855f7'];
 
+/**
+ * Split a function description into readable sentences,
+ * stripping PubMed references like {ECO:...|PubMed:12345} or (PubMed:12345).
+ */
+function cleanAndSplitSentences(text: string): string[] {
+  // Remove ECO evidence codes and PubMed references in curly braces
+  let cleaned = text.replace(/\s*\{ECO:[^}]*\}/g, '');
+  // Remove parenthetical PubMed references
+  cleaned = cleaned.replace(/\s*\(PubMed:\d+[^)]*\)/g, '');
+  // Remove standalone "PubMed:NNNNN" references
+  cleaned = cleaned.replace(/\s*PubMed:\d+/g, '');
+  // Remove leftover empty parentheses
+  cleaned = cleaned.replace(/\(\s*\)/g, '');
+  // Collapse multiple spaces
+  cleaned = cleaned.replace(/\s{2,}/g, ' ').trim();
+
+  // Split on sentence boundaries (period followed by space or end)
+  const sentences = cleaned
+    .split(/\.\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 10)
+    .slice(0, 5)
+    .map((s) => (s.endsWith('.') ? s : `${s}.`));
+
+  return sentences;
+}
+
 export default function ProteinInfoCard({ protein, delay = 0 }: ProteinInfoCardProps) {
+  const sentences = protein.function_description
+    ? cleanAndSplitSentences(protein.function_description)
+    : [];
+
   return (
     <GlassCard delay={delay}>
+      {/* ── Header ── */}
       <h2 className="text-sm font-heading font-semibold text-text-primary mb-4 uppercase tracking-wider">
         Protein Information
       </h2>
 
-      <div className="flex flex-wrap items-center gap-3 mb-4">
-        <h3 className="text-lg font-body text-text-primary font-semibold">
-          {protein.protein_name}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <h3 className="text-lg font-heading text-text-primary font-semibold">
+          Protein: <span className="text-cyan">{protein.protein_name}</span>
         </h3>
         <GlowBadge color="cyan">{protein.protein_length} amino acids</GlowBadge>
         <a
@@ -33,22 +65,80 @@ export default function ProteinInfoCard({ protein, delay = 0 }: ProteinInfoCardP
         </a>
       </div>
 
-      {protein.function_description && (
-        <div className="text-text-secondary text-sm font-body leading-relaxed mb-6 max-w-prose">
-          {protein.function_description.split('\n').slice(0, 3).map((para, i) => (
-            <p key={i} className={i > 0 ? 'mt-2' : ''}>
-              {para}
-            </p>
-          ))}
+      {/* ── Key Properties Grid ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 p-4 rounded-lg bg-space-800/40 border border-space-600/30">
+        {/* Length */}
+        <div>
+          <span className="text-xs font-body text-text-muted uppercase tracking-wider block mb-1">
+            Length
+          </span>
+          <span className="text-sm font-mono text-text-primary">
+            {protein.protein_length.toLocaleString()} amino acids
+          </span>
+          <p className="text-xs font-body text-text-secondary mt-0.5">
+            This protein is made up of {protein.protein_length.toLocaleString()} amino acid building blocks
+          </p>
+        </div>
+
+        {/* UniProt ID */}
+        <div>
+          <span className="text-xs font-body text-text-muted uppercase tracking-wider block mb-1">
+            UniProt ID
+          </span>
+          <a
+            href={`https://www.uniprot.org/uniprot/${protein.uniprot_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-mono text-cyan hover:text-cyan/80 transition-colors"
+          >
+            {protein.uniprot_id}
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </div>
+
+        {/* Gene Names */}
+        {protein.gene_names && protein.gene_names.length > 0 && (
+          <div className="sm:col-span-2">
+            <span className="text-xs font-body text-text-muted uppercase tracking-wider block mb-1.5">
+              Gene Names
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {protein.gene_names.map((name) => (
+                <GlowBadge key={name} color="green">
+                  {name}
+                </GlowBadge>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── What This Protein Does ── */}
+      {sentences.length > 0 && (
+        <div className="mb-6">
+          <h4 className="text-xs font-heading text-text-muted uppercase tracking-wider mb-3">
+            What This Protein Does
+          </h4>
+          <ul className="space-y-2 max-w-prose">
+            {sentences.map((sentence, i) => (
+              <li key={i} className="flex gap-2.5 text-sm font-body text-text-secondary leading-relaxed">
+                <span className="text-cyan/60 mt-1 shrink-0">&#8226;</span>
+                <span>{sentence}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
-      {/* Protein Domain Visualization */}
+      {/* ── Protein Domain Visualization ── */}
       {protein.domains.length > 0 && (
         <div>
-          <h4 className="text-xs font-body text-text-muted uppercase tracking-wider mb-3">
+          <h4 className="text-xs font-heading text-text-muted uppercase tracking-wider mb-1">
             Protein Domains
           </h4>
+          <p className="text-xs font-body text-text-secondary mb-3">
+            Functional regions of the protein
+          </p>
           <DomainBar protein={protein} />
         </div>
       )}
@@ -102,20 +192,32 @@ function DomainBar({ protein }: { protein: UniProtData }) {
         })}
       </svg>
 
-      {/* Domain legend */}
-      <div className="flex flex-wrap gap-3 mt-2">
+      {/* Domain legend — enhanced */}
+      <div className="flex flex-col gap-2 mt-3">
         {protein.domains.map((domain, i) => (
-          <div key={`${domain.name}-${i}`} className="flex items-center gap-1.5">
+          <div
+            key={`${domain.name}-${i}`}
+            className="flex items-start gap-2.5 p-2.5 rounded-md bg-space-800/30 border border-space-600/20"
+          >
             <span
-              className="w-3 h-3 rounded-sm"
+              className="w-3 h-3 rounded-sm mt-0.5 shrink-0"
               style={{ backgroundColor: DOMAIN_COLORS[i % DOMAIN_COLORS.length], opacity: 0.7 }}
             />
-            <span className="text-text-secondary text-xs font-body">
-              {domain.name}
-            </span>
-            <span className="text-text-muted text-xs font-mono">
-              ({domain.start}-{domain.end})
-            </span>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-text-primary text-xs font-body font-semibold">
+                  {domain.name}
+                </span>
+                <span className="text-text-muted text-xs font-mono">
+                  Position {domain.start}&ndash;{domain.end}
+                </span>
+              </div>
+              {domain.description && (
+                <p className="text-text-secondary text-xs font-body mt-0.5 leading-relaxed">
+                  {domain.description}
+                </p>
+              )}
+            </div>
           </div>
         ))}
       </div>

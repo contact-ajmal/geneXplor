@@ -265,3 +265,12 @@ html.light .input-bg,
 .msp-plugin button[title="Toggle Expanded"] {
   display: none !important;
 }
+
+/* ── Scrollbar hide utility ── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

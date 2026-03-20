@@ -175,9 +175,9 @@ export default function TrendingPage() {
       </ScrollReveal>
 
       {/* Main Content: Table + Bubble Chart */}
-      <div className="grid lg:grid-cols-5 gap-6">
-        {/* Table (3 cols) */}
-        <ScrollReveal delay={0.1} className="lg:col-span-3">
+      <div className="grid lg:grid-cols-9 gap-6">
+        {/* Table (55%) */}
+        <ScrollReveal delay={0.1} className="lg:col-span-5">
           <GlassCard hover={false}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
@@ -250,8 +250,8 @@ export default function TrendingPage() {
           </GlassCard>
         </ScrollReveal>
 
-        {/* Bubble Chart (2 cols) */}
-        <ScrollReveal delay={0.15} className="lg:col-span-2">
+        {/* Bubble Chart (45%) */}
+        <ScrollReveal delay={0.15} className="lg:col-span-4">
           <GlassCard hover={false}>
             <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider mb-4">
               Research Landscape
