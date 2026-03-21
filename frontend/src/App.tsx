@@ -26,6 +26,7 @@ const TrendingPage = lazy(() => import('./pages/TrendingPage'));
 const ComparePage = lazy(() => import('./pages/ComparePage'));
 const CompareResultPage = lazy(() => import('./pages/CompareResultPage'));
 const WatchlistPage = lazy(() => import('./pages/WatchlistPage'));
+const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage'));
 
 function DashboardFallback() {
   return (
@@ -122,6 +123,7 @@ export default function App() {
               <Route path="/compare" element={<ComparePage />} />
               <Route path="/compare/:symbolA/:symbolB" element={<CompareResultPage />} />
               <Route path="/watchlist" element={<WatchlistPage />} />
+              <Route path="/search" element={<SearchResultsPage />} />
             </Routes>
           </Suspense>
         </main>

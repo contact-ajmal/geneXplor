@@ -47,7 +47,7 @@ async def health_check(session: AsyncSession = Depends(get_session)) -> HealthRe
         status=overall,
         database=db_status,
         redis=redis_status,
-        version="0.1.0",
+        version="0.2.0",
     )
 
 
@@ -79,10 +79,27 @@ async def get_gene(
 ) -> GeneDashboardResponse:
     symbol_upper = symbol.upper().strip()
 
-    if not GENE_SYMBOL_PATTERN.match(symbol_upper):
+    # Try alias resolution before strict validation
+    from app.services.alias_index_service import get_alias_index
+    from app.services.gene_index_service import get_gene_index
+
+    alias_idx = get_alias_index()
+    gene_idx = get_gene_index()
+
+    resolved = None
+    if alias_idx.loaded:
+        resolved = alias_idx.resolve(symbol_upper)
+    if not resolved and gene_idx.loaded:
+        gene = gene_idx.get(symbol_upper)
+        if gene:
+            resolved = gene.symbol
+
+    final_symbol = resolved or symbol_upper
+
+    if not GENE_SYMBOL_PATTERN.match(final_symbol):
         raise InvalidGeneSymbolError(symbol)
 
-    return await get_gene_dashboard(symbol_upper, session)
+    return await get_gene_dashboard(final_symbol, session)
 
 
 @router.get("/gene/{symbol}/summary", response_model=GeneSummaryResponse)

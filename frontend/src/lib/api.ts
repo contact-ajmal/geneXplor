@@ -434,6 +434,54 @@ export interface ClinicalReportResponse {
   disclaimer: string;
 }
 
+// ── Search Types ──
+
+export interface MatchReason {
+  reason_type: string;
+  detail: string;
+  source: string;
+  confidence: number;
+}
+
+export interface SearchResultItem {
+  gene_symbol: string;
+  gene_name: string;
+  chromosome: string;
+  band: string;
+  biotype: string;
+  ensembl_id: string;
+  score: number;
+  match_reasons: MatchReason[];
+  highlights: string[];
+}
+
+export interface ParsedQueryTerm {
+  term: string;
+  type: string;
+  confidence: number;
+  resolved_to: string | null;
+}
+
+export interface SearchResponse {
+  query: string;
+  total_results: number;
+  results: SearchResultItem[];
+  parsed_query: {
+    raw: string;
+    terms: ParsedQueryTerm[];
+    strategy: string;
+  };
+  search_time_ms: number;
+  did_you_mean: string | null;
+}
+
+export interface AutocompleteItem {
+  text: string;
+  category: string;
+  detail: string;
+  resolved_to: string | null;
+}
+
 // ── API Calls ──
 
 export const fetchCompareGenes = async (
@@ -521,6 +569,36 @@ export const downloadClinicalReportMarkdown = async (
   const { data } = await api.get(`/gene/${symbol}/report`, {
     params,
     responseType: 'text',
+  });
+  return data;
+};
+
+export const fetchSearch = async (
+  query: string,
+  limit = 20,
+  offset = 0,
+): Promise<SearchResponse> => {
+  const { data } = await api.get<SearchResponse>('/search', {
+    params: { q: query, limit, offset },
+  });
+  return data;
+};
+
+export const fetchAutocomplete = async (
+  query: string,
+  limit = 10,
+): Promise<AutocompleteItem[]> => {
+  const { data } = await api.get<AutocompleteItem[]>('/search/autocomplete', {
+    params: { q: query, limit },
+  });
+  return data;
+};
+
+export const fetchSuggest = async (
+  query: string,
+): Promise<{ suggestions: string[] }> => {
+  const { data } = await api.get<{ suggestions: string[] }>('/search/suggest', {
+    params: { q: query },
   });
   return data;
 };
