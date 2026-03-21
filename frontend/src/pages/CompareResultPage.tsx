@@ -55,16 +55,16 @@ export default function CompareResultPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Dna className="w-20 h-20 text-magenta/40 mx-auto mb-6" />
-          <div className="p-6 rounded-2xl bg-magenta/5 border border-magenta/20 mb-6">
-            <AlertCircle className="w-6 h-6 text-magenta mx-auto mb-3" />
-            <h2 className="text-lg font-heading font-semibold text-text-primary mb-2">
+          <Dna className="w-20 h-20 text-danger/40 mx-auto mb-6" />
+          <div className="p-6 rounded-2xl bg-danger-light border border-danger/20 mb-6">
+            <AlertCircle className="w-6 h-6 text-danger mx-auto mb-3" />
+            <h2 className="text-lg font-heading font-semibold text-text-heading mb-2">
               Comparison failed
             </h2>
             <p className="text-text-secondary text-sm font-body mb-4">
               Could not compare{' '}
-              <span className="font-mono text-cyan">{a}</span> and{' '}
-              <span className="font-mono text-magenta">{b}</span>.
+              <span className="font-mono text-primary">{a}</span> and{' '}
+              <span className="font-mono text-danger">{b}</span>.
             </p>
             <p className="text-text-muted text-xs font-body">{error.message}</p>
           </div>
@@ -100,7 +100,7 @@ export default function CompareResultPage() {
       >
         <button
           onClick={() => navigate('/compare')}
-          className="flex items-center gap-1.5 text-text-muted hover:text-cyan text-sm font-body transition-colors cursor-pointer bg-transparent border-none"
+          className="flex items-center gap-1.5 text-text-muted hover:text-primary text-sm font-body transition-colors cursor-pointer bg-transparent border-none"
         >
           <ArrowLeft className="w-4 h-4" />
           New comparison
@@ -146,7 +146,7 @@ export default function CompareResultPage() {
           <Link to={`/gene/${a}`}>
             <AnimatedButton variant="secondary">
               <span className="flex items-center gap-2">
-                View full <span className="font-mono text-cyan">{a}</span>{' '}
+                View full <span className="font-mono text-primary">{a}</span>{' '}
                 dashboard
                 <ExternalLink className="w-3.5 h-3.5" />
               </span>
@@ -155,7 +155,7 @@ export default function CompareResultPage() {
           <Link to={`/gene/${b}`}>
             <AnimatedButton variant="secondary">
               <span className="flex items-center gap-2">
-                View full <span className="font-mono text-magenta">{b}</span>{' '}
+                View full <span className="font-mono text-danger">{b}</span>{' '}
                 dashboard
                 <ExternalLink className="w-3.5 h-3.5" />
               </span>
@@ -167,7 +167,7 @@ export default function CompareResultPage() {
   );
 }
 
-/* ── Sub-components ── */
+/* -- Sub-components -- */
 
 function CompareHeader({
   symbolA,
@@ -183,15 +183,15 @@ function CompareHeader({
       className="text-center mb-8"
     >
       <div className="flex items-center justify-center gap-4 md:gap-6">
-        <h1 className="text-2xl md:text-4xl font-heading font-bold font-mono text-cyan">
+        <h1 className="text-2xl md:text-4xl font-heading font-bold font-mono text-primary">
           <DecodeText text={symbolA} speed={35} />
         </h1>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-px bg-space-500" />
+          <div className="w-8 h-px bg-ocean-200" />
           <GitCompare className="w-6 h-6 text-text-muted" />
-          <div className="w-8 h-px bg-space-500" />
+          <div className="w-8 h-px bg-ocean-200" />
         </div>
-        <h1 className="text-2xl md:text-4xl font-heading font-bold font-mono text-magenta">
+        <h1 className="text-2xl md:text-4xl font-heading font-bold font-mono text-danger">
           <DecodeText text={symbolB} speed={35} delay={200} />
         </h1>
       </div>
@@ -248,7 +248,7 @@ function SummaryHighlights({
 
   return (
     <GlassCard delay={0}>
-      <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider mb-3">
+      <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider mb-3">
         Comparison Highlights
       </h2>
       <ul className="space-y-2">
@@ -257,7 +257,7 @@ function SummaryHighlights({
             key={i}
             className="flex items-start gap-2 text-sm font-body text-text-secondary"
           >
-            <span className="text-cyan mt-0.5">•</span>
+            <span className="text-primary mt-0.5">•</span>
             {h}
           </li>
         ))}
@@ -303,7 +303,7 @@ function GeneOverviewComparison({
 
   return (
     <GlassCard delay={0} className="mt-6">
-      <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider mb-4">
+      <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider mb-4">
         Gene Overview
       </h2>
 
@@ -311,57 +311,57 @@ function GeneOverviewComparison({
         {stats.map((s) => (
           <div
             key={s.label}
-            className="rounded-xl bg-space-800/50 border border-space-600/30 p-4"
+            className="rounded-xl bg-ocean-50 border border-ocean-100 p-4"
           >
             <p className="text-text-muted text-xs font-body mb-2">{s.label}</p>
             <div className="flex items-center justify-between">
-              <span className="font-mono text-cyan text-sm">{s.valueA}</span>
+              <span className="font-mono text-primary text-sm">{s.valueA}</span>
               {s.match !== undefined && (
                 <GlowBadge color={s.match ? 'green' : 'amber'} className="text-[10px]">
                   {s.match ? 'Match' : 'Different'}
                 </GlowBadge>
               )}
-              <span className="font-mono text-magenta text-sm">{s.valueB}</span>
+              <span className="font-mono text-danger text-sm">{s.valueB}</span>
             </div>
           </div>
         ))}
       </div>
 
       {/* Gene Length Bar Comparison */}
-      <div className="rounded-xl bg-space-800/50 border border-space-600/30 p-4">
+      <div className="rounded-xl bg-ocean-50 border border-ocean-100 p-4">
         <p className="text-text-muted text-xs font-body mb-3">Gene Length</p>
         <div className="space-y-3">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-mono text-cyan">{geneA.gene_symbol}</span>
+              <span className="text-xs font-mono text-primary">{geneA.gene_symbol}</span>
               <span className="text-xs font-mono text-text-secondary">
                 {(lenA / 1000).toFixed(1)} kb
               </span>
             </div>
-            <div className="h-3 rounded-full bg-space-700 overflow-hidden">
+            <div className="h-3 rounded-full bg-ocean-100 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(lenA / maxLen) * 100}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="h-full rounded-full bg-gradient-to-r from-cyan/80 to-cyan"
+                className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary"
               />
             </div>
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-mono text-magenta">
+              <span className="text-xs font-mono text-danger">
                 {geneB.gene_symbol}
               </span>
               <span className="text-xs font-mono text-text-secondary">
                 {(lenB / 1000).toFixed(1)} kb
               </span>
             </div>
-            <div className="h-3 rounded-full bg-space-700 overflow-hidden">
+            <div className="h-3 rounded-full bg-ocean-100 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(lenB / maxLen) * 100}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-                className="h-full rounded-full bg-gradient-to-r from-magenta/80 to-magenta"
+                className="h-full rounded-full bg-gradient-to-r from-danger/60 to-danger"
               />
             </div>
           </div>
@@ -408,14 +408,14 @@ function VariantCountComparison({
   return (
     <GlassCard delay={0} className="mt-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
           Variant Comparison
         </h2>
         <div className="flex items-center gap-4 text-xs font-mono">
-          <span className="text-cyan">
+          <span className="text-primary">
             {geneA.gene_symbol}: <CountUp end={totalA} />
           </span>
-          <span className="text-magenta">
+          <span className="text-danger">
             {geneB.gene_symbol}: <CountUp end={totalB} />
           </span>
         </div>
@@ -426,37 +426,37 @@ function VariantCountComparison({
           <BarChart data={chartData} barGap={2}>
             <XAxis
               dataKey="name"
-              tick={{ fill: '#94a3b8', fontSize: 11, fontFamily: 'Plus Jakarta Sans' }}
-              axisLine={{ stroke: '#1a2332' }}
+              tick={{ fill: '#64748b', fontSize: 11, fontFamily: 'Plus Jakarta Sans' }}
+              axisLine={{ stroke: '#e2e8f0' }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fill: '#94a3b8', fontSize: 11, fontFamily: 'JetBrains Mono' }}
+              tick={{ fill: '#64748b', fontSize: 11, fontFamily: 'JetBrains Mono' }}
               axisLine={false}
               tickLine={false}
             />
             <Tooltip
               contentStyle={{
-                background: '#141b2d',
-                border: '1px solid rgba(0,212,255,0.15)',
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
                 borderRadius: '8px',
                 fontSize: '12px',
                 fontFamily: 'Plus Jakarta Sans',
               }}
-              itemStyle={{ color: '#e2e8f0' }}
-              labelStyle={{ color: '#94a3b8', marginBottom: '4px' }}
+              itemStyle={{ color: '#1e293b' }}
+              labelStyle={{ color: '#64748b', marginBottom: '4px' }}
             />
             <Legend
               wrapperStyle={{ fontSize: '12px', fontFamily: 'JetBrains Mono' }}
             />
             <Bar
               dataKey={geneA.gene_symbol}
-              fill="#00d4ff"
+              fill="#1B4965"
               radius={[4, 4, 0, 0]}
             />
             <Bar
               dataKey={geneB.gene_symbol}
-              fill="#ff3366"
+              fill="#D64045"
               radius={[4, 4, 0, 0]}
             />
           </BarChart>
@@ -510,7 +510,7 @@ function DiseaseComparison({
 
   return (
     <GlassCard delay={0} className="mt-6">
-      <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider mb-1">
+      <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider mb-1">
         Disease Associations
       </h2>
       <p className="text-text-muted text-xs font-body mb-4">
@@ -530,8 +530,8 @@ function DiseaseComparison({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Unique to A */}
-        <div className="rounded-xl bg-cyan/[0.03] border border-cyan/10 p-3">
-          <p className="text-xs font-heading font-semibold text-cyan uppercase tracking-wider mb-2">
+        <div className="rounded-xl bg-primary-light border border-primary/10 p-3">
+          <p className="text-xs font-heading font-semibold text-primary uppercase tracking-wider mb-2">
             {geneA.gene_symbol} only
           </p>
           <div className="space-y-1 max-h-48 overflow-y-auto">
@@ -557,8 +557,8 @@ function DiseaseComparison({
         </div>
 
         {/* Shared */}
-        <div className="rounded-xl bg-purple-500/[0.03] border border-purple-500/10 p-3">
-          <p className="text-xs font-heading font-semibold text-purple-400 uppercase tracking-wider mb-2">
+        <div className="rounded-xl bg-purple-50 border border-purple-200 p-3">
+          <p className="text-xs font-heading font-semibold text-purple-600 uppercase tracking-wider mb-2">
             Shared
           </p>
           <div className="space-y-1 max-h-48 overflow-y-auto">
@@ -586,8 +586,8 @@ function DiseaseComparison({
         </div>
 
         {/* Unique to B */}
-        <div className="rounded-xl bg-magenta/[0.03] border border-magenta/10 p-3">
-          <p className="text-xs font-heading font-semibold text-magenta uppercase tracking-wider mb-2">
+        <div className="rounded-xl bg-danger-light border border-danger/10 p-3">
+          <p className="text-xs font-heading font-semibold text-danger uppercase tracking-wider mb-2">
             {geneB.gene_symbol} only
           </p>
           <div className="space-y-1 max-h-48 overflow-y-auto">
@@ -633,49 +633,49 @@ function PublicationComparison({
 
   return (
     <GlassCard delay={0} className="mt-6">
-      <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider mb-4">
+      <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider mb-4">
         Publications
       </h2>
 
       {/* Total bar comparison */}
-      <div className="rounded-xl bg-space-800/50 border border-space-600/30 p-4 mb-5">
+      <div className="rounded-xl bg-ocean-50 border border-ocean-100 p-4 mb-5">
         <p className="text-text-muted text-xs font-body mb-3">
           Total publications in PubMed
         </p>
         <div className="space-y-3">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-mono text-cyan">
+              <span className="text-xs font-mono text-primary">
                 {geneA.gene_symbol}
               </span>
               <span className="text-xs font-mono text-text-secondary">
                 <CountUp end={totalA} />
               </span>
             </div>
-            <div className="h-3 rounded-full bg-space-700 overflow-hidden">
+            <div className="h-3 rounded-full bg-ocean-100 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(totalA / maxPubs) * 100}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="h-full rounded-full bg-gradient-to-r from-cyan/80 to-cyan"
+                className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary"
               />
             </div>
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-mono text-magenta">
+              <span className="text-xs font-mono text-danger">
                 {geneB.gene_symbol}
               </span>
               <span className="text-xs font-mono text-text-secondary">
                 <CountUp end={totalB} />
               </span>
             </div>
-            <div className="h-3 rounded-full bg-space-700 overflow-hidden">
+            <div className="h-3 rounded-full bg-ocean-100 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(totalB / maxPubs) * 100}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-                className="h-full rounded-full bg-gradient-to-r from-magenta/80 to-magenta"
+                className="h-full rounded-full bg-gradient-to-r from-danger/60 to-danger"
               />
             </div>
           </div>
@@ -685,7 +685,7 @@ function PublicationComparison({
       {/* Side-by-side recent papers */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <p className="text-xs font-heading font-semibold text-cyan uppercase tracking-wider mb-2">
+          <p className="text-xs font-heading font-semibold text-primary uppercase tracking-wider mb-2">
             Recent {geneA.gene_symbol} papers
           </p>
           <div className="space-y-2">
@@ -695,9 +695,9 @@ function PublicationComparison({
                 href={article.pubmed_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-lg bg-space-800/40 border border-space-600/20 p-3 hover:border-cyan/20 transition-colors"
+                className="block rounded-lg bg-ocean-50 border border-ocean-100 p-3 hover:border-primary/20 transition-colors"
               >
-                <p className="text-xs font-body text-text-primary line-clamp-2 mb-1">
+                <p className="text-xs font-body text-text-heading line-clamp-2 mb-1">
                   {article.title}
                 </p>
                 <p className="text-[10px] font-body text-text-muted">
@@ -711,7 +711,7 @@ function PublicationComparison({
           </div>
         </div>
         <div>
-          <p className="text-xs font-heading font-semibold text-magenta uppercase tracking-wider mb-2">
+          <p className="text-xs font-heading font-semibold text-danger uppercase tracking-wider mb-2">
             Recent {geneB.gene_symbol} papers
           </p>
           <div className="space-y-2">
@@ -721,9 +721,9 @@ function PublicationComparison({
                 href={article.pubmed_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block rounded-lg bg-space-800/40 border border-space-600/20 p-3 hover:border-magenta/20 transition-colors"
+                className="block rounded-lg bg-ocean-50 border border-ocean-100 p-3 hover:border-danger/20 transition-colors"
               >
-                <p className="text-xs font-body text-text-primary line-clamp-2 mb-1">
+                <p className="text-xs font-body text-text-heading line-clamp-2 mb-1">
                   {article.title}
                 </p>
                 <p className="text-[10px] font-body text-text-muted">
@@ -762,47 +762,47 @@ function ProteinComparison({
 
   return (
     <GlassCard delay={0} className="mt-6">
-      <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider mb-4">
+      <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider mb-4">
         Protein Comparison
       </h2>
 
       {/* Protein Length Bars */}
-      <div className="rounded-xl bg-space-800/50 border border-space-600/30 p-4 mb-5">
+      <div className="rounded-xl bg-ocean-50 border border-ocean-100 p-4 mb-5">
         <p className="text-text-muted text-xs font-body mb-3">Protein Length (aa)</p>
         <div className="space-y-3">
           <div>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-mono text-cyan">
+              <span className="text-xs font-mono text-primary">
                 {protA?.protein_name || geneA.gene_symbol}
               </span>
               <span className="text-xs font-mono text-text-secondary">
                 <CountUp end={lenA} /> aa
               </span>
             </div>
-            <div className="h-4 rounded-full bg-space-700 overflow-hidden">
+            <div className="h-4 rounded-full bg-ocean-100 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(lenA / maxLen) * 100}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="h-full rounded-full bg-gradient-to-r from-cyan/60 to-cyan relative"
+                className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary relative"
               />
             </div>
           </div>
           <div>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-mono text-magenta">
+              <span className="text-xs font-mono text-danger">
                 {protB?.protein_name || geneB.gene_symbol}
               </span>
               <span className="text-xs font-mono text-text-secondary">
                 <CountUp end={lenB} /> aa
               </span>
             </div>
-            <div className="h-4 rounded-full bg-space-700 overflow-hidden">
+            <div className="h-4 rounded-full bg-ocean-100 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(lenB / maxLen) * 100}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-                className="h-full rounded-full bg-gradient-to-r from-magenta/60 to-magenta"
+                className="h-full rounded-full bg-gradient-to-r from-danger/60 to-danger"
               />
             </div>
           </div>
@@ -813,14 +813,14 @@ function ProteinComparison({
       {(domainsA.length > 0 || domainsB.length > 0) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <p className="text-xs font-heading font-semibold text-cyan uppercase tracking-wider mb-2">
+            <p className="text-xs font-heading font-semibold text-primary uppercase tracking-wider mb-2">
               {geneA.gene_symbol} Domains ({domainsA.length})
             </p>
             <div className="space-y-1">
               {domainsA.slice(0, 8).map((d, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between rounded-lg bg-space-800/40 border border-space-600/20 px-3 py-1.5"
+                  className="flex items-center justify-between rounded-lg bg-ocean-50 border border-ocean-100 px-3 py-1.5"
                 >
                   <span className="text-xs font-body text-text-secondary truncate mr-2">
                     {d.name || d.description}
@@ -841,14 +841,14 @@ function ProteinComparison({
             </div>
           </div>
           <div>
-            <p className="text-xs font-heading font-semibold text-magenta uppercase tracking-wider mb-2">
+            <p className="text-xs font-heading font-semibold text-danger uppercase tracking-wider mb-2">
               {geneB.gene_symbol} Domains ({domainsB.length})
             </p>
             <div className="space-y-1">
               {domainsB.slice(0, 8).map((d, i) => (
                 <div
                   key={i}
-                  className="flex items-center justify-between rounded-lg bg-space-800/40 border border-space-600/20 px-3 py-1.5"
+                  className="flex items-center justify-between rounded-lg bg-ocean-50 border border-ocean-100 px-3 py-1.5"
                 >
                   <span className="text-xs font-body text-text-secondary truncate mr-2">
                     {d.name || d.description}

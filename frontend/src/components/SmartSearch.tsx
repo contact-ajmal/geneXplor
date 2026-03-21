@@ -11,13 +11,13 @@ import type { AutocompleteItem } from '../lib/api';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 
 const CATEGORY_CONFIG: Record<string, { icon: typeof Dna; color: string; label: string }> = {
-  gene: { icon: Dna, color: 'text-cyan', label: 'Gene' },
-  alias: { icon: Hash, color: 'text-amber', label: 'Alias' },
-  gene_name: { icon: Dna, color: 'text-cyan/70', label: 'Gene Name' },
-  disease: { icon: Activity, color: 'text-magenta', label: 'Disease' },
-  chromosome: { icon: MapPin, color: 'text-helix-green', label: 'Location' },
-  location: { icon: MapPin, color: 'text-helix-green', label: 'Location' },
-  function: { icon: FlaskConical, color: 'text-purple-400', label: 'Function' },
+  gene: { icon: Dna, color: 'text-primary', label: 'Gene' },
+  alias: { icon: Hash, color: 'text-warning', label: 'Alias' },
+  gene_name: { icon: Dna, color: 'text-primary-hover', label: 'Gene Name' },
+  disease: { icon: Activity, color: 'text-danger', label: 'Disease' },
+  chromosome: { icon: MapPin, color: 'text-success', label: 'Location' },
+  location: { icon: MapPin, color: 'text-success', label: 'Location' },
+  function: { icon: FlaskConical, color: 'text-purple-500', label: 'Function' },
 };
 
 interface SmartSearchProps {
@@ -178,29 +178,28 @@ export default function SmartSearch({
             className={
               isHero
                 ? `w-full pl-12 pr-28 py-4 rounded-xl text-base font-mono
-                    bg-[rgba(20,27,45,0.7)] backdrop-blur-xl
-                    border border-space-500/60 text-text-primary
+                    bg-white border border-ocean-100 text-text-heading
                     placeholder:text-text-muted/50
-                    focus:outline-none focus:border-cyan/50
-                    focus:shadow-[0_0_30px_rgba(0,212,255,0.15)]
+                    focus:outline-none focus:border-primary
+                    focus:shadow-[0_0_0_3px_rgba(16,42,67,0.08)]
                     transition-all duration-300`
                 : `w-full pl-9 pr-16 py-1.5 rounded-lg text-sm font-mono
-                    bg-space-700/60 border border-space-600/60 text-text-primary
+                    bg-white border border-ocean-200 text-text-heading
                     placeholder:text-text-muted/50
-                    focus:outline-none focus:border-cyan/30 focus:ring-1 focus:ring-cyan/20
+                    focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20
                     transition-all`
             }
           />
           {isHero && (
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-text-muted/50 border border-space-500/30 bg-space-800/30">
+              <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-text-muted/50 border border-ocean-100 bg-ocean-50">
                 {navigator.platform.includes('Mac') ? '\u2318' : 'Ctrl'}K
               </kbd>
               <button
                 type="submit"
                 className="px-5 py-2 rounded-lg font-body font-semibold text-sm
-                  bg-gradient-to-r from-cyan to-cyan-dim text-space-900
-                  hover:shadow-[0_0_24px_rgba(0,212,255,0.35)]
+                  bg-primary text-white
+                  hover:shadow-[0_4px_12px_rgba(16,42,67,0.15)]
                   transition-all duration-200 cursor-pointer border-none"
               >
                 Search
@@ -208,7 +207,7 @@ export default function SmartSearch({
             </div>
           )}
           {!isHero && (
-            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-text-muted/40 border border-space-500/20">
+            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-text-muted/40 border border-ocean-100">
               {navigator.platform.includes('Mac') ? '\u2318' : 'Ctrl'}K
             </kbd>
           )}
@@ -234,8 +233,8 @@ export default function SmartSearch({
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
             className="absolute top-full left-0 right-0 mt-2 rounded-xl overflow-hidden
-              bg-[rgba(15,22,40,0.95)] backdrop-blur-xl border border-space-500/40
-              shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-50 max-h-[400px] overflow-y-auto"
+              bg-white border border-ocean-100
+              shadow-[0_8px_24px_rgba(16,42,67,0.12)] z-50 max-h-[400px] overflow-y-auto"
           >
             {/* Loading indicator */}
             {isFetching && input.trim() && (
@@ -265,7 +264,7 @@ export default function SmartSearch({
                     onMouseEnter={() => setSelectedIndex(i)}
                     className={`w-full text-left px-4 py-2.5 font-mono text-sm flex items-center gap-3
                       transition-colors cursor-pointer border-none
-                      ${i === selectedIndex ? 'bg-cyan/10 text-cyan' : 'text-text-primary hover:bg-space-700/60'}`}
+                      ${i === selectedIndex ? 'bg-primary-light text-primary' : 'text-text-body hover:bg-ocean-50'}`}
                   >
                     <Dna className="w-3.5 h-3.5 text-text-muted" />
                     <span>{gene}</span>
@@ -294,7 +293,7 @@ export default function SmartSearch({
                         onMouseEnter={() => setSelectedIndex(globalIndex)}
                         className={`w-full text-left px-4 py-2 text-sm flex items-center gap-3
                           transition-colors cursor-pointer border-none
-                          ${globalIndex === selectedIndex ? 'bg-cyan/10 text-cyan' : 'text-text-primary hover:bg-space-700/60'}`}
+                          ${globalIndex === selectedIndex ? 'bg-primary-light text-primary' : 'text-text-body hover:bg-ocean-50'}`}
                       >
                         <div className="flex-1 flex items-center gap-2 min-w-0">
                           <span className="font-mono truncate">{item.text}</span>
@@ -305,7 +304,7 @@ export default function SmartSearch({
                           )}
                         </div>
                         {item.resolved_to && item.resolved_to !== item.text && (
-                          <span className="text-[10px] font-mono text-cyan/60 flex items-center gap-1 shrink-0">
+                          <span className="text-[10px] font-mono text-primary/60 flex items-center gap-1 shrink-0">
                             <ArrowRight className="w-2.5 h-2.5" />
                             {item.resolved_to}
                           </span>
@@ -322,8 +321,8 @@ export default function SmartSearch({
               <button
                 type="button"
                 onClick={() => doNavigate(input)}
-                className="w-full text-left px-4 py-2.5 text-xs font-body text-cyan/70 hover:text-cyan hover:bg-space-700/40
-                  transition-colors cursor-pointer border-none border-t border-space-500/20 flex items-center gap-2"
+                className="w-full text-left px-4 py-2.5 text-xs font-body text-primary/70 hover:text-primary hover:bg-ocean-50
+                  transition-colors cursor-pointer border-none border-t border-ocean-100 flex items-center gap-2"
               >
                 <Search className="w-3.5 h-3.5" />
                 Search all results for &quot;{input.trim()}&quot;

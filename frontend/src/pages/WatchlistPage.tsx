@@ -18,7 +18,7 @@ import AnimatedButton from '../components/ui/AnimatedButton';
 import CountUp from '../components/ui/CountUp';
 
 // Sparkline (inline mini chart)
-function MiniSparkline({ data, color = '#00d4ff' }: { data: number[]; color?: string }) {
+function MiniSparkline({ data, color = '#1B4965' }: { data: number[]; color?: string }) {
   if (data.length < 2) return null;
   const max = Math.max(...data, 1);
   const w = 60;
@@ -196,7 +196,7 @@ export default function WatchlistPage() {
     }
   };
 
-  // ── Empty State ──
+  // -- Empty State --
   if (count === 0) {
     return (
       <div className="max-w-2xl mx-auto px-6 pt-32 text-center">
@@ -205,8 +205,8 @@ export default function WatchlistPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Dna className="w-20 h-20 text-cyan/30 mx-auto mb-6" />
-          <h1 className="text-3xl font-heading font-bold text-text-primary mb-3">
+          <Dna className="w-20 h-20 text-primary/30 mx-auto mb-6" />
+          <h1 className="text-3xl font-heading font-bold text-text-heading mb-3">
             <DecodeText text="Your Watchlist" speed={35} />
           </h1>
           <p className="text-text-secondary font-body text-lg mb-2">
@@ -271,11 +271,11 @@ export default function WatchlistPage() {
         transition={{ duration: 0.4 }}
         className="mb-8"
       >
-        <h1 className="text-4xl md:text-5xl font-heading font-bold text-text-primary mb-2">
+        <h1 className="text-4xl md:text-5xl font-heading font-bold text-text-heading mb-2">
           <DecodeText text="Your Gene Watchlist" speed={35} />
         </h1>
         <p className="text-text-secondary font-body text-lg">
-          <span className="font-mono text-cyan">{count}</span> gene{count !== 1 ? 's' : ''} tracked
+          <span className="font-mono text-primary">{count}</span> gene{count !== 1 ? 's' : ''} tracked
         </p>
       </motion.div>
 
@@ -295,9 +295,9 @@ export default function WatchlistPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search watchlist..."
             className="w-full pl-9 pr-3 py-2 rounded-lg text-sm font-body
-              bg-space-700/60 border border-space-600/60 text-text-primary
+              bg-ocean-50 border border-ocean-200 text-text-heading
               placeholder:text-text-muted/50
-              focus:outline-none focus:border-cyan/30 focus:ring-1 focus:ring-cyan/20
+              focus:outline-none focus:border-primary/30 focus:ring-1 focus:ring-primary/20
               transition-all"
           />
         </div>
@@ -307,21 +307,21 @@ export default function WatchlistPage() {
           <div className="relative group">
             <button
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-body
-                bg-space-700/60 border border-space-600/60 text-text-secondary
-                hover:border-cyan/30 transition-colors cursor-pointer"
+                bg-ocean-50 border border-ocean-200 text-text-secondary
+                hover:border-primary/30 transition-colors cursor-pointer"
             >
               <Tag className="w-3.5 h-3.5" />
               {tagFilter || 'All tags'}
               <ChevronDown className="w-3 h-3" />
             </button>
             <div className="absolute top-full left-0 mt-1 w-40 rounded-xl overflow-hidden
-              bg-[rgba(15,22,40,0.95)] backdrop-blur-xl border border-space-500/40
-              shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-50
+              bg-white border border-ocean-200
+              shadow-lg z-50
               hidden group-hover:block">
               <button
                 onClick={() => setTagFilter(null)}
                 className={`w-full text-left px-3 py-2 text-xs font-body transition-colors cursor-pointer border-none
-                  ${!tagFilter ? 'bg-cyan/10 text-cyan' : 'text-text-secondary hover:bg-space-700/60'}`}
+                  ${!tagFilter ? 'bg-primary-light text-primary' : 'text-text-secondary hover:bg-ocean-50'}`}
               >
                 All tags
               </button>
@@ -330,7 +330,7 @@ export default function WatchlistPage() {
                   key={t}
                   onClick={() => setTagFilter(t === tagFilter ? null : t)}
                   className={`w-full text-left px-3 py-2 text-xs font-mono transition-colors cursor-pointer border-none
-                    ${t === tagFilter ? 'bg-cyan/10 text-cyan' : 'text-text-secondary hover:bg-space-700/60'}`}
+                    ${t === tagFilter ? 'bg-primary-light text-primary' : 'text-text-secondary hover:bg-ocean-50'}`}
                 >
                   {t}
                 </button>
@@ -343,23 +343,23 @@ export default function WatchlistPage() {
         <div className="relative group">
           <button
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-body
-              bg-space-700/60 border border-space-600/60 text-text-secondary
-              hover:border-cyan/30 transition-colors cursor-pointer"
+              bg-ocean-50 border border-ocean-200 text-text-secondary
+              hover:border-primary/30 transition-colors cursor-pointer"
           >
             <ArrowUpDown className="w-3.5 h-3.5" />
             Sort
             <ChevronDown className="w-3 h-3" />
           </button>
           <div className="absolute top-full left-0 mt-1 w-40 rounded-xl overflow-hidden
-            bg-[rgba(15,22,40,0.95)] backdrop-blur-xl border border-space-500/40
-            shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-50
+            bg-white border border-ocean-200
+            shadow-lg z-50
             hidden group-hover:block">
             {([['added', 'Date added'], ['name', 'Gene name'], ['variants', 'Variant count'], ['diseases', 'Disease count']] as [SortKey, string][]).map(([key, label]) => (
               <button
                 key={key}
                 onClick={() => setSortKey(key)}
                 className={`w-full text-left px-3 py-2 text-xs font-body transition-colors cursor-pointer border-none
-                  ${sortKey === key ? 'bg-cyan/10 text-cyan' : 'text-text-secondary hover:bg-space-700/60'}`}
+                  ${sortKey === key ? 'bg-primary-light text-primary' : 'text-text-secondary hover:bg-ocean-50'}`}
               >
                 {label}
               </button>
@@ -368,13 +368,13 @@ export default function WatchlistPage() {
         </div>
 
         {/* View mode toggle */}
-        <div className="flex items-center gap-0.5 rounded-lg border border-space-600/60 p-0.5 bg-space-800/60">
+        <div className="flex items-center gap-0.5 rounded-lg border border-ocean-200 p-0.5 bg-ocean-50">
           {([['cards', LayoutGrid], ['table', Table2], ['compare', BarChart3]] as [ViewMode, typeof LayoutGrid][]).map(([mode, Icon]) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode)}
               className={`p-1.5 rounded-md transition-colors cursor-pointer border-none
-                ${viewMode === mode ? 'bg-cyan/10 text-cyan' : 'text-text-muted hover:text-text-secondary'}`}
+                ${viewMode === mode ? 'bg-primary-light text-primary' : 'text-text-muted hover:text-text-secondary'}`}
               title={mode.charAt(0).toUpperCase() + mode.slice(1)}
             >
               <Icon className="w-4 h-4" />
@@ -387,8 +387,8 @@ export default function WatchlistPage() {
           <button
             onClick={exportWatchlist}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-body
-              bg-space-700/60 border border-space-600/60 text-text-secondary
-              hover:border-cyan/30 hover:text-cyan transition-colors cursor-pointer"
+              bg-ocean-50 border border-ocean-200 text-text-secondary
+              hover:border-primary/30 hover:text-primary transition-colors cursor-pointer"
             title="Export watchlist as JSON"
           >
             <Download className="w-3.5 h-3.5" />
@@ -397,8 +397,8 @@ export default function WatchlistPage() {
           <button
             onClick={() => fileInputRef.current?.click()}
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-body
-              bg-space-700/60 border border-space-600/60 text-text-secondary
-              hover:border-cyan/30 hover:text-cyan transition-colors cursor-pointer"
+              bg-ocean-50 border border-ocean-200 text-text-secondary
+              hover:border-primary/30 hover:text-primary transition-colors cursor-pointer"
             title="Import watchlist from JSON"
           >
             <Upload className="w-3.5 h-3.5" />
@@ -423,8 +423,8 @@ export default function WatchlistPage() {
             exit={{ opacity: 0 }}
             className={`mb-4 px-4 py-2 rounded-lg text-sm font-body ${
               importStatus.startsWith('Error')
-                ? 'bg-magenta/10 text-magenta border border-magenta/20'
-                : 'bg-helix-green/10 text-helix-green border border-helix-green/20'
+                ? 'bg-danger-light text-danger border border-danger/20'
+                : 'bg-success-light text-success border border-success/20'
             }`}
           >
             {importStatus}
@@ -438,7 +438,7 @@ export default function WatchlistPage() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-3 mb-4 px-4 py-2.5 rounded-xl
-            bg-cyan/5 border border-cyan/10"
+            bg-primary-light border border-primary/10"
         >
           <span className="text-xs font-body text-text-secondary">
             {selected.size} selected
@@ -452,8 +452,8 @@ export default function WatchlistPage() {
             }}
             disabled={selected.size < 2}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body
-              bg-cyan/10 text-cyan border border-cyan/20
-              hover:bg-cyan/20 transition-colors cursor-pointer
+              bg-primary-light text-primary border border-primary/20
+              hover:bg-primary/10 transition-colors cursor-pointer
               disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <BarChart3 className="w-3 h-3" />
@@ -462,8 +462,8 @@ export default function WatchlistPage() {
           <button
             onClick={handleBatchRemove}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body
-              bg-magenta/10 text-magenta border border-magenta/20
-              hover:bg-magenta/20 transition-colors cursor-pointer"
+              bg-danger-light text-danger border border-danger/20
+              hover:bg-danger/10 transition-colors cursor-pointer"
           >
             <Trash2 className="w-3 h-3" />
             Remove Selected
@@ -477,7 +477,7 @@ export default function WatchlistPage() {
         </motion.div>
       )}
 
-      {/* ── CARDS VIEW ── */}
+      {/* -- CARDS VIEW -- */}
       {viewMode === 'cards' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredWatchlist.map((entry, i) => {
@@ -503,16 +503,16 @@ export default function WatchlistPage() {
                         type="checkbox"
                         checked={selected.has(entry.gene_symbol)}
                         onChange={() => toggleSelect(entry.gene_symbol)}
-                        className="rounded border-space-500 bg-space-700/60 text-cyan focus:ring-cyan/30 cursor-pointer"
+                        className="rounded border-ocean-200 bg-ocean-50 text-primary focus:ring-primary/30 cursor-pointer"
                       />
                       <Link
                         to={`/gene/${entry.gene_symbol}`}
-                        className="text-xl font-mono font-bold text-cyan hover:text-cyan-dim transition-colors"
+                        className="text-xl font-mono font-bold text-primary hover:text-primary/80 transition-colors"
                       >
                         {entry.gene_symbol}
                       </Link>
                     </div>
-                    <Star className="w-4 h-4 text-amber fill-amber" />
+                    <Star className="w-4 h-4 text-warning fill-warning" />
                   </div>
 
                   {geneName && (
@@ -545,10 +545,10 @@ export default function WatchlistPage() {
                     </div>
                   ) : isError ? (
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-magenta text-xs font-body">Failed to load</span>
+                      <span className="text-danger text-xs font-body">Failed to load</span>
                       <button
                         onClick={() => queryState?.refetch()}
-                        className="text-cyan text-xs font-body hover:underline cursor-pointer"
+                        className="text-primary text-xs font-body hover:underline cursor-pointer"
                       >
                         <RefreshCw className="w-3 h-3 inline" /> Retry
                       </button>
@@ -556,13 +556,13 @@ export default function WatchlistPage() {
                   ) : (
                     <div className="flex items-center gap-4 mb-3 text-xs font-mono">
                       <span className="text-text-secondary">
-                        <span className="text-text-primary font-semibold">
+                        <span className="text-text-heading font-semibold">
                           <CountUp end={variantCount} duration={600} />
                         </span>{' '}
                         variants
                       </span>
                       <span className="text-text-secondary">
-                        <span className="text-text-primary font-semibold">
+                        <span className="text-text-heading font-semibold">
                           <CountUp end={diseaseCount} duration={600} />
                         </span>{' '}
                         diseases
@@ -571,11 +571,11 @@ export default function WatchlistPage() {
                   )}
 
                   {/* Actions */}
-                  <div className="flex items-center gap-1.5 border-t border-space-600/30 pt-3">
+                  <div className="flex items-center gap-1.5 border-t border-ocean-100 pt-3">
                     <Link
                       to={`/gene/${entry.gene_symbol}`}
                       className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-body
-                        text-text-muted hover:text-cyan hover:bg-cyan/5 transition-colors"
+                        text-text-muted hover:text-primary hover:bg-primary-light transition-colors"
                     >
                       <LayoutDashboard className="w-3 h-3" />
                       Dashboard
@@ -583,7 +583,7 @@ export default function WatchlistPage() {
                     <Link
                       to={`/gene/${entry.gene_symbol}/story`}
                       className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-body
-                        text-text-muted hover:text-cyan hover:bg-cyan/5 transition-colors"
+                        text-text-muted hover:text-primary hover:bg-primary-light transition-colors"
                     >
                       <BookOpen className="w-3 h-3" />
                       Story
@@ -591,7 +591,7 @@ export default function WatchlistPage() {
                     <button
                       onClick={() => startEditNote(entry)}
                       className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-body
-                        text-text-muted hover:text-cyan hover:bg-cyan/5 transition-colors cursor-pointer"
+                        text-text-muted hover:text-primary hover:bg-primary-light transition-colors cursor-pointer"
                     >
                       <Pencil className="w-3 h-3" />
                       Note
@@ -599,7 +599,7 @@ export default function WatchlistPage() {
                     <button
                       onClick={() => startEditTags(entry)}
                       className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-body
-                        text-text-muted hover:text-cyan hover:bg-cyan/5 transition-colors cursor-pointer"
+                        text-text-muted hover:text-primary hover:bg-primary-light transition-colors cursor-pointer"
                     >
                       <Tag className="w-3 h-3" />
                       Tags
@@ -607,7 +607,7 @@ export default function WatchlistPage() {
                     <button
                       onClick={() => setConfirmRemove(entry.gene_symbol)}
                       className="ml-auto flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-body
-                        text-text-muted hover:text-magenta hover:bg-magenta/5 transition-colors cursor-pointer"
+                        text-text-muted hover:text-danger hover:bg-danger-light transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>
@@ -623,18 +623,18 @@ export default function WatchlistPage() {
         </div>
       )}
 
-      {/* ── TABLE VIEW ── */}
+      {/* -- TABLE VIEW -- */}
       {viewMode === 'table' && (
-        <div className="rounded-2xl border border-cyan/[0.08] glass-bg backdrop-blur-xl overflow-x-auto">
+        <div className="rounded-2xl border border-ocean-100 bg-white overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-space-600/30">
+              <tr className="border-b border-ocean-100">
                 <th className="px-4 py-3">
                   <input
                     type="checkbox"
                     checked={selected.size === filteredWatchlist.length && filteredWatchlist.length > 0}
                     onChange={selectAll}
-                    className="rounded border-space-500 bg-space-700/60 text-cyan focus:ring-cyan/30 cursor-pointer"
+                    className="rounded border-ocean-200 bg-ocean-50 text-primary focus:ring-primary/30 cursor-pointer"
                   />
                 </th>
                 {['Gene', 'Variants', 'Diseases', 'Note', 'Tags', 'Added'].map((h) => (
@@ -654,33 +654,33 @@ export default function WatchlistPage() {
                 return (
                   <tr
                     key={entry.gene_symbol}
-                    className="border-b border-space-600/10 hover:bg-cyan/[0.02] transition-colors"
+                    className="border-b border-ocean-50 hover:bg-ocean-50 transition-colors"
                   >
                     <td className="px-4 py-3">
                       <input
                         type="checkbox"
                         checked={selected.has(entry.gene_symbol)}
                         onChange={() => toggleSelect(entry.gene_symbol)}
-                        className="rounded border-space-500 bg-space-700/60 text-cyan focus:ring-cyan/30 cursor-pointer"
+                        className="rounded border-ocean-200 bg-ocean-50 text-primary focus:ring-primary/30 cursor-pointer"
                       />
                     </td>
                     <td className="px-4 py-3">
                       <Link
                         to={`/gene/${entry.gene_symbol}`}
-                        className="font-mono font-bold text-cyan hover:text-cyan-dim transition-colors"
+                        className="font-mono font-bold text-primary hover:text-primary/80 transition-colors"
                       >
                         {entry.gene_symbol}
                       </Link>
                     </td>
-                    <td className="px-4 py-3 font-mono text-sm text-text-primary">{variantCount}</td>
-                    <td className="px-4 py-3 font-mono text-sm text-text-primary">{diseaseCount}</td>
+                    <td className="px-4 py-3 font-mono text-sm text-text-heading">{variantCount}</td>
+                    <td className="px-4 py-3 font-mono text-sm text-text-heading">{diseaseCount}</td>
                     <td className="px-4 py-3 text-xs font-body text-text-muted max-w-[200px] truncate italic">
                       {entry.user_note || '—'}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
                         {entry.tags.map((t) => (
-                          <span key={t} className="px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-cyan/10 text-cyan border border-cyan/20">
+                          <span key={t} className="px-1.5 py-0.5 rounded-full text-[10px] font-mono bg-primary-light text-primary border border-primary/20">
                             {t}
                           </span>
                         ))}
@@ -692,7 +692,7 @@ export default function WatchlistPage() {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => setConfirmRemove(entry.gene_symbol)}
-                        className="p-1 rounded text-text-muted hover:text-magenta transition-colors cursor-pointer"
+                        className="p-1 rounded text-text-muted hover:text-danger transition-colors cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -705,12 +705,12 @@ export default function WatchlistPage() {
         </div>
       )}
 
-      {/* ── COMPARE VIEW ── */}
+      {/* -- COMPARE VIEW -- */}
       {viewMode === 'compare' && (
         <div className="space-y-6">
           {/* Variant count comparison bar chart */}
           <GlassCard hover={false}>
-            <h3 className="text-sm font-heading font-semibold text-text-primary mb-4">
+            <h3 className="text-sm font-heading font-semibold text-text-heading mb-4">
               Variant Counts Comparison
             </h3>
             <div className="space-y-3">
@@ -729,19 +729,19 @@ export default function WatchlistPage() {
                   <div key={entry.gene_symbol} className="flex items-center gap-3">
                     <Link
                       to={`/gene/${entry.gene_symbol}`}
-                      className="w-16 text-xs font-mono text-cyan hover:text-cyan-dim transition-colors shrink-0"
+                      className="w-16 text-xs font-mono text-primary hover:text-primary/80 transition-colors shrink-0"
                     >
                       {entry.gene_symbol}
                     </Link>
-                    <div className="flex-1 h-5 rounded-full bg-space-700/40 overflow-hidden">
+                    <div className="flex-1 h-5 rounded-full bg-ocean-100 overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${pct}%` }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="h-full rounded-full bg-gradient-to-r from-cyan/60 to-cyan"
+                        className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary"
                       />
                     </div>
-                    <span className="w-12 text-right text-xs font-mono text-text-primary">
+                    <span className="w-12 text-right text-xs font-mono text-text-heading">
                       {variantCount}
                     </span>
                   </div>
@@ -752,7 +752,7 @@ export default function WatchlistPage() {
 
           {/* Disease overlap */}
           <GlassCard hover={false}>
-            <h3 className="text-sm font-heading font-semibold text-text-primary mb-4">
+            <h3 className="text-sm font-heading font-semibold text-text-heading mb-4">
               Disease Associations
             </h3>
             <div className="space-y-3">
@@ -771,19 +771,19 @@ export default function WatchlistPage() {
                   <div key={entry.gene_symbol} className="flex items-center gap-3">
                     <Link
                       to={`/gene/${entry.gene_symbol}`}
-                      className="w-16 text-xs font-mono text-cyan hover:text-cyan-dim transition-colors shrink-0"
+                      className="w-16 text-xs font-mono text-primary hover:text-primary/80 transition-colors shrink-0"
                     >
                       {entry.gene_symbol}
                     </Link>
-                    <div className="flex-1 h-5 rounded-full bg-space-700/40 overflow-hidden">
+                    <div className="flex-1 h-5 rounded-full bg-ocean-100 overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${pct}%` }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="h-full rounded-full bg-gradient-to-r from-magenta/60 to-magenta"
+                        className="h-full rounded-full bg-gradient-to-r from-danger/60 to-danger"
                       />
                     </div>
-                    <span className="w-12 text-right text-xs font-mono text-text-primary">
+                    <span className="w-12 text-right text-xs font-mono text-text-heading">
                       {diseases.length}
                     </span>
                   </div>
@@ -799,7 +799,7 @@ export default function WatchlistPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="mt-8 rounded-2xl border border-space-600/20 p-5 bg-space-800/20 text-center"
+        className="mt-8 rounded-2xl border border-ocean-100 p-5 bg-ocean-50 text-center"
       >
         <div className="flex items-center justify-center gap-2 mb-2">
           <Bell className="w-4 h-4 text-text-muted" />
@@ -813,14 +813,14 @@ export default function WatchlistPage() {
         </p>
       </motion.div>
 
-      {/* ── Edit Note Modal ── */}
+      {/* -- Edit Note Modal -- */}
       <AnimatePresence>
         {editingNote && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/30"
             onClick={() => setEditingNote(null)}
           >
             <motion.div
@@ -828,19 +828,19 @@ export default function WatchlistPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl border border-cyan/10 p-6 glass-bg backdrop-blur-xl"
+              className="w-full max-w-sm rounded-2xl border border-ocean-100 p-6 bg-white shadow-xl"
             >
-              <h3 className="text-sm font-heading font-semibold text-text-primary mb-3">
-                Edit note for <span className="font-mono text-cyan">{editingNote}</span>
+              <h3 className="text-sm font-heading font-semibold text-text-heading mb-3">
+                Edit note for <span className="font-mono text-primary">{editingNote}</span>
               </h3>
               <textarea
                 value={editNoteText}
                 onChange={(e) => setEditNoteText(e.target.value.slice(0, 200))}
                 rows={3}
                 className="w-full px-3 py-2 rounded-lg text-sm font-body
-                  bg-space-800/60 border border-space-600/60 text-text-primary
+                  bg-ocean-50 border border-ocean-200 text-text-heading
                   placeholder:text-text-muted/50
-                  focus:outline-none focus:border-cyan/30 focus:ring-1 focus:ring-cyan/20
+                  focus:outline-none focus:border-primary/30 focus:ring-1 focus:ring-primary/20
                   transition-all resize-none mb-1"
               />
               <p className="text-text-muted text-[10px] font-mono text-right mb-3">{editNoteText.length}/200</p>
@@ -848,8 +848,8 @@ export default function WatchlistPage() {
                 <button
                   onClick={saveEditNote}
                   className="flex-1 px-4 py-2 rounded-lg text-sm font-body font-semibold
-                    bg-gradient-to-r from-cyan to-cyan-dim text-space-900
-                    hover:shadow-[0_0_24px_rgba(0,212,255,0.35)]
+                    bg-primary text-white
+                    hover:bg-primary/90
                     transition-all cursor-pointer border-none"
                 >
                   Save
@@ -857,7 +857,7 @@ export default function WatchlistPage() {
                 <button
                   onClick={() => setEditingNote(null)}
                   className="px-4 py-2 rounded-lg text-sm font-body text-text-secondary
-                    border border-space-600/60 hover:border-space-500 transition-colors cursor-pointer bg-transparent"
+                    border border-ocean-200 hover:border-ocean-300 transition-colors cursor-pointer bg-transparent"
                 >
                   Cancel
                 </button>
@@ -867,14 +867,14 @@ export default function WatchlistPage() {
         )}
       </AnimatePresence>
 
-      {/* ── Edit Tags Modal ── */}
+      {/* -- Edit Tags Modal -- */}
       <AnimatePresence>
         {editingTags && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/30"
             onClick={() => setEditingTags(null)}
           >
             <motion.div
@@ -882,10 +882,10 @@ export default function WatchlistPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl border border-cyan/10 p-6 glass-bg backdrop-blur-xl"
+              className="w-full max-w-sm rounded-2xl border border-ocean-100 p-6 bg-white shadow-xl"
             >
-              <h3 className="text-sm font-heading font-semibold text-text-primary mb-3">
-                Edit tags for <span className="font-mono text-cyan">{editingTags}</span>
+              <h3 className="text-sm font-heading font-semibold text-text-heading mb-3">
+                Edit tags for <span className="font-mono text-primary">{editingTags}</span>
               </h3>
               <div className="flex items-center gap-2 mb-3">
                 <input
@@ -905,9 +905,9 @@ export default function WatchlistPage() {
                   placeholder="Add a tag"
                   list="watchlist-edit-tags"
                   className="flex-1 px-3 py-1.5 rounded-lg text-xs font-mono
-                    bg-space-800/60 border border-space-600/60 text-text-primary
+                    bg-ocean-50 border border-ocean-200 text-text-heading
                     placeholder:text-text-muted/50
-                    focus:outline-none focus:border-cyan/30 focus:ring-1 focus:ring-cyan/20
+                    focus:outline-none focus:border-primary/30 focus:ring-1 focus:ring-primary/20
                     transition-all"
                 />
                 <datalist id="watchlist-edit-tags">
@@ -921,12 +921,12 @@ export default function WatchlistPage() {
                   <span
                     key={t}
                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono
-                      bg-cyan/10 text-cyan border border-cyan/20"
+                      bg-primary-light text-primary border border-primary/20"
                   >
                     {t}
                     <button
                       onClick={() => setEditTags(editTags.filter((x) => x !== t))}
-                      className="hover:text-magenta transition-colors cursor-pointer"
+                      className="hover:text-danger transition-colors cursor-pointer"
                     >
                       <X className="w-2.5 h-2.5" />
                     </button>
@@ -940,8 +940,8 @@ export default function WatchlistPage() {
                 <button
                   onClick={saveEditTags}
                   className="flex-1 px-4 py-2 rounded-lg text-sm font-body font-semibold
-                    bg-gradient-to-r from-cyan to-cyan-dim text-space-900
-                    hover:shadow-[0_0_24px_rgba(0,212,255,0.35)]
+                    bg-primary text-white
+                    hover:bg-primary/90
                     transition-all cursor-pointer border-none"
                 >
                   Save
@@ -949,7 +949,7 @@ export default function WatchlistPage() {
                 <button
                   onClick={() => setEditingTags(null)}
                   className="px-4 py-2 rounded-lg text-sm font-body text-text-secondary
-                    border border-space-600/60 hover:border-space-500 transition-colors cursor-pointer bg-transparent"
+                    border border-ocean-200 hover:border-ocean-300 transition-colors cursor-pointer bg-transparent"
                 >
                   Cancel
                 </button>
@@ -959,14 +959,14 @@ export default function WatchlistPage() {
         )}
       </AnimatePresence>
 
-      {/* ── Confirm Remove ── */}
+      {/* -- Confirm Remove -- */}
       <AnimatePresence>
         {confirmRemove && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/30"
             onClick={() => setConfirmRemove(null)}
           >
             <motion.div
@@ -974,10 +974,10 @@ export default function WatchlistPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-xs rounded-2xl border border-magenta/10 p-5 glass-bg backdrop-blur-xl text-center"
+              className="w-full max-w-xs rounded-2xl border border-danger/10 p-5 bg-white shadow-xl text-center"
             >
-              <p className="text-sm font-body text-text-primary mb-4">
-                Remove <span className="font-mono text-cyan">{confirmRemove}</span> from watchlist?
+              <p className="text-sm font-body text-text-heading mb-4">
+                Remove <span className="font-mono text-primary">{confirmRemove}</span> from watchlist?
               </p>
               <div className="flex items-center gap-2">
                 <button
@@ -991,15 +991,15 @@ export default function WatchlistPage() {
                     });
                   }}
                   className="flex-1 px-4 py-2 rounded-lg text-sm font-body font-semibold
-                    bg-magenta/10 text-magenta border border-magenta/20
-                    hover:bg-magenta/20 transition-colors cursor-pointer"
+                    bg-danger-light text-danger border border-danger/20
+                    hover:bg-danger/10 transition-colors cursor-pointer"
                 >
                   Remove
                 </button>
                 <button
                   onClick={() => setConfirmRemove(null)}
                   className="flex-1 px-4 py-2 rounded-lg text-sm font-body text-text-secondary
-                    border border-space-600/60 hover:border-space-500 transition-colors cursor-pointer bg-transparent"
+                    border border-ocean-200 hover:border-ocean-300 transition-colors cursor-pointer bg-transparent"
                 >
                   Cancel
                 </button>

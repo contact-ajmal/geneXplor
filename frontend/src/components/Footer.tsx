@@ -13,13 +13,13 @@ const DATA_SOURCES = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-cyan/[0.06] mt-auto">
+    <footer className="border-t border-ocean-700 mt-auto bg-ocean-800">
       <div className="max-w-[1600px] mx-auto px-6 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Brand */}
           <div className="flex items-center gap-2">
-            <Dna className="w-4 h-4 text-cyan/40" />
-            <span className="text-text-muted text-xs font-heading font-semibold">
+            <Dna className="w-4 h-4 text-ocean-300" />
+            <span className="text-white text-xs font-heading font-semibold">
               GeneXplor v1.0
             </span>
           </div>
@@ -32,7 +32,7 @@ export default function Footer() {
                 href={source.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-muted/60 hover:text-text-muted text-[11px] font-mono transition-colors"
+                className="text-ocean-300 hover:text-white text-[11px] font-mono transition-colors"
               >
                 {source.name}
               </a>
@@ -40,7 +40,7 @@ export default function Footer() {
           </div>
 
           {/* Disclaimer */}
-          <p className="text-text-muted/40 text-[10px] font-body text-center md:text-right">
+          <p className="text-ocean-200/60 text-[10px] font-body text-center md:text-right">
             Data cached 24h. Not for clinical use.
           </p>
         </div>

@@ -15,17 +15,17 @@ export default function SkeletonLoader({ className = '', lines = 3, variant = 't
     return (
       <div
         className={`
-          rounded-2xl border border-cyan/[0.05] p-5
-          bg-[rgba(20,27,45,0.5)] backdrop-blur-xl
+          rounded-xl border border-ocean-100 p-5
+          bg-white
           ${className}
         `}
       >
-        <div className="h-5 w-1/3 rounded skeleton-shimmer mb-4" />
+        <div className="h-5 w-1/3 rounded-lg skeleton-shimmer mb-4" />
         <div className="space-y-3">
           {Array.from({ length: lines }).map((_, i) => (
             <div
               key={i}
-              className="h-3.5 rounded skeleton-shimmer"
+              className="h-3.5 rounded-lg skeleton-shimmer"
               style={{ width: `${85 - i * 15}%` }}
             />
           ))}
@@ -39,7 +39,7 @@ export default function SkeletonLoader({ className = '', lines = 3, variant = 't
       {Array.from({ length: lines }).map((_, i) => (
         <div
           key={i}
-          className="h-3.5 rounded skeleton-shimmer"
+          className="h-3.5 rounded-lg skeleton-shimmer"
           style={{ width: `${90 - i * 12}%` }}
         />
       ))}

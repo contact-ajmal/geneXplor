@@ -31,11 +31,7 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="sticky top-14 z-30 border-b border-cyan/[0.06] px-4 md:px-6 py-3"
-      style={{
-        background: 'rgba(10, 14, 26, 0.92)',
-        backdropFilter: 'blur(20px)',
-      }}
+      className="sticky top-14 z-30 bg-white border-b border-ocean-100 px-4 md:px-6 py-3 shadow-sm"
     >
       <div className="max-w-[1600px] mx-auto">
         {/* Main row */}
@@ -43,7 +39,7 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
           {/* Gene symbol + name */}
           <div className="flex items-center gap-3 min-w-0">
             <h1 className="text-2xl md:text-4xl font-heading font-bold shrink-0">
-              <DecodeText text={upperSymbol} className="font-mono text-cyan" speed={35} />
+              <DecodeText text={upperSymbol} className="font-mono text-text-heading" speed={35} />
             </h1>
             <WatchButton symbol={upperSymbol} onToast={onToast} />
           </div>
@@ -68,8 +64,8 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
             <Link
               to={`/gene/${upperSymbol}/story`}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body
-                text-text-secondary hover:text-cyan hover:bg-cyan/[0.05]
-                border border-space-600/40 hover:border-cyan/20 transition-all"
+                text-text-secondary hover:text-primary hover:bg-ocean-50
+                border border-ocean-200 hover:border-primary/30 transition-all"
             >
               <BookOpen className="w-3.5 h-3.5" />
               Story Mode
@@ -78,8 +74,8 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
             <button
               onClick={() => navigate(`/compare?gene=${upperSymbol}`)}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body
-                text-text-secondary hover:text-cyan hover:bg-cyan/[0.05]
-                border border-space-600/40 hover:border-cyan/20 transition-all cursor-pointer bg-transparent"
+                text-text-secondary hover:text-primary hover:bg-ocean-50
+                border border-ocean-200 hover:border-primary/30 transition-all cursor-pointer bg-transparent"
             >
               <GitCompare className="w-3.5 h-3.5" />
               Compare
@@ -90,8 +86,8 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
               <button
                 onClick={() => setShowExport(!showExport)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-body
-                  text-text-secondary hover:text-cyan hover:bg-cyan/[0.05]
-                  border border-space-600/40 hover:border-cyan/20 transition-all cursor-pointer bg-transparent"
+                  text-text-secondary hover:text-primary hover:bg-ocean-50
+                  border border-ocean-200 hover:border-primary/30 transition-all cursor-pointer bg-transparent"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Export</span>
@@ -101,14 +97,14 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setShowExport(false)} />
                   <div className="absolute right-0 top-full mt-1 w-44 rounded-xl overflow-hidden
-                    bg-[rgba(15,22,40,0.95)] backdrop-blur-xl border border-space-500/40
-                    shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-50">
+                    bg-white border border-ocean-100
+                    shadow-lg z-50">
                     {['CSV', 'PDF', 'Export Reports', 'JSON', 'Markdown'].map((fmt) => (
                       <button
                         key={fmt}
                         onClick={() => { onExport?.(fmt); setShowExport(false); }}
                         className="w-full text-left px-3 py-2 text-xs font-body
-                          text-text-secondary hover:bg-space-700/60 hover:text-text-primary
+                          text-text-secondary hover:bg-ocean-50 hover:text-text-heading
                           transition-colors cursor-pointer border-none"
                       >
                         {fmt}
@@ -123,7 +119,7 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
             <div className="hidden lg:flex items-center gap-1.5 ml-2">
               {activeSources.map(([source]) => (
                 <span key={source} title={source} className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-helix-green" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-success" />
                   <span className="text-text-muted text-[10px] font-mono capitalize">{source}</span>
                 </span>
               ))}
@@ -138,7 +134,7 @@ export default function DashboardGeneHeader({ gene, metadata, aiSummary, onToast
             href={`https://ensembl.org/Homo_sapiens/Gene/Summary?g=${gene.ensembl_id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 ml-3 text-cyan/60 hover:text-cyan transition-colors font-mono text-[11px]"
+            className="inline-flex items-center gap-1 ml-3 text-primary/60 hover:text-primary transition-colors font-mono text-[11px]"
           >
             {gene.ensembl_id}
             <ExternalLink className="w-2.5 h-2.5" />

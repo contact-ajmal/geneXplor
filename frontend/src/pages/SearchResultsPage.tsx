@@ -35,20 +35,20 @@ function ResultCard({ result, index }: { result: SearchResultItem; index: number
       >
         <GlassCard hover>
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-cyan/10 flex items-center justify-center shrink-0 mt-0.5">
-              <Dna className="w-5 h-5 text-cyan" />
+            <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center shrink-0 mt-0.5">
+              <Dna className="w-5 h-5 text-primary" />
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3 mb-1">
-                <h3 className="text-lg font-mono font-bold text-cyan">{result.gene_symbol}</h3>
+                <h3 className="text-lg font-mono font-bold text-primary">{result.gene_symbol}</h3>
                 {result.biotype && (
                   <GlowBadge color={biotypeColor as 'cyan' | 'amber' | 'magenta' | 'green'}>
                     {result.biotype.replace(/_/g, ' ')}
                   </GlowBadge>
                 )}
                 {result.score >= 40 && (
-                  <span className="text-[10px] font-mono text-helix-green/60">
+                  <span className="text-[10px] font-mono text-success/60">
                     Best match
                   </span>
                 )}
@@ -77,7 +77,7 @@ function ResultCard({ result, index }: { result: SearchResultItem; index: number
                   {result.match_reasons.map((reason, i) => (
                     <span
                       key={`${reason.reason_type}-${i}`}
-                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-space-700/50 text-text-muted/70 border border-space-600/30"
+                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-ocean-50 text-text-muted border border-ocean-100"
                     >
                       {reason.detail}
                     </span>
@@ -128,7 +128,7 @@ export default function SearchResultsPage() {
           animate={{ opacity: 1 }}
           className="mb-6"
         >
-          <h1 className="text-xl font-heading font-bold text-text-primary mb-1">
+          <h1 className="text-xl font-heading font-bold text-text-heading mb-1">
             Search results for &quot;{query}&quot;
           </h1>
           {data && (
@@ -150,7 +150,7 @@ export default function SearchResultsPage() {
       {isLoading && (
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <Loader2 className="w-8 h-8 text-cyan animate-spin mx-auto mb-3" />
+            <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-3" />
             <p className="text-sm font-body text-text-muted">Searching across all databases...</p>
           </div>
         </div>
@@ -158,7 +158,7 @@ export default function SearchResultsPage() {
 
       {error && (
         <GlassCard>
-          <div className="flex items-center gap-3 text-magenta">
+          <div className="flex items-center gap-3 text-danger">
             <AlertCircle className="w-5 h-5" />
             <p className="text-sm font-body">{(error as Error).message}</p>
           </div>
@@ -174,13 +174,13 @@ export default function SearchResultsPage() {
         >
           <GlassCard>
             <div className="flex items-start gap-3">
-              <Lightbulb className="w-5 h-5 text-amber shrink-0 mt-0.5" />
+              <Lightbulb className="w-5 h-5 text-warning shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-body text-text-secondary mb-2">Did you mean:</p>
                 <button
                   onClick={() => navigate(`/search?q=${encodeURIComponent(didYouMean)}`)}
-                  className="px-3 py-1.5 rounded-lg text-sm font-mono text-cyan bg-cyan/10 border border-cyan/20
-                    hover:bg-cyan/20 transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg text-sm font-mono text-primary bg-primary-light border border-ocean-200
+                    hover:bg-primary/20 transition-colors cursor-pointer"
                 >
                   {didYouMean}
                 </button>
@@ -197,11 +197,11 @@ export default function SearchResultsPage() {
           animate={{ opacity: 1 }}
           className="mb-4 flex items-center gap-2 text-xs font-body text-text-muted/60"
         >
-          <Lightbulb className="w-3.5 h-3.5 text-amber/50" />
+          <Lightbulb className="w-3.5 h-3.5 text-warning/50" />
           <span>Also try:</span>
           <Link
             to={`/search?q=${encodeURIComponent(didYouMean)}`}
-            className="font-mono text-cyan/60 hover:text-cyan transition-colors"
+            className="font-mono text-primary/70 hover:text-primary transition-colors"
           >
             {didYouMean}
           </Link>
@@ -225,7 +225,7 @@ export default function SearchResultsPage() {
           className="text-center py-20"
         >
           <Search className="w-12 h-12 text-text-muted/20 mx-auto mb-4" />
-          <h2 className="text-lg font-heading font-semibold text-text-primary mb-2">
+          <h2 className="text-lg font-heading font-semibold text-text-heading mb-2">
             No results found
           </h2>
           <p className="text-sm font-body text-text-muted mb-6 max-w-md mx-auto">
@@ -236,8 +236,8 @@ export default function SearchResultsPage() {
               <button
                 key={example}
                 onClick={() => navigate(`/search?q=${encodeURIComponent(example)}`)}
-                className="px-3 py-1.5 rounded-lg text-xs font-mono text-text-muted bg-space-700/50
-                  border border-space-600/30 hover:border-cyan/30 hover:text-cyan
+                className="px-3 py-1.5 rounded-lg text-xs font-mono text-text-muted bg-ocean-50
+                  border border-ocean-100 hover:border-primary/30 hover:text-primary
                   transition-colors cursor-pointer"
               >
                 {example}

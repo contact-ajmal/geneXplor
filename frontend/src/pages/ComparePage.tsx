@@ -66,8 +66,8 @@ export default function ComparePage() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-10"
       >
-        <GitCompare className="w-12 h-12 text-cyan mx-auto mb-4" />
-        <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-3">
+        <GitCompare className="w-12 h-12 text-primary mx-auto mb-4" />
+        <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-heading mb-3">
           <DecodeText text="Gene Comparison" speed={35} />
         </h1>
         <p className="text-text-secondary font-body text-sm max-w-lg mx-auto">
@@ -80,7 +80,7 @@ export default function ComparePage() {
         <div className="flex flex-col md:flex-row items-stretch gap-4">
           {/* Gene A */}
           <div className="flex-1 relative">
-            <label className="block text-xs font-heading font-semibold text-cyan uppercase tracking-wider mb-2">
+            <label className="block text-xs font-heading font-semibold text-primary uppercase tracking-wider mb-2">
               Gene A
             </label>
             <div className="relative">
@@ -93,14 +93,14 @@ export default function ComparePage() {
                 onBlur={() => setTimeout(() => setFocusedInput(null), 150)}
                 placeholder="e.g. TP53"
                 className="w-full pl-9 pr-4 py-3 rounded-lg text-sm font-mono
-                  bg-space-800/60 border border-space-600/60 text-text-primary
+                  bg-ocean-50 border border-ocean-200 text-text-heading
                   placeholder:text-text-muted/50
-                  focus:outline-none focus:border-cyan/30 focus:ring-1 focus:ring-cyan/20
+                  focus:outline-none focus:border-primary/30 focus:ring-1 focus:ring-primary/20
                   transition-all"
               />
             </div>
             {suggestionsA.length > 0 && (
-              <div className="absolute z-20 mt-1 w-full rounded-lg border border-space-600/60 bg-space-800 shadow-xl overflow-hidden">
+              <div className="absolute z-20 mt-1 w-full rounded-lg border border-ocean-200 bg-white shadow-xl overflow-hidden">
                 {suggestionsA.map((s) => (
                   <button
                     key={s}
@@ -108,8 +108,8 @@ export default function ComparePage() {
                       setGeneA(s);
                       setFocusedInput(null);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm font-mono text-text-primary
-                      hover:bg-cyan/10 hover:text-cyan transition-colors cursor-pointer bg-transparent border-none"
+                    className="w-full px-4 py-2 text-left text-sm font-mono text-text-heading
+                      hover:bg-primary-light hover:text-primary transition-colors cursor-pointer bg-transparent border-none"
                   >
                     {s}
                   </button>
@@ -124,8 +124,8 @@ export default function ComparePage() {
               whileHover={{ scale: 1.1, rotate: 180 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleSwap}
-              className="p-3 rounded-full bg-space-700/60 border border-space-500/40
-                text-text-secondary hover:text-cyan hover:border-cyan/30 transition-colors
+              className="p-3 rounded-full bg-ocean-50 border border-ocean-200
+                text-text-secondary hover:text-primary hover:border-primary/30 transition-colors
                 cursor-pointer"
               aria-label="Swap genes"
             >
@@ -135,7 +135,7 @@ export default function ComparePage() {
 
           {/* Gene B */}
           <div className="flex-1 relative">
-            <label className="block text-xs font-heading font-semibold text-magenta uppercase tracking-wider mb-2">
+            <label className="block text-xs font-heading font-semibold text-danger uppercase tracking-wider mb-2">
               Gene B
             </label>
             <div className="relative">
@@ -148,14 +148,14 @@ export default function ComparePage() {
                 onBlur={() => setTimeout(() => setFocusedInput(null), 150)}
                 placeholder="e.g. BRCA1"
                 className="w-full pl-9 pr-4 py-3 rounded-lg text-sm font-mono
-                  bg-space-800/60 border border-space-600/60 text-text-primary
+                  bg-ocean-50 border border-ocean-200 text-text-heading
                   placeholder:text-text-muted/50
-                  focus:outline-none focus:border-magenta/30 focus:ring-1 focus:ring-magenta/20
+                  focus:outline-none focus:border-danger/30 focus:ring-1 focus:ring-danger/20
                   transition-all"
               />
             </div>
             {suggestionsB.length > 0 && (
-              <div className="absolute z-20 mt-1 w-full rounded-lg border border-space-600/60 bg-space-800 shadow-xl overflow-hidden">
+              <div className="absolute z-20 mt-1 w-full rounded-lg border border-ocean-200 bg-white shadow-xl overflow-hidden">
                 {suggestionsB.map((s) => (
                   <button
                     key={s}
@@ -163,8 +163,8 @@ export default function ComparePage() {
                       setGeneB(s);
                       setFocusedInput(null);
                     }}
-                    className="w-full px-4 py-2 text-left text-sm font-mono text-text-primary
-                      hover:bg-magenta/10 hover:text-magenta transition-colors cursor-pointer bg-transparent border-none"
+                    className="w-full px-4 py-2 text-left text-sm font-mono text-text-heading
+                      hover:bg-danger-light hover:text-danger transition-colors cursor-pointer bg-transparent border-none"
                   >
                     {s}
                   </button>
@@ -207,13 +207,13 @@ export default function ComparePage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(`/compare/${a}/${b}`)}
-              className="px-4 py-2 rounded-lg bg-space-700/40 border border-space-500/30
-                text-text-secondary text-sm font-mono hover:border-cyan/20 hover:text-cyan
+              className="px-4 py-2 rounded-lg bg-ocean-50 border border-ocean-200
+                text-text-secondary text-sm font-mono hover:border-primary/20 hover:text-primary
                 transition-all cursor-pointer"
             >
-              <span className="text-cyan">{a}</span>
+              <span className="text-primary">{a}</span>
               <span className="text-text-muted mx-2">vs</span>
-              <span className="text-magenta">{b}</span>
+              <span className="text-danger">{b}</span>
             </motion.button>
           ))}
         </div>

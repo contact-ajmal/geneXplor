@@ -68,21 +68,17 @@ export default function DashboardSidebar({ symbol, collapsed, badges = {} }: Das
       initial={false}
       animate={{ width: collapsed ? 60 : 220 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="hidden md:flex flex-col shrink-0 border-r border-cyan/[0.06] h-full overflow-y-auto overflow-x-hidden"
-      style={{
-        background: 'rgba(15, 22, 40, 0.5)',
-        backdropFilter: 'blur(12px)',
-      }}
+      className="hidden md:flex flex-col shrink-0 bg-white border-r border-ocean-100 h-full overflow-y-auto overflow-x-hidden"
     >
       <nav className="flex-1 py-3 px-2">
         {Array.from(groups).map(([groupName, tabs]) => (
           <div key={groupName} className="mb-3">
             {!collapsed && (
-              <p className="px-3 mb-1 text-[10px] font-heading font-semibold text-text-muted/50 uppercase tracking-widest">
+              <p className="px-3 mb-1 text-[10px] font-heading font-semibold text-text-muted uppercase tracking-widest">
                 {groupName}
               </p>
             )}
-            {collapsed && <div className="h-px bg-space-600/20 mx-2 mb-2" />}
+            {collapsed && <div className="h-px bg-ocean-100 mx-2 mb-2" />}
             <div className="space-y-0.5">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -100,13 +96,13 @@ export default function DashboardSidebar({ symbol, collapsed, badges = {} }: Das
                       border-none text-left relative group
                       ${collapsed ? 'px-2 py-2.5 justify-center' : 'px-3 py-2'}
                       ${isActive
-                        ? 'bg-cyan/[0.08] text-cyan'
-                        : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.03]'
+                        ? 'bg-primary-light text-primary'
+                        : 'text-text-secondary hover:text-text-heading hover:bg-ocean-50'
                       }
                     `}
-                    style={isActive ? { borderLeft: '2px solid #00d4ff' } : { borderLeft: '2px solid transparent' }}
+                    style={isActive ? { borderLeft: '3px solid var(--color-primary, #0369a1)' } : { borderLeft: '3px solid transparent' }}
                   >
-                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-cyan' : ''}`} />
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-primary' : ''}`} />
                     {!collapsed && (
                       <>
                         <span className="text-xs font-body truncate flex-1">{tab.label}</span>
@@ -115,8 +111,8 @@ export default function DashboardSidebar({ symbol, collapsed, badges = {} }: Das
                             min-w-[20px] h-5 flex items-center justify-center px-1
                             rounded-full text-[10px] font-mono font-bold
                             ${hasHighSeverity
-                              ? 'bg-magenta/20 text-magenta'
-                              : 'bg-space-600/40 text-text-muted'
+                              ? 'bg-danger-light text-danger'
+                              : 'bg-ocean-100 text-text-secondary'
                             }
                           `}>
                             {badgeCount > 999 ? '999+' : badgeCount}
@@ -129,14 +125,14 @@ export default function DashboardSidebar({ symbol, collapsed, badges = {} }: Das
                         absolute -top-0.5 -right-0.5 min-w-[14px] h-3.5
                         flex items-center justify-center px-0.5
                         rounded-full text-[8px] font-mono font-bold
-                        ${hasHighSeverity ? 'bg-magenta text-white' : 'bg-space-500 text-text-primary'}
+                        ${hasHighSeverity ? 'bg-danger text-white' : 'bg-ocean-200 text-text-secondary'}
                       `}>
                         {badgeCount > 99 ? '99+' : badgeCount}
                       </span>
                     )}
                     {collapsed && (
                       <div className="absolute left-full ml-2 px-2 py-1 rounded-md
-                        bg-space-700 border border-space-500/40 text-xs font-body text-text-primary
+                        bg-white border border-ocean-100 text-xs font-body text-text-heading
                         whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none
                         transition-opacity z-50 shadow-lg">
                         {tab.label}

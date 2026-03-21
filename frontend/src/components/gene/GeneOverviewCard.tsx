@@ -14,7 +14,7 @@ export default function GeneOverviewCard({ gene, delay = 0 }: GeneOverviewCardPr
 
   return (
     <GlassCard delay={delay}>
-      <h2 className="text-sm font-heading font-semibold text-text-primary mb-4 uppercase tracking-wider">
+      <h2 className="text-sm font-heading font-semibold text-text-heading mb-4 uppercase tracking-wider">
         Gene Overview
       </h2>
 
@@ -29,17 +29,17 @@ export default function GeneOverviewCard({ gene, delay = 0 }: GeneOverviewCardPr
           <GlowBadge color="cyan">{gene.biotype.replace(/_/g, ' ')}</GlowBadge>
         </StatCell>
         <StatCell label="Transcripts">
-          <span className="text-xl font-mono text-text-primary font-semibold">
+          <span className="text-xl font-mono text-text-heading font-semibold">
             <CountUp end={gene.transcript_count} />
           </span>
         </StatCell>
         <StatCell label="Chromosome">
-          <span className="text-xl font-mono text-text-primary font-semibold">
+          <span className="text-xl font-mono text-text-heading font-semibold">
             {gene.chromosome}
           </span>
         </StatCell>
         <StatCell label="Gene Length">
-          <span className="text-xl font-mono text-text-primary font-semibold">
+          <span className="text-xl font-mono text-text-heading font-semibold">
             <CountUp end={parseFloat((geneLength / 1000).toFixed(1))} decimals={1} />
             <span className="text-sm text-text-muted ml-1">kb</span>
           </span>
@@ -50,7 +50,7 @@ export default function GeneOverviewCard({ gene, delay = 0 }: GeneOverviewCardPr
         href={`https://ensembl.org/Homo_sapiens/Gene/Summary?g=${gene.ensembl_id}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg bg-cyan/10 border border-cyan/20 text-cyan text-sm font-body hover:bg-cyan/20 transition-colors"
+        className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg bg-primary-light border border-ocean-200 text-primary text-sm font-body hover:bg-ocean-50 transition-colors"
       >
         View on Ensembl
         <ExternalLink className="w-3.5 h-3.5" />
@@ -61,7 +61,7 @@ export default function GeneOverviewCard({ gene, delay = 0 }: GeneOverviewCardPr
 
 function StatCell({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl bg-space-800/50 border border-space-600/30 p-3 text-center">
+    <div className="rounded-xl bg-ocean-50 border border-ocean-100 p-3 text-center">
       <p className="text-text-muted text-xs font-body mb-1">{label}</p>
       {children}
     </div>

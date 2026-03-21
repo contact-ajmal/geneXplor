@@ -56,11 +56,11 @@ const LOADING_STEPS = [
 function sigColor(sig: string): string {
   const s = sig.toLowerCase();
   if (s.includes('pathogenic') && !s.includes('likely') && !s.includes('benign'))
-    return 'text-magenta';
-  if (s.includes('likely pathogenic')) return 'text-amber';
-  if (s.includes('uncertain')) return 'text-yellow-400';
-  if (s.includes('likely benign')) return 'text-green-400';
-  if (s.includes('benign')) return 'text-helix';
+    return 'text-danger';
+  if (s.includes('likely pathogenic')) return 'text-warning';
+  if (s.includes('uncertain')) return 'text-yellow-600';
+  if (s.includes('likely benign')) return 'text-green-600';
+  if (s.includes('benign')) return 'text-success';
   return 'text-text-secondary';
 }
 
@@ -186,7 +186,7 @@ export default function ClinicalReportModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30"
         onClick={(e) => e.target === e.currentTarget && handleClose()}
       >
         <motion.div
@@ -194,24 +194,24 @@ export default function ClinicalReportModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-2xl border border-cyan/10 bg-[#0f1628] shadow-2xl shadow-cyan/5"
+          className="w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-2xl border border-ocean-100 bg-white shadow-xl"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-space-600/30">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-ocean-100">
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-cyan" />
+              <FileText className="w-5 h-5 text-primary" />
               <div>
-                <h2 className="text-base font-heading font-semibold text-text-primary">
+                <h2 className="text-base font-heading font-semibold text-text-heading">
                   Generate Clinical Report
                 </h2>
                 <p className="text-xs text-text-muted font-body">
-                  <span className="font-mono text-cyan">{geneSymbol}</span> — ACMG-formatted report
+                  <span className="font-mono text-primary">{geneSymbol}</span> — ACMG-formatted report
                 </p>
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-1.5 rounded-lg hover:bg-space-700/60 transition-colors"
+              className="p-1.5 rounded-lg hover:bg-ocean-50 transition-colors"
             >
               <X className="w-4 h-4 text-text-muted" />
             </button>
@@ -249,10 +249,10 @@ export default function ClinicalReportModal({
           </div>
 
           {/* Disclaimer footer */}
-          <div className="px-6 py-3 border-t border-space-600/30 bg-magenta/5">
+          <div className="px-6 py-3 border-t border-ocean-100 bg-danger-light">
             <div className="flex items-start gap-2">
-              <AlertTriangle className="w-3.5 h-3.5 text-magenta shrink-0 mt-0.5" />
-              <p className="text-[10px] text-magenta/80 font-body leading-tight">
+              <AlertTriangle className="w-3.5 h-3.5 text-danger shrink-0 mt-0.5" />
+              <p className="text-[10px] text-danger/80 font-body leading-tight">
                 FOR RESEARCH USE ONLY — This report is auto-generated from public databases and has
                 not been reviewed by a certified clinical geneticist. Not intended for clinical
                 decision-making or diagnostic use.
@@ -288,7 +288,7 @@ function ConfigureStep({
     <div className="space-y-6">
       {/* Sections */}
       <div>
-        <h3 className="text-sm font-heading font-semibold text-text-primary mb-3">
+        <h3 className="text-sm font-heading font-semibold text-text-heading mb-3">
           Include Sections
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -298,12 +298,12 @@ function ConfigureStep({
               onClick={() => toggleSection(s.key)}
               className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border text-left transition-all text-sm font-body ${
                 selectedSections[s.key]
-                  ? 'border-cyan/20 bg-cyan/5 text-text-primary'
-                  : 'border-space-600/30 bg-space-800/30 text-text-muted'
+                  ? 'border-primary/20 bg-primary-light text-text-heading'
+                  : 'border-ocean-100 bg-ocean-50 text-text-muted'
               }`}
             >
               {selectedSections[s.key] ? (
-                <CheckSquare className="w-4 h-4 text-cyan shrink-0" />
+                <CheckSquare className="w-4 h-4 text-primary shrink-0" />
               ) : (
                 <Square className="w-4 h-4 text-text-muted shrink-0" />
               )}
@@ -315,7 +315,7 @@ function ConfigureStep({
 
       {/* Variant Filter */}
       <div>
-        <h3 className="text-sm font-heading font-semibold text-text-primary mb-3">
+        <h3 className="text-sm font-heading font-semibold text-text-heading mb-3">
           Variant Filter
         </h3>
         <div className="flex flex-col gap-2">
@@ -330,17 +330,17 @@ function ConfigureStep({
               key={value}
               className={`flex items-center gap-2.5 px-3 py-2 rounded-lg border cursor-pointer transition-all text-sm font-body ${
                 variantFilter === value
-                  ? 'border-cyan/20 bg-cyan/5 text-text-primary'
-                  : 'border-space-600/30 bg-space-800/30 text-text-muted hover:border-space-600/50'
+                  ? 'border-primary/20 bg-primary-light text-text-heading'
+                  : 'border-ocean-100 bg-ocean-50 text-text-muted hover:border-ocean-200'
               }`}
             >
               <div
                 className={`w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center ${
-                  variantFilter === value ? 'border-cyan' : 'border-text-muted'
+                  variantFilter === value ? 'border-primary' : 'border-text-muted'
                 }`}
               >
                 {variantFilter === value && (
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                 )}
               </div>
               {label}
@@ -351,7 +351,7 @@ function ConfigureStep({
 
       {/* Format */}
       <div>
-        <h3 className="text-sm font-heading font-semibold text-text-primary mb-3">
+        <h3 className="text-sm font-heading font-semibold text-text-heading mb-3">
           Output Format
         </h3>
         <div className="flex gap-2">
@@ -367,8 +367,8 @@ function ConfigureStep({
               onClick={() => setFormat(value as ReportFormat)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-body transition-all ${
                 format === value
-                  ? 'border-cyan/30 bg-cyan/10 text-cyan'
-                  : 'border-space-600/30 bg-space-800/30 text-text-muted hover:border-space-600/50'
+                  ? 'border-primary/30 bg-primary-light text-primary'
+                  : 'border-ocean-100 bg-ocean-50 text-text-muted hover:border-ocean-200'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -379,9 +379,9 @@ function ConfigureStep({
       </div>
 
       {/* Disclaimer checkbox (always on) */}
-      <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg border border-magenta/20 bg-magenta/5">
-        <CheckSquare className="w-4 h-4 text-magenta shrink-0" />
-        <span className="text-sm text-magenta/80 font-body">
+      <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg border border-danger/20 bg-danger-light">
+        <CheckSquare className="w-4 h-4 text-danger shrink-0" />
+        <span className="text-sm text-danger/80 font-body">
           Include disclaimer (required)
         </span>
       </div>
@@ -409,16 +409,16 @@ function LoadingStep({
   return (
     <div className="flex flex-col items-center justify-center py-16 space-y-6">
       <div className="relative">
-        <Loader2 className="w-12 h-12 text-cyan animate-spin" />
-        <div className="absolute inset-0 w-12 h-12 rounded-full bg-cyan/10 animate-ping" />
+        <Loader2 className="w-12 h-12 text-primary animate-spin" />
+        <div className="absolute inset-0 w-12 h-12 rounded-full bg-primary-light animate-ping" />
       </div>
 
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-heading font-semibold text-text-primary">
+        <h3 className="text-lg font-heading font-semibold text-text-heading">
           Generating Clinical Report
         </h3>
         <p className="text-sm text-text-secondary font-body">
-          <span className="font-mono text-cyan">{geneSymbol}</span>
+          <span className="font-mono text-primary">{geneSymbol}</span>
         </p>
       </div>
 
@@ -435,13 +435,13 @@ function LoadingStep({
             className="flex items-center gap-2 text-sm font-body"
           >
             {i < loadingStep ? (
-              <Check className="w-4 h-4 text-helix" />
+              <Check className="w-4 h-4 text-success" />
             ) : i === loadingStep ? (
-              <Loader2 className="w-4 h-4 text-cyan animate-spin" />
+              <Loader2 className="w-4 h-4 text-primary animate-spin" />
             ) : (
-              <div className="w-4 h-4 rounded-full border border-space-600" />
+              <div className="w-4 h-4 rounded-full border border-ocean-100" />
             )}
-            <span className={i <= loadingStep ? 'text-text-primary' : 'text-text-muted'}>
+            <span className={i <= loadingStep ? 'text-text-heading' : 'text-text-muted'}>
               {text}
             </span>
           </motion.div>
@@ -478,7 +478,7 @@ function PreviewStep({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors font-body"
+          className="flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-heading transition-colors font-body"
         >
           <ArrowLeft className="w-4 h-4" />
           Edit & Regenerate
@@ -505,11 +505,11 @@ function PreviewStep({
       <GlassCard className="p-0 overflow-hidden">
         <div className="p-6 space-y-6 max-h-[55vh] overflow-y-auto report-preview">
           {/* Header */}
-          <div className="text-center space-y-2 pb-4 border-b border-space-600/30">
+          <div className="text-center space-y-2 pb-4 border-b border-ocean-100">
             <p className="text-xs text-text-muted font-body tracking-widest uppercase">
               GeneXplor Clinical Gene Report
             </p>
-            <h2 className="text-3xl font-heading font-bold text-cyan">
+            <h2 className="text-3xl font-heading font-bold text-primary">
               {report.gene_symbol}
             </h2>
             {report.gene_summary && (
@@ -529,17 +529,17 @@ function PreviewStep({
               <MetricBox
                 value={report.clinical_metrics.total_variants_analyzed}
                 label="Total Variants"
-                color="text-cyan"
+                color="text-primary"
               />
               <MetricBox
                 value={`${report.clinical_metrics.pathogenic_variant_burden}%`}
                 label="Pathogenic Burden"
-                color="text-magenta"
+                color="text-danger"
               />
               <MetricBox
                 value={report.clinical_metrics.vus_to_pathogenic_ratio}
                 label="VUS:Path Ratio"
-                color="text-amber"
+                color="text-warning"
               />
             </div>
           )}
@@ -566,35 +566,35 @@ function PreviewStep({
           {report.variant_summary && (
             <PreviewSection title="2. Variant Summary">
               <div className="flex flex-wrap gap-3 mb-3">
-                <CountBadge label="Pathogenic" count={report.variant_summary.total_pathogenic} color="bg-red-500/10 text-red-400 border-red-500/20" />
-                <CountBadge label="Likely Path." count={report.variant_summary.total_likely_pathogenic} color="bg-orange-500/10 text-orange-400 border-orange-500/20" />
-                <CountBadge label="VUS" count={report.variant_summary.total_vus} color="bg-yellow-500/10 text-yellow-400 border-yellow-500/20" />
-                <CountBadge label="Likely Benign" count={report.variant_summary.total_likely_benign} color="bg-green-500/10 text-green-400 border-green-500/20" />
-                <CountBadge label="Benign" count={report.variant_summary.total_benign} color="bg-emerald-500/10 text-emerald-400 border-emerald-500/20" />
+                <CountBadge label="Pathogenic" count={report.variant_summary.total_pathogenic} color="bg-red-50 text-red-600 border-red-200" />
+                <CountBadge label="Likely Path." count={report.variant_summary.total_likely_pathogenic} color="bg-orange-50 text-orange-600 border-orange-200" />
+                <CountBadge label="VUS" count={report.variant_summary.total_vus} color="bg-yellow-50 text-yellow-600 border-yellow-200" />
+                <CountBadge label="Likely Benign" count={report.variant_summary.total_likely_benign} color="bg-green-50 text-green-600 border-green-200" />
+                <CountBadge label="Benign" count={report.variant_summary.total_benign} color="bg-emerald-50 text-emerald-600 border-emerald-200" />
               </div>
               {report.variant_summary.variants.length > 0 && (
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs">
                     <thead>
-                      <tr className="border-b border-space-600/40">
-                        <th className="text-left py-1.5 px-2 text-cyan font-heading font-medium">Variant ID</th>
-                        <th className="text-left py-1.5 px-2 text-cyan font-heading font-medium">HGVS</th>
-                        <th className="text-left py-1.5 px-2 text-cyan font-heading font-medium">Significance</th>
-                        <th className="text-left py-1.5 px-2 text-cyan font-heading font-medium">Stars</th>
-                        <th className="text-right py-1.5 px-2 text-cyan font-heading font-medium">AF</th>
+                      <tr className="border-b border-ocean-100">
+                        <th className="text-left py-1.5 px-2 text-primary font-heading font-medium">Variant ID</th>
+                        <th className="text-left py-1.5 px-2 text-primary font-heading font-medium">HGVS</th>
+                        <th className="text-left py-1.5 px-2 text-primary font-heading font-medium">Significance</th>
+                        <th className="text-left py-1.5 px-2 text-primary font-heading font-medium">Stars</th>
+                        <th className="text-right py-1.5 px-2 text-primary font-heading font-medium">AF</th>
                       </tr>
                     </thead>
                     <tbody>
                       {report.variant_summary.variants.slice(0, 15).map((v) => (
-                        <tr key={v.variant_id} className="border-b border-space-700/30">
-                          <td className="py-1 px-2 font-mono text-text-primary">{v.variant_id}</td>
+                        <tr key={v.variant_id} className="border-b border-ocean-50">
+                          <td className="py-1 px-2 font-mono text-text-heading">{v.variant_id}</td>
                           <td className="py-1 px-2 font-mono text-text-secondary">
                             {(v.hgvs_protein || v.hgvs_coding || '—').slice(0, 25)}
                           </td>
                           <td className={`py-1 px-2 font-body ${sigColor(v.clinical_significance)}`}>
                             {v.clinical_significance}
                           </td>
-                          <td className="py-1 px-2 text-amber">
+                          <td className="py-1 px-2 text-warning">
                             {'★'.repeat(v.review_stars)}
                             {'☆'.repeat(4 - v.review_stars)}
                           </td>
@@ -622,17 +622,17 @@ function PreviewStep({
                 {report.disease_associations.slice(0, 8).map((da) => (
                   <div
                     key={da.disease_name}
-                    className="flex items-start justify-between py-1.5 border-b border-space-700/30 last:border-0"
+                    className="flex items-start justify-between py-1.5 border-b border-ocean-50 last:border-0"
                   >
                     <div>
-                      <p className="text-sm text-text-primary font-body">{da.disease_name}</p>
+                      <p className="text-sm text-text-heading font-body">{da.disease_name}</p>
                       {da.key_variants.length > 0 && (
                         <p className="text-xs text-text-muted font-mono mt-0.5">
                           {da.key_variants.slice(0, 3).join(', ')}
                         </p>
                       )}
                     </div>
-                    <span className="text-xs text-magenta font-mono shrink-0 ml-2">
+                    <span className="text-xs text-danger font-mono shrink-0 ml-2">
                       {da.pathogenic_variant_count} P/LP
                     </span>
                   </div>
@@ -645,7 +645,7 @@ function PreviewStep({
           {report.research_context && (
             <PreviewSection title="7. Research Context">
               <p className="text-sm text-text-secondary font-body">
-                Publications (last 5 years): <span className="text-cyan font-mono">{report.research_context.total_publications_5yr}</span>
+                Publications (last 5 years): <span className="text-primary font-mono">{report.research_context.total_publications_5yr}</span>
               </p>
               {report.research_context.key_references.length > 0 && (
                 <div className="mt-2 space-y-1.5">
@@ -670,7 +670,7 @@ function PreviewStep({
                 {Object.entries(report.methodology.data_sources).map(([src, ver]) => (
                   <span
                     key={src}
-                    className="px-2 py-0.5 text-[10px] rounded border border-space-600/40 bg-space-800/40 text-text-muted font-body"
+                    className="px-2 py-0.5 text-[10px] rounded border border-ocean-100 bg-ocean-50 text-text-muted font-body"
                   >
                     {src}: {ver}
                   </span>
@@ -680,8 +680,8 @@ function PreviewStep({
           )}
 
           {/* Disclaimer */}
-          <div className="p-3 rounded-lg border border-magenta/20 bg-magenta/5 text-center">
-            <p className="text-xs text-magenta font-body font-semibold">{report.disclaimer}</p>
+          <div className="p-3 rounded-lg border border-danger/20 bg-danger-light text-center">
+            <p className="text-xs text-danger font-body font-semibold">{report.disclaimer}</p>
           </div>
         </div>
       </GlassCard>
@@ -694,7 +694,7 @@ function PreviewStep({
 function PreviewSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <h3 className="text-sm font-heading font-semibold text-cyan mb-2">{title}</h3>
+      <h3 className="text-sm font-heading font-semibold text-primary mb-2">{title}</h3>
       {children}
     </div>
   );
@@ -710,7 +710,7 @@ function MetricBox({
   color: string;
 }) {
   return (
-    <div className="text-center p-3 rounded-lg border border-space-600/30 bg-space-800/30">
+    <div className="text-center p-3 rounded-lg border border-ocean-100 bg-ocean-50">
       <p className={`text-xl font-heading font-bold ${color}`}>{value}</p>
       <p className="text-[10px] text-text-muted font-body mt-0.5">{label}</p>
     </div>
@@ -721,7 +721,7 @@ function InfoRow({ label, value, mono }: { label: string; value: string; mono?: 
   return (
     <div className="flex items-baseline gap-1.5">
       <span className="text-text-muted text-xs font-body">{label}:</span>
-      <span className={`text-text-primary text-xs ${mono ? 'font-mono' : 'font-body'}`}>
+      <span className={`text-text-heading text-xs ${mono ? 'font-mono' : 'font-body'}`}>
         {value || '—'}
       </span>
     </div>

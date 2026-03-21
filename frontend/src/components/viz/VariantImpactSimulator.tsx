@@ -52,8 +52,8 @@ const STAGES = [
 ] as const;
 
 const BASE_COLORS: Record<string, string> = {
-  A: '#00ff88', T: '#ff3366', C: '#00d4ff', G: '#ffaa00',
-  U: '#ff3366',
+  A: '#2B9F78', T: '#D64045', C: '#1B4965', G: '#D4A843',
+  U: '#D64045',
 };
 
 const AA_THREE_TO_ONE: Record<string, string> = {
@@ -67,7 +67,7 @@ const AA_THREE_TO_ONE: Record<string, string> = {
 const AA_PROPERTIES: Record<string, { color: string; property: string }> = {
   R: { color: '#4dabf7', property: 'positive' },
   K: { color: '#4dabf7', property: 'positive' },
-  H: { color: '#748ffc', property: 'positive' },
+  H: { color: '#5294C4', property: 'positive' },
   D: { color: '#ff6b6b', property: 'negative' },
   E: { color: '#ff6b6b', property: 'negative' },
   S: { color: '#69db7c', property: 'polar' },
@@ -82,10 +82,10 @@ const AA_PROPERTIES: Record<string, { color: string; property: string }> = {
   I: { color: '#868e96', property: 'nonpolar' },
   L: { color: '#868e96', property: 'nonpolar' },
   M: { color: '#868e96', property: 'nonpolar' },
-  F: { color: '#da77f2', property: 'aromatic' },
-  W: { color: '#da77f2', property: 'aromatic' },
-  Y: { color: '#da77f2', property: 'aromatic' },
-  '*': { color: '#ff3366', property: 'stop' },
+  F: { color: '#627D98', property: 'aromatic' },
+  W: { color: '#627D98', property: 'aromatic' },
+  Y: { color: '#627D98', property: 'aromatic' },
+  '*': { color: '#D64045', property: 'stop' },
 };
 
 const SPEED_OPTIONS = [0.5, 1, 2] as const;
@@ -301,14 +301,14 @@ export default function VariantImpactSimulator({
   const hasStarted = currentStage >= 0;
 
   return (
-    <div className={`${embedded ? '' : 'rounded-2xl border border-cyan/[0.08] glass-bg backdrop-blur-xl p-5'}`}>
+    <div className={`${embedded ? '' : 'rounded-2xl bg-white border border-ocean-100 shadow-sm p-5'}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+          <h3 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
             Variant Impact Simulator
           </h3>
-          <p className="font-mono text-cyan text-xs mt-0.5">{variant.variantId}</p>
+          <p className="font-mono text-primary text-xs mt-0.5">{variant.variantId}</p>
         </div>
         <div className="flex items-center gap-2">
           <GlowBadge color={
@@ -321,7 +321,7 @@ export default function VariantImpactSimulator({
           {onClose && (
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg bg-space-800/60 border border-space-600/30 text-text-secondary hover:text-text-primary hover:border-cyan/20 transition-colors cursor-pointer"
+              className="p-1.5 rounded-lg bg-white border border-ocean-100 text-text-secondary hover:text-text-heading hover:border-ocean-200 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -346,10 +346,10 @@ export default function VariantImpactSimulator({
               className={`
                 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-body transition-all cursor-pointer
                 ${isCurrent
-                  ? 'bg-cyan/15 text-cyan border border-cyan/30 shadow-[0_0_12px_rgba(0,212,255,0.15)]'
+                  ? 'bg-primary-light text-primary border border-ocean-200 shadow-sm'
                   : isPast
-                    ? 'bg-space-700/50 text-text-secondary border border-space-600/20'
-                    : 'bg-space-800/30 text-text-muted border border-transparent hover:border-space-600/20'
+                    ? 'bg-ocean-50 text-text-secondary border border-ocean-100'
+                    : 'bg-white text-text-muted border border-transparent hover:border-ocean-100'
                 }
               `}
             >
@@ -386,11 +386,11 @@ export default function VariantImpactSimulator({
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-3 mt-6 pt-4 border-t border-space-600/20">
+      <div className="flex items-center justify-center gap-3 mt-6 pt-4 border-t border-ocean-100">
         <button
           onClick={handleStepBack}
           disabled={!hasStarted || currentStage === activeStages[0]}
-          className="p-2 rounded-lg bg-space-800/50 border border-space-600/30 text-text-secondary hover:text-cyan hover:border-cyan/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+          className="p-2 rounded-lg bg-white border border-ocean-100 text-text-secondary hover:text-primary hover:border-ocean-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
           aria-label="Previous stage"
         >
           <SkipBack className="w-4 h-4" />
@@ -399,7 +399,7 @@ export default function VariantImpactSimulator({
         {isComplete ? (
           <button
             onClick={handleReplay}
-            className="p-3 rounded-full bg-cyan/10 border border-cyan/30 text-cyan hover:bg-cyan/20 transition-all cursor-pointer shadow-[0_0_16px_rgba(0,212,255,0.1)]"
+            className="p-3 rounded-full bg-primary-light border border-ocean-200 text-primary hover:bg-primary-light transition-all cursor-pointer shadow-sm"
             aria-label="Replay simulation"
           >
             <RotateCcw className="w-5 h-5" />
@@ -407,7 +407,7 @@ export default function VariantImpactSimulator({
         ) : (
           <button
             onClick={isPlaying ? handlePause : handlePlay}
-            className="p-3 rounded-full bg-cyan/10 border border-cyan/30 text-cyan hover:bg-cyan/20 transition-all cursor-pointer shadow-[0_0_16px_rgba(0,212,255,0.1)]"
+            className="p-3 rounded-full bg-primary-light border border-ocean-200 text-primary hover:bg-primary-light transition-all cursor-pointer shadow-sm"
             aria-label={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
@@ -417,20 +417,20 @@ export default function VariantImpactSimulator({
         <button
           onClick={handleStepForward}
           disabled={!hasStarted || isComplete}
-          className="p-2 rounded-lg bg-space-800/50 border border-space-600/30 text-text-secondary hover:text-cyan hover:border-cyan/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+          className="p-2 rounded-lg bg-white border border-ocean-100 text-text-secondary hover:text-primary hover:border-ocean-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
           aria-label="Next stage"
         >
           <SkipForward className="w-4 h-4" />
         </button>
 
         {/* Speed control */}
-        <div className="flex items-center gap-1 ml-4 border-l border-space-600/20 pl-4">
+        <div className="flex items-center gap-1 ml-4 border-l border-ocean-100 pl-4">
           {SPEED_OPTIONS.map(s => (
             <button
               key={s}
               onClick={() => setSpeed(s)}
               className={`px-2 py-1 rounded text-xs font-mono cursor-pointer transition-all
-                ${speed === s ? 'bg-cyan/15 text-cyan border border-cyan/25' : 'text-text-muted hover:text-text-secondary border border-transparent'}
+                ${speed === s ? 'bg-primary-light text-primary border border-ocean-200' : 'text-text-muted hover:text-text-secondary border border-transparent'}
               `}
             >
               {s}x
@@ -456,7 +456,7 @@ function StartScreen({ variant, onStart }: { variant: ParsedVariant; onStart: ()
         <p className="text-text-secondary font-body text-sm mb-2">
           Simulate the biological impact of
         </p>
-        <p className="font-mono text-cyan text-lg">{variant.variantId}</p>
+        <p className="font-mono text-primary text-lg">{variant.variantId}</p>
         {variant.hgvsp && (
           <p className="font-mono text-text-muted text-sm mt-1">{variant.hgvsp}</p>
         )}
@@ -468,7 +468,7 @@ function StartScreen({ variant, onStart }: { variant: ParsedVariant; onStart: ()
 
       <button
         onClick={onStart}
-        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan to-cyan/70 text-space-900 font-body font-semibold text-sm hover:shadow-[0_0_24px_rgba(0,212,255,0.35)] transition-all cursor-pointer"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary/70 text-white font-body font-semibold text-sm hover:shadow-md transition-all cursor-pointer"
       >
         <Play className="w-4 h-4" />
         Simulate Impact
@@ -501,7 +501,7 @@ function DNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-xl mx-auto text-center"
     >
-      <h4 className="text-lg font-heading font-semibold text-text-primary mb-1">DNA Level</h4>
+      <h4 className="text-lg font-heading font-semibold text-text-heading mb-1">DNA Level</h4>
       <p className="text-text-muted text-xs font-body mb-6">
         A single base change at position {variant.position > 0 ? variant.position.toLocaleString() : '—'}
       </p>
@@ -530,10 +530,10 @@ function DNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
                   `}
                   style={{
                     backgroundColor: isVariant && phase >= 1
-                      ? 'rgba(255,51,102,0.2)'
+                      ? 'rgba(214,64,69,0.2)'
                       : `${BASE_COLORS[displayBase]}15`,
                     color: isVariant && phase >= 1
-                      ? '#ff3366'
+                      ? '#D64045'
                       : BASE_COLORS[displayBase],
                   }}
                   animate={isVariant && phase === 1 ? {
@@ -552,7 +552,7 @@ function DNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
             {bases.map((_, i) => (
               <div
                 key={`bond-${i}`}
-                className={`w-7 sm:w-8 flex justify-center ${i === variantIndex && phase >= 1 ? 'text-magenta' : 'text-space-600'}`}
+                className={`w-7 sm:w-8 flex justify-center ${i === variantIndex && phase >= 1 ? 'text-danger' : 'text-ocean-500'}`}
               >
                 <span className="text-[10px]">│</span>
               </div>
@@ -574,10 +574,10 @@ function DNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
                   `}
                   style={{
                     backgroundColor: isVariant && phase >= 1
-                      ? 'rgba(255,51,102,0.1)'
+                      ? 'rgba(214,64,69,0.1)'
                       : `${BASE_COLORS[comp]}10`,
                     color: isVariant && phase >= 1
-                      ? '#ff3366'
+                      ? '#D64045'
                       : `${BASE_COLORS[comp]}99`,
                   }}
                 >
@@ -594,7 +594,7 @@ function DNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: phase >= 1 ? 1 : 0 }}
-          className="font-mono text-sm text-magenta mt-4"
+          className="font-mono text-sm text-danger mt-4"
         >
           {variant.hgvsc}
         </motion.p>
@@ -632,7 +632,7 @@ function RNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-xl mx-auto text-center"
     >
-      <h4 className="text-lg font-heading font-semibold text-text-primary mb-1">RNA Level</h4>
+      <h4 className="text-lg font-heading font-semibold text-text-heading mb-1">RNA Level</h4>
       <p className="text-text-muted text-xs font-body mb-6">
         {isSplice
           ? 'This variant disrupts RNA splicing'
@@ -714,8 +714,8 @@ function RNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
                   className={`w-8 h-8 rounded flex items-center justify-center font-mono text-sm font-bold transition-all
                     ${changed && phase >= 1 ? 'ring-2 ring-magenta shadow-[0_0_8px_rgba(255,51,102,0.4)]' : ''}`}
                   style={{
-                    backgroundColor: changed && phase >= 1 ? 'rgba(255,51,102,0.15)' : `${BASE_COLORS[b]}20`,
-                    color: changed && phase >= 1 ? '#ff3366' : BASE_COLORS[b],
+                    backgroundColor: changed && phase >= 1 ? 'rgba(214,64,69,0.15)' : `${BASE_COLORS[b]}20`,
+                    color: changed && phase >= 1 ? '#D64045' : BASE_COLORS[b],
                   }}
                 >
                   {b}
@@ -730,9 +730,9 @@ function RNAStage({ variant, phase }: { variant: ParsedVariant; phase: number })
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4 p-3 rounded-lg bg-magenta/[0.06] border border-magenta/20"
+          className="mt-4 p-3 rounded-lg bg-danger/[0.06] border border-danger/20"
         >
-          <p className="text-magenta text-xs font-body">
+          <p className="text-danger text-xs font-body">
             This variant affects a splice site, potentially causing exon skipping or intron retention
           </p>
         </motion.div>
@@ -778,7 +778,7 @@ function ProteinStage({ variant, protein, phase }: {
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-xl mx-auto text-center"
     >
-      <h4 className="text-lg font-heading font-semibold text-text-primary mb-1">Protein Level</h4>
+      <h4 className="text-lg font-heading font-semibold text-text-heading mb-1">Protein Level</h4>
       <p className="text-text-muted text-xs font-body mb-6">
         {ct === 'missense' && pc
           ? `Amino acid ${pc.from} becomes ${pc.to} at position ${pc.position}`
@@ -811,10 +811,10 @@ function ProteinStage({ variant, protein, phase }: {
               color = toProps.color;
             } else if (ct === 'nonsense') {
               displayAA = '*';
-              color = '#ff3366';
+              color = '#D64045';
             } else if (ct === 'frameshift') {
               displayAA = '?';
-              color = '#ff3366';
+              color = '#D64045';
               scrambled = true;
             }
           }
@@ -824,7 +824,7 @@ function ProteinStage({ variant, protein, phase }: {
               truncated = true;
             } else if (ct === 'frameshift') {
               displayAA = '?';
-              color = '#ff8c00';
+              color = '#D4A843';
               scrambled = true;
             }
           }
@@ -876,12 +876,12 @@ function ProteinStage({ variant, protein, phase }: {
               {fromAA}
             </div>
             <div>
-              <p className="text-text-primary text-xs font-mono">{pc.from}</p>
+              <p className="text-text-heading text-xs font-mono">{pc.from}</p>
               <p className="text-text-muted text-[10px] font-body">{fromProps.property}</p>
             </div>
           </div>
 
-          <span className="text-magenta text-lg">→</span>
+          <span className="text-danger text-lg">→</span>
 
           <div className="flex items-center gap-2">
             <div
@@ -891,7 +891,7 @@ function ProteinStage({ variant, protein, phase }: {
               {toAA}
             </div>
             <div>
-              <p className="text-text-primary text-xs font-mono">{pc.to}</p>
+              <p className="text-text-heading text-xs font-mono">{pc.to}</p>
               <p className="text-text-muted text-[10px] font-body">{toProps.property}</p>
             </div>
           </div>
@@ -926,7 +926,7 @@ function StructureStage({ variant, sigCategory, phase }: {
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-md mx-auto text-center"
     >
-      <h4 className="text-lg font-heading font-semibold text-text-primary mb-1">Protein Structure</h4>
+      <h4 className="text-lg font-heading font-semibold text-text-heading mb-1">Protein Structure</h4>
       <p className="text-text-muted text-xs font-body mb-6">
         {isPathogenic
           ? 'This may disrupt the protein\'s 3D structure'
@@ -943,7 +943,7 @@ function StructureStage({ variant, sigCategory, phase }: {
           <motion.path
             d="M30,90 C50,40 80,30 110,50 S150,90 170,70 S210,30 230,60 S250,100 230,120 S190,150 160,130 S120,100 90,120 S50,150 30,130 Z"
             fill="none"
-            stroke={isPathogenic && phase >= 1 ? '#ff3366' : isBenign && phase >= 1 ? '#00ff88' : '#00d4ff'}
+            stroke={isPathogenic && phase >= 1 ? '#D64045' : isBenign && phase >= 1 ? '#2B9F78' : '#1B4965'}
             strokeWidth={2.5}
             className="transition-all duration-700"
             initial={{ pathLength: 0, opacity: 0 }}
@@ -956,7 +956,7 @@ function StructureStage({ variant, sigCategory, phase }: {
             cx={140}
             cy={80}
             r={phase >= 1 ? 8 : 5}
-            fill={isPathogenic ? '#ff3366' : isBenign ? '#00ff88' : '#ffaa00'}
+            fill={isPathogenic ? '#D64045' : isBenign ? '#2B9F78' : '#D4A843'}
             opacity={0.8}
             className="transition-all duration-500"
             animate={phase === 1 ? {
@@ -970,7 +970,7 @@ function StructureStage({ variant, sigCategory, phase }: {
             <>
               <motion.path
                 d="M120,65 L135,55 M145,55 L160,65"
-                stroke="#ff3366"
+                stroke="#D64045"
                 strokeWidth={2}
                 strokeLinecap="round"
                 initial={{ opacity: 0 }}
@@ -981,7 +981,7 @@ function StructureStage({ variant, sigCategory, phase }: {
               <motion.path
                 d="M110,90 Q120,75 130,90 Q140,105 150,90"
                 fill="none"
-                stroke="#ff3366"
+                stroke="#D64045"
                 strokeWidth={1}
                 strokeDasharray="3,3"
                 initial={{ opacity: 0 }}
@@ -996,7 +996,7 @@ function StructureStage({ variant, sigCategory, phase }: {
             <motion.path
               d="M125,85 L135,95 L155,70"
               fill="none"
-              stroke="#00ff88"
+              stroke="#2B9F78"
               strokeWidth={3}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -1013,7 +1013,7 @@ function StructureStage({ variant, sigCategory, phase }: {
               y={88}
               textAnchor="middle"
               className="font-bold text-2xl"
-              fill="#ffaa00"
+              fill="#D4A843"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 0.8, scale: 1 }}
               transition={{ delay: 0.3 }}
@@ -1065,7 +1065,7 @@ function FunctionStage({ variant, affectedDomain, protein, phase }: {
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-xl mx-auto text-center"
     >
-      <h4 className="text-lg font-heading font-semibold text-text-primary mb-1">Functional Impact</h4>
+      <h4 className="text-lg font-heading font-semibold text-text-heading mb-1">Functional Impact</h4>
       <p className="text-text-muted text-xs font-body mb-6">
         {affectedDomain
           ? `This variant affects the ${affectedDomain.name} domain`
@@ -1076,11 +1076,11 @@ function FunctionStage({ variant, affectedDomain, protein, phase }: {
       {/* Domain diagram */}
       {protein && protein.domains.length > 0 && (
         <div className="mb-6">
-          <div className="relative h-10 bg-space-700/50 rounded-full overflow-hidden border border-space-600/20 mx-auto max-w-lg">
+          <div className="relative h-10 bg-ocean-50 rounded-full overflow-hidden border border-ocean-100 mx-auto max-w-lg">
             {protein.domains.map((domain, i) => {
               const start = (domain.start / protein.protein_length) * 100;
               const width = ((domain.end - domain.start) / protein.protein_length) * 100;
-              const colors = ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#748ffc', '#da77f2'];
+              const colors = ['#1B4965', '#D64045', '#2B9F78', '#D4A843', '#5294C4', '#627D98'];
               const isAffected = affectedDomain && domain.name === affectedDomain.name;
               return (
                 <motion.div
@@ -1092,7 +1092,7 @@ function FunctionStage({ variant, affectedDomain, protein, phase }: {
                     left: `${start}%`,
                     width: `${Math.max(width, 2)}%`,
                     backgroundColor: isAffected && phase >= 1
-                      ? 'rgba(255,51,102,0.4)'
+                      ? 'rgba(214,64,69,0.4)'
                       : `${colors[i % colors.length]}50`,
                   }}
                   title={domain.name}
@@ -1103,7 +1103,7 @@ function FunctionStage({ variant, affectedDomain, protein, phase }: {
             {/* Variant position marker */}
             {variant.proteinChange && (
               <motion.div
-                className="absolute top-0 h-full w-1 bg-magenta shadow-[0_0_8px_rgba(255,51,102,0.6)]"
+                className="absolute top-0 h-full w-1 bg-danger shadow-md"
                 style={{
                   left: `${(variant.proteinChange.position / protein.protein_length) * 100}%`,
                 }}
@@ -1116,18 +1116,18 @@ function FunctionStage({ variant, affectedDomain, protein, phase }: {
           {/* Domain labels */}
           <div className="flex flex-wrap justify-center gap-2 mt-3">
             {protein.domains.slice(0, 5).map((domain, i) => {
-              const colors = ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#748ffc', '#da77f2'];
+              const colors = ['#1B4965', '#D64045', '#2B9F78', '#D4A843', '#5294C4', '#627D98'];
               const isAffected = affectedDomain && domain.name === affectedDomain.name;
               return (
                 <span
                   key={i}
                   className={`flex items-center gap-1 text-[10px] font-mono transition-all
-                    ${isAffected && phase >= 1 ? 'text-magenta font-bold' : 'text-text-muted'}
+                    ${isAffected && phase >= 1 ? 'text-danger font-bold' : 'text-text-muted'}
                   `}
                 >
                   <span
                     className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: isAffected && phase >= 1 ? '#ff3366' : colors[i % colors.length] }}
+                    style={{ backgroundColor: isAffected && phase >= 1 ? '#D64045' : colors[i % colors.length] }}
                   />
                   {domain.name.length > 18 ? domain.name.slice(0, 18) + '...' : domain.name}
                 </span>
@@ -1142,10 +1142,10 @@ function FunctionStage({ variant, affectedDomain, protein, phase }: {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-xl bg-magenta/[0.06] border border-magenta/20 max-w-lg mx-auto"
+          className="p-4 rounded-xl bg-danger/[0.06] border border-danger/20 max-w-lg mx-auto"
         >
-          <p className="text-text-primary font-body text-sm">
-            This variant affects the <span className="font-mono text-magenta font-semibold">{affectedDomain.name}</span> domain
+          <p className="text-text-heading font-body text-sm">
+            This variant affects the <span className="font-mono text-danger font-semibold">{affectedDomain.name}</span> domain
             {affectedDomain.description && (
               <>, which is responsible for <span className="text-text-secondary">{affectedDomain.description.toLowerCase()}</span></>
             )}
@@ -1160,7 +1160,7 @@ function FunctionStage({ variant, affectedDomain, protein, phase }: {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="p-4 rounded-xl bg-space-700/30 border border-space-600/20 max-w-lg mx-auto"
+          className="p-4 rounded-xl bg-ocean-50 border border-ocean-100 max-w-lg mx-auto"
         >
           <p className="text-text-secondary font-body text-sm">
             This variant is not located within a known protein domain, but may still affect protein function
@@ -1208,7 +1208,7 @@ function ClinicalStage({ variant, diseases, sigCategory, phase }: {
       exit={{ opacity: 0, y: -20 }}
       className="w-full max-w-xl mx-auto text-center"
     >
-      <h4 className="text-lg font-heading font-semibold text-text-primary mb-1">Clinical Outcome</h4>
+      <h4 className="text-lg font-heading font-semibold text-text-heading mb-1">Clinical Outcome</h4>
       <p className="text-text-muted text-xs font-body mb-6">
         What this variant means for health
       </p>
@@ -1241,11 +1241,11 @@ function ClinicalStage({ variant, diseases, sigCategory, phase }: {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.15 }}
-              className="p-3 rounded-xl bg-space-700/30 border border-space-600/20 text-left"
+              className="p-3 rounded-xl bg-ocean-50 border border-ocean-100 text-left"
             >
               <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-magenta shrink-0" />
-                <p className="font-body text-sm text-text-primary">{disease.disease_name}</p>
+                <div className="w-1.5 h-1.5 rounded-full bg-danger shrink-0" />
+                <p className="font-body text-sm text-text-heading">{disease.disease_name}</p>
               </div>
               <p className="text-text-muted text-xs font-body mt-0.5 ml-3.5">
                 {disease.variant_count} variant{disease.variant_count !== 1 ? 's' : ''} linked
@@ -1260,9 +1260,9 @@ function ClinicalStage({ variant, diseases, sigCategory, phase }: {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mb-6 p-3 rounded-xl bg-space-700/30 border border-space-600/20 max-w-md mx-auto"
+          className="mb-6 p-3 rounded-xl bg-ocean-50 border border-ocean-100 max-w-md mx-auto"
         >
-          <p className="font-body text-sm text-text-primary">{variant.condition}</p>
+          <p className="font-body text-sm text-text-heading">{variant.condition}</p>
         </motion.div>
       )}
 
@@ -1275,7 +1275,7 @@ function ClinicalStage({ variant, diseases, sigCategory, phase }: {
           className="space-y-1"
         >
           <p className="text-text-secondary text-sm font-body">
-            This variant is found in <span className="font-mono text-cyan">{afDisplay}</span> of the population
+            This variant is found in <span className="font-mono text-primary">{afDisplay}</span> of the population
           </p>
           {oneInN && oneInN < 10000000 && (
             <p className="text-text-muted text-xs font-body">

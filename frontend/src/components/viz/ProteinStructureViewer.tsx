@@ -15,12 +15,12 @@ import GlowBadge from '../ui/GlowBadge';
 
 /* ── significance → color ── */
 const SIG_COLORS: Record<string, string> = {
-  pathogenic: '#ff3366',
-  'likely pathogenic': '#ff8c00',
-  'uncertain significance': '#ffaa00',
-  'likely benign': '#4a9eff',
-  benign: '#00ff88',
-  population: '#94a3b8',
+  pathogenic: '#D64045',
+  'likely pathogenic': '#E07A3A',
+  'uncertain significance': '#D4A843',
+  'likely benign': '#5294C4',
+  benign: '#2B9F78',
+  population: '#7B8794',
 };
 
 const CONFIDENCE_LEGEND = [
@@ -136,7 +136,7 @@ export default function ProteinStructureViewer({
             binary: false,
           },
           alphafoldView: structure.source === 'alphafold',
-          bgColor: { r: 10, g: 14, b: 26 }, // #0a0e1a
+          bgColor: { r: 240, g: 244, b: 248 }, // #F0F4F8
           hideControls: false,
           hideCanvasControls: ['expand'],
           sequencePanel: false,
@@ -272,14 +272,14 @@ export default function ProteinStructureViewer({
   if (!structure.structure_available) {
     return (
       <GlassCard delay={delay}>
-        <h2 className="text-sm font-heading font-semibold text-text-primary mb-4 uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading mb-4 uppercase tracking-wider">
           3D Protein Structure
         </h2>
         <div className="text-center py-12">
           <Box className="w-12 h-12 text-text-muted/30 mx-auto mb-4" />
           <p className="text-text-secondary text-sm font-body mb-2">
             No predicted structure available for{' '}
-            <span className="font-mono text-cyan">{geneSymbol}</span>
+            <span className="font-mono text-primary">{geneSymbol}</span>
           </p>
           <p className="text-text-muted text-xs font-body mb-4">
             AlphaFold coverage is expanding — check back later
@@ -288,7 +288,7 @@ export default function ProteinStructureViewer({
             href={`https://alphafold.ebi.ac.uk/search/text/${geneSymbol}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-cyan text-xs font-body hover:underline"
+            className="inline-flex items-center gap-1.5 text-primary text-xs font-body hover:underline"
           >
             Search AlphaFold DB
             <ExternalLink className="w-3 h-3" />
@@ -304,7 +304,7 @@ export default function ProteinStructureViewer({
     <GlassCard delay={delay} className="overflow-hidden">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+          <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
             3D Protein Structure
           </h2>
           <p className="text-text-muted text-xs font-body mt-0.5">
@@ -325,21 +325,21 @@ export default function ProteinStructureViewer({
       </div>
 
       {/* Viewer container */}
-      <div className="relative rounded-xl overflow-hidden border border-space-600/30 bg-space-900">
+      <div className="relative rounded-xl overflow-hidden border border-ocean-100 bg-ocean-50">
         <div
           ref={containerRef}
-          className="w-full h-[350px] md:h-[450px] lg:h-[600px] bg-space-900"
+          className="w-full h-[350px] md:h-[450px] lg:h-[600px] bg-ocean-50"
           style={{ position: 'relative' }}
         />
 
         {/* Loading overlay */}
         {loading && isInView && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-space-900/90 z-10">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 z-10">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             >
-              <Loader2 className="w-10 h-10 text-cyan" />
+              <Loader2 className="w-10 h-10 text-primary" />
             </motion.div>
             <p className="text-text-secondary text-sm font-body mt-3">
               Loading 3D structure...
@@ -349,8 +349,8 @@ export default function ProteinStructureViewer({
 
         {/* Error overlay */}
         {error && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-space-900/90 z-10">
-            <Box className="w-10 h-10 text-magenta/50 mb-3" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 z-10">
+            <Box className="w-10 h-10 text-danger/50 mb-3" />
             <p className="text-text-secondary text-sm font-body text-center px-4">{error}</p>
           </div>
         )}
@@ -365,7 +365,7 @@ export default function ProteinStructureViewer({
           className="mt-3 flex flex-wrap items-center gap-2"
         >
           {/* View toggle */}
-          <div className="flex rounded-lg overflow-hidden border border-space-600/40">
+          <div className="flex rounded-lg overflow-hidden border border-ocean-100">
             <ControlButton
               active={viewMode === 'confidence'}
               onClick={() => setViewMode('confidence')}
@@ -385,7 +385,7 @@ export default function ProteinStructureViewer({
           </div>
 
           {/* Representation toggle */}
-          <div className="flex rounded-lg overflow-hidden border border-space-600/40">
+          <div className="flex rounded-lg overflow-hidden border border-ocean-100">
             <ControlButton
               active={repMode === 'cartoon'}
               onClick={() => setRepMode('cartoon')}
@@ -423,7 +423,7 @@ export default function ProteinStructureViewer({
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-body
-              text-text-secondary hover:text-cyan hover:bg-cyan/[0.05] transition-colors"
+              text-text-secondary hover:text-primary transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">
@@ -439,7 +439,7 @@ export default function ProteinStructureViewer({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-3 pt-3 border-t border-space-600/20"
+          className="mt-3 pt-3 border-t border-ocean-100"
         >
           {viewMode === 'confidence' ? (
             <div>
@@ -519,8 +519,8 @@ function ControlButton({
         cursor-pointer border-none
         ${
           active
-            ? 'bg-cyan/15 text-cyan'
-            : 'bg-transparent text-text-secondary hover:text-cyan hover:bg-cyan/[0.05]'
+            ? 'bg-primary-light text-primary'
+            : 'bg-transparent text-text-secondary hover:text-primary hover:bg-primary-light'
         }`}
     >
       {children}
@@ -567,7 +567,7 @@ function VariantResidueList({
       {residues.length > 6 && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="text-text-muted hover:text-cyan text-[10px] font-body mt-1.5
+          className="text-text-muted hover:text-primary text-[10px] font-body mt-1.5
             cursor-pointer bg-transparent border-none transition-colors"
         >
           {expanded ? 'Show less' : `+${residues.length - 6} more`}

@@ -33,7 +33,7 @@ export default function PublicationsTab() {
             delay={0}
           />
         ) : (
-          <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
+          <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center">
             <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
               Recent Publications
             </p>

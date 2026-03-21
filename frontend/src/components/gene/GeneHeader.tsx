@@ -28,7 +28,7 @@ export default function GeneHeader({ gene, metadata, onToast }: GeneHeaderProps)
       {/* Back button */}
       <button
         onClick={() => navigate('/')}
-        className="flex items-center gap-2 text-text-secondary hover:text-cyan transition-colors mb-6 cursor-pointer group"
+        className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-6 cursor-pointer group"
       >
         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
         <span className="text-sm font-body">Back to search</span>
@@ -40,7 +40,7 @@ export default function GeneHeader({ gene, metadata, onToast }: GeneHeaderProps)
           <h1 className="text-4xl md:text-5xl font-heading font-bold">
             <DecodeText
               text={gene.gene_symbol}
-              className="font-mono text-cyan"
+              className="font-mono text-primary"
               speed={35}
             />
           </h1>
@@ -76,7 +76,7 @@ export default function GeneHeader({ gene, metadata, onToast }: GeneHeaderProps)
           href={`https://ensembl.org/Homo_sapiens/Gene/Summary?g=${gene.ensembl_id}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-cyan/70 hover:text-cyan transition-colors font-mono text-xs"
+          className="inline-flex items-center gap-1 text-primary/70 hover:text-primary transition-colors font-mono text-xs"
         >
           {gene.ensembl_id}
           <ExternalLink className="w-3 h-3" />
@@ -88,7 +88,7 @@ export default function GeneHeader({ gene, metadata, onToast }: GeneHeaderProps)
         <div className="flex items-center gap-3">
           {activeSources.map(([source]) => (
             <span key={source} className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-helix-green animate-[glow-pulse_2s_ease-in-out_infinite]" />
+              <span className="w-2 h-2 rounded-full bg-success" />
               <span className="text-text-muted text-xs font-mono capitalize">{source}</span>
             </span>
           ))}

@@ -15,7 +15,7 @@ export default function DiseasesTab() {
 
   if (diseases.length === 0) {
     return (
-      <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
+      <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center">
         <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
           Disease Associations
         </p>
@@ -59,7 +59,7 @@ export default function DiseasesTab() {
         <GlassCard>
           <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-4">
             {selectedDisease ? (
-              <>Variants for: <span className="text-text-primary normal-case">{selectedDisease}</span></>
+              <>Variants for: <span className="text-text-heading normal-case">{selectedDisease}</span></>
             ) : (
               'Select a disease to view its variants'
             )}
@@ -70,10 +70,10 @@ export default function DiseasesTab() {
               {selectedDiseaseVariants.map((v) => (
                 <div
                   key={v.variant_id}
-                  className="rounded-lg bg-space-800/40 border border-space-600/20 p-3"
+                  className="rounded-lg bg-ocean-50 border border-ocean-100 p-3"
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-mono text-[10px] text-cyan/70">
+                    <span className="font-mono text-[10px] text-primary/70">
                       ID: {v.variant_id}
                     </span>
                     <GlowBadge
@@ -86,7 +86,7 @@ export default function DiseasesTab() {
                       {v.clinical_significance}
                     </GlowBadge>
                   </div>
-                  <p className="text-xs font-mono text-text-primary truncate" title={v.title}>
+                  <p className="text-xs font-mono text-text-heading truncate" title={v.title}>
                     {v.title}
                   </p>
                   <p className="text-[10px] font-body text-text-muted mt-0.5">

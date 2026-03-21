@@ -14,7 +14,7 @@ export default function ResearchPublications({ articles, totalResults, delay = 0
   return (
     <GlassCard delay={delay}>
       <div className="mb-4">
-        <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
           Recent Publications
         </h2>
         <p className="text-text-muted text-xs font-body mt-1">
@@ -40,13 +40,13 @@ function PublicationCard({ article, index }: { article: PubMedArticle; index: nu
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
       whileHover={{ y: -2, transition: { duration: 0.2 } }}
-      className="p-4 rounded-lg bg-space-800/40 border border-space-600/20 hover:border-cyan/15 hover:shadow-[0_4px_20px_rgba(0,212,255,0.06)] transition-all group"
+      className="p-4 rounded-lg bg-ocean-50 border border-ocean-100 hover:border-primary/30 transition-all group"
     >
       <a
         href={article.pubmed_link}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-text-primary text-sm font-body leading-snug group-hover:text-cyan transition-colors font-semibold block"
+        className="text-text-heading text-sm font-body leading-snug group-hover:text-primary transition-colors font-semibold block"
       >
         {article.title}
         <ExternalLink className="w-3 h-3 inline ml-1.5 opacity-0 group-hover:opacity-60 transition-opacity" />
@@ -68,7 +68,7 @@ function PublicationCard({ article, index }: { article: PubMedArticle; index: nu
           {article.abstract_snippet.length > 100 && (
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-0.5 mt-1 text-text-muted hover:text-cyan text-[10px] font-body transition-colors cursor-pointer"
+              className="flex items-center gap-0.5 mt-1 text-text-muted hover:text-primary text-[10px] font-body transition-colors cursor-pointer"
             >
               {expanded ? 'Less' : 'More'}
               <ChevronDown className={`w-2.5 h-2.5 transition-transform ${expanded ? 'rotate-180' : ''}`} />

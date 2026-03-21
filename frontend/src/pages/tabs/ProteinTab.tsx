@@ -29,7 +29,7 @@ export default function ProteinTab() {
         >
           {structure ? (
             <Suspense fallback={
-              <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+              <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
                 <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
                 <div className="h-[350px] md:h-[450px] lg:h-[600px] rounded skeleton-shimmer" />
               </div>
@@ -42,7 +42,7 @@ export default function ProteinTab() {
               />
             </Suspense>
           ) : (
-            <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center h-full flex items-center justify-center">
+            <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center h-full flex items-center justify-center">
               <div>
                 <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
                   3D Structure
@@ -63,7 +63,7 @@ export default function ProteinTab() {
           {protein ? (
             <ProteinInfoCard protein={protein} delay={0} />
           ) : (
-            <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
+            <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center">
               <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
                 Protein Information
               </p>

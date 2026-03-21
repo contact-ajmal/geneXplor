@@ -12,14 +12,14 @@ interface ProteinVariantMapProps {
 }
 
 const SIGNIFICANCE_COLORS: Record<string, string> = {
-  'Pathogenic': '#ff3366',
+  'Pathogenic': '#D64045',
   'Likely pathogenic': '#ff8c00',
-  'Uncertain significance': '#ffaa00',
+  'Uncertain significance': '#D4A843',
   'Likely benign': '#4a9eff',
-  'Benign': '#00ff88',
+  'Benign': '#2B9F78',
 };
 
-const DOMAIN_COLORS = ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#a855f7'];
+const DOMAIN_COLORS = ['#1B4965', '#D64045', '#2B9F78', '#D4A843', '#a855f7'];
 
 interface MappedVariant {
   id: string;
@@ -227,7 +227,7 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
   return (
     <GlassCard delay={delay} className="overflow-visible">
       <div className="mb-4">
-        <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
           Protein Variant Map
         </h2>
         <p className="text-text-muted text-xs font-body mt-1">
@@ -256,14 +256,14 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
                   y1={backboneY + backboneHeight + 4}
                   x2={xScale(tick)}
                   y2={backboneY + backboneHeight + 10}
-                  stroke="#64748b"
+                  stroke="#94a3b8"
                   strokeWidth={0.5}
                 />
                 <text
                   x={xScale(tick)}
                   y={backboneY + backboneHeight + 22}
                   textAnchor="middle"
-                  fill="#64748b"
+                  fill="#94a3b8"
                   fontSize={9}
                   fontFamily="JetBrains Mono, monospace"
                 >
@@ -277,7 +277,7 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
               x={width / 2}
               y={height - 5}
               textAnchor="middle"
-              fill="#64748b"
+              fill="#94a3b8"
               fontSize={10}
               fontFamily="Plus Jakarta Sans, sans-serif"
             >
@@ -291,8 +291,8 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
               width={plotWidth}
               height={backboneHeight}
               rx={4}
-              fill="rgba(26, 35, 50, 0.9)"
-              stroke="rgba(0, 212, 255, 0.15)"
+              fill="#f0f4f8"
+              stroke="#c8d6e5"
               strokeWidth={1}
             />
 
@@ -370,10 +370,10 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
                     r={isActive ? r + 1.5 : r}
                     fill={variant.color}
                     opacity={isActive ? 1 : 0.8}
-                    stroke={isActive ? '#fff' : 'none'}
+                    stroke={isActive ? '#333' : 'none'}
                     strokeWidth={isActive ? 1 : 0}
                   />
-                  {/* Glow on active */}
+                  {/* Ring on active */}
                   {isActive && (
                     <circle
                       cx={cx}
@@ -398,16 +398,16 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="absolute z-20 pointer-events-none rounded-lg bg-space-700/95 backdrop-blur-md border border-cyan/20 p-3 shadow-lg shadow-black/30"
+                className="absolute z-20 pointer-events-none rounded-lg bg-white border border-ocean-100 p-3 shadow-lg"
                 style={{
                   left: Math.min(tooltipPos.x + 12, (svgRef.current?.clientWidth || 600) - 220),
                   top: tooltipPos.y - 10,
                   maxWidth: 240,
                 }}
               >
-                <p className="font-mono text-xs text-cyan mb-1 truncate">{activeVariant.id}</p>
+                <p className="font-mono text-xs text-primary mb-1 truncate">{activeVariant.id}</p>
                 {activeVariant.hgvsp && (
-                  <p className="font-mono text-xs text-text-primary mb-1">{activeVariant.hgvsp}</p>
+                  <p className="font-mono text-xs text-text-heading mb-1">{activeVariant.hgvsp}</p>
                 )}
                 <p className="text-xs text-text-secondary mb-1">
                   Position: <span className="font-mono">{activeVariant.position}</span>
@@ -436,7 +436,7 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
       )}
 
       {/* Legend */}
-      <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-space-600/30">
+      <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t border-ocean-100">
         {legendItems.map(item => (
           <div key={item.label} className="flex items-center gap-1.5">
             <span
@@ -446,7 +446,7 @@ export default function ProteinVariantMap({ protein, clinvarVariants, gnomadVari
             <span className="text-text-muted text-xs font-body">{item.label}</span>
           </div>
         ))}
-        <div className="flex items-center gap-2 ml-4 border-l border-space-600/30 pl-4">
+        <div className="flex items-center gap-2 ml-4 border-l border-ocean-100 pl-4">
           <span className="text-text-muted text-xs font-body">Size:</span>
           <svg width="60" height="16" viewBox="0 0 60 16">
             <circle cx="8" cy="8" r="6" fill="#64748b" opacity={0.5} />

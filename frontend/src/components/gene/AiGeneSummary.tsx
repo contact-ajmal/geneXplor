@@ -19,7 +19,7 @@ function highlightText(text: string): React.ReactNode[] {
   return parts.map((part, i) => {
     if (/^[A-Z][A-Z0-9]{1,9}$/.test(part) && part.length >= 2) {
       return (
-        <span key={i} className="font-mono text-cyan">
+        <span key={i} className="font-mono text-primary">
           {part}
         </span>
       );
@@ -101,13 +101,10 @@ export default function AiGeneSummary({ geneSymbol, delay = 0 }: AiGeneSummaryPr
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay }}
-      className="rounded-2xl border border-transparent bg-[rgba(20,27,45,0.7)] backdrop-blur-xl p-5 relative overflow-hidden"
-      style={{
-        borderImage: 'linear-gradient(135deg, rgba(0,212,255,0.2), rgba(255,51,102,0.15), rgba(0,212,255,0.1)) 1',
-      }}
+      className="rounded-2xl border border-ocean-100 bg-white p-5 relative overflow-hidden"
     >
-      {/* Subtle gradient glow at top */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan/30 to-transparent" />
+      {/* Subtle gradient line at top */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
@@ -116,7 +113,7 @@ export default function AiGeneSummary({ geneSymbol, delay = 0 }: AiGeneSummaryPr
           className="flex items-center gap-2 cursor-pointer group"
         >
           <Sparkles className="w-4 h-4 text-[#a855f7]" />
-          <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+          <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
             AI Gene Summary
           </h2>
           {isCollapsed ? (
@@ -149,7 +146,7 @@ export default function AiGeneSummary({ geneSymbol, delay = 0 }: AiGeneSummaryPr
             {/* Loading state */}
             {(isLoading || (isFetching && !data)) && (
               <div className="py-6 flex flex-col items-center gap-3">
-                <div className="w-6 h-6 border-2 border-cyan/30 border-t-cyan rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                 <p className="text-text-muted text-xs font-body animate-pulse">
                   Generating clinical summary...
                 </p>
@@ -159,7 +156,7 @@ export default function AiGeneSummary({ geneSymbol, delay = 0 }: AiGeneSummaryPr
             {/* Error state */}
             {error && !data && (
               <div className="py-4 text-center">
-                <AlertTriangle className="w-5 h-5 text-amber mx-auto mb-2" />
+                <AlertTriangle className="w-5 h-5 text-warning mx-auto mb-2" />
                 <p className="text-text-muted text-xs font-body">
                   Insufficient data to generate summary
                 </p>
@@ -178,14 +175,14 @@ export default function AiGeneSummary({ geneSymbol, delay = 0 }: AiGeneSummaryPr
                   </p>
                 ))}
                 {!typingDone && (
-                  <span className="inline-block w-0.5 h-4 bg-cyan animate-pulse ml-0.5 align-middle" />
+                  <span className="inline-block w-0.5 h-4 bg-primary animate-pulse ml-0.5 align-middle" />
                 )}
               </div>
             )}
 
             {/* Footer */}
             {data && typingDone && (
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-space-600/20">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-ocean-100">
                 <div className="flex items-center gap-3">
                   <GlowBadge
                     color={data.source === 'ai' ? 'cyan' : 'muted'}

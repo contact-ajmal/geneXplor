@@ -11,7 +11,7 @@ export default function PopulationTab() {
 
   if (!allele_frequencies || allele_frequencies.variants.length === 0) {
     return (
-      <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
+      <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center">
         <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
           Population Map
         </p>
@@ -26,7 +26,7 @@ export default function PopulationTab() {
       animate={{ opacity: 1, y: 0 }}
     >
       <Suspense fallback={
-        <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+        <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
           <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
           <div className="h-[400px] rounded skeleton-shimmer" />
         </div>

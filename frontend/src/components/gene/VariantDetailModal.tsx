@@ -51,12 +51,12 @@ const POPULATION_LABELS: Record<string, string> = {
 };
 
 const POPULATION_COLORS: Record<string, string> = {
-  afr: '#ff3366',
-  amr: '#ffaa00',
+  afr: '#D64045',
+  amr: '#D4A843',
   asj: '#a855f7',
-  eas: '#00d4ff',
+  eas: '#1B4965',
   fin: '#4a9eff',
-  nfe: '#00ff88',
+  nfe: '#2B9F78',
   sas: '#ff8c00',
   oth: '#64748b',
   ami: '#e879f9',
@@ -268,7 +268,7 @@ export default function VariantDetailModal({
         >
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/30"
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -277,7 +277,7 @@ export default function VariantDetailModal({
 
           {/* Modal */}
           <motion.div
-            className="relative z-10 w-full max-w-[720px] max-h-[85vh] overflow-y-auto mx-4 rounded-2xl border border-cyan/[0.12] bg-[rgba(20,27,45,0.95)] backdrop-blur-xl shadow-[0_0_60px_rgba(0,212,255,0.08)]"
+            className="relative z-10 w-full max-w-[720px] max-h-[85vh] overflow-y-auto mx-4 rounded-2xl border border-ocean-100 bg-white shadow-xl"
             initial={{ opacity: 0, y: 60, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 60, scale: 0.97 }}
@@ -286,15 +286,15 @@ export default function VariantDetailModal({
             {/* Close button */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 z-20 p-1.5 rounded-lg bg-space-800/60 border border-space-600/30 text-text-secondary hover:text-text-primary hover:border-cyan/20 transition-colors cursor-pointer"
+              className="absolute top-4 right-4 z-20 p-1.5 rounded-lg bg-ocean-50 border border-ocean-100 text-text-secondary hover:text-text-heading hover:border-ocean-200 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
 
             <div className="p-6 space-y-6">
-              {/* ── Header ── */}
+              {/* -- Header -- */}
               <div>
-                <h2 className="font-mono text-lg text-cyan pr-8 break-all leading-relaxed">
+                <h2 className="font-mono text-lg text-primary pr-8 break-all leading-relaxed">
                   {variant.variant_id}
                 </h2>
                 <div className="flex flex-wrap items-center gap-2 mt-2">
@@ -307,13 +307,13 @@ export default function VariantDetailModal({
                 </div>
               </div>
 
-              {/* ── Tab Bar ── */}
-              <div className="flex gap-1 p-0.5 rounded-lg bg-space-800/60 border border-space-600/20">
+              {/* -- Tab Bar -- */}
+              <div className="flex gap-1 p-0.5 rounded-lg bg-ocean-50 border border-ocean-100">
                 <button
                   onClick={() => setActiveTab('details')}
                   className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body font-semibold transition-all cursor-pointer
                     ${activeTab === 'details'
-                      ? 'bg-cyan/[0.12] text-cyan border border-cyan/20'
+                      ? 'bg-primary-light text-primary border border-ocean-200'
                       : 'text-text-muted hover:text-text-secondary border border-transparent'}`}
                 >
                   Details
@@ -322,7 +322,7 @@ export default function VariantDetailModal({
                   onClick={() => setActiveTab('impact')}
                   className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body font-semibold transition-all cursor-pointer
                     ${activeTab === 'impact'
-                      ? 'bg-cyan/[0.12] text-cyan border border-cyan/20'
+                      ? 'bg-primary-light text-primary border border-ocean-200'
                       : 'text-text-muted hover:text-text-secondary border border-transparent'}`}
                 >
                   <Zap className="w-3 h-3" />
@@ -332,7 +332,7 @@ export default function VariantDetailModal({
                   onClick={() => setActiveTab('population')}
                   className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body font-semibold transition-all cursor-pointer
                     ${activeTab === 'population'
-                      ? 'bg-cyan/[0.12] text-cyan border border-cyan/20'
+                      ? 'bg-primary-light text-primary border border-ocean-200'
                       : 'text-text-muted hover:text-text-secondary border border-transparent'}`}
                 >
                   <Globe className="w-3 h-3" />
@@ -340,7 +340,7 @@ export default function VariantDetailModal({
                 </button>
               </div>
 
-              {/* ── Impact Simulator Tab ── */}
+              {/* -- Impact Simulator Tab -- */}
               {activeTab === 'impact' && (
                 <Suspense fallback={
                   <div className="h-[400px] rounded-xl skeleton-shimmer" />
@@ -356,7 +356,7 @@ export default function VariantDetailModal({
                 </Suspense>
               )}
 
-              {/* ── Population Map Tab ── */}
+              {/* -- Population Map Tab -- */}
               {activeTab === 'population' && (
                 <Suspense fallback={
                   <div className="h-[400px] rounded-xl skeleton-shimmer" />
@@ -371,10 +371,10 @@ export default function VariantDetailModal({
                 </Suspense>
               )}
 
-              {/* ── Details Tab ── */}
+              {/* -- Details Tab -- */}
               {activeTab === 'details' && <>
 
-              {/* ── Section A: Variant Identity ── */}
+              {/* -- Section A: Variant Identity -- */}
               <Section title="Variant Identity">
                 <DataGrid>
                   {variant.hgvsc && (
@@ -394,7 +394,7 @@ export default function VariantDetailModal({
                 </DataGrid>
               </Section>
 
-              {/* ── Section B: Clinical Significance Detail ── */}
+              {/* -- Section B: Clinical Significance Detail -- */}
               {variant.hasClinvar && (
                 <Section title="Clinical Significance">
                   <DataGrid>
@@ -406,8 +406,8 @@ export default function VariantDetailModal({
                             <Star
                               key={i}
                               className="w-3.5 h-3.5"
-                              fill={i < reviewStars ? '#ffaa00' : 'transparent'}
-                              stroke={i < reviewStars ? '#ffaa00' : '#64748b'}
+                              fill={i < reviewStars ? '#D4A843' : 'transparent'}
+                              stroke={i < reviewStars ? '#D4A843' : '#64748b'}
                               strokeWidth={1.5}
                             />
                           ))}
@@ -429,33 +429,33 @@ export default function VariantDetailModal({
                 </Section>
               )}
 
-              {/* ── Section C: ACMG Criteria ── */}
+              {/* -- Section C: ACMG Criteria -- */}
               <Section title="ACMG Criteria Assessment">
                 <p className="text-text-muted text-xs font-body mb-3">
                   ACMG criteria not available for this variant. Below is the general ACMG/AMP classification framework.
                 </p>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-magenta text-xs font-body font-semibold mb-1.5 uppercase tracking-wider">
+                    <p className="text-danger text-xs font-body font-semibold mb-1.5 uppercase tracking-wider">
                       Pathogenic Criteria
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                       {ACMG_PATHOGENIC_CRITERIA.map(c => (
-                        <div key={c.code} className="flex items-start gap-2 p-1.5 rounded bg-magenta/[0.04]">
-                          <span className="font-mono text-xs text-magenta/70 shrink-0 w-8">{c.code}</span>
+                        <div key={c.code} className="flex items-start gap-2 p-1.5 rounded bg-danger-light">
+                          <span className="font-mono text-xs text-danger/70 shrink-0 w-8">{c.code}</span>
                           <span className="text-text-muted text-xs">{c.description}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                   <div>
-                    <p className="text-helix-green text-xs font-body font-semibold mb-1.5 uppercase tracking-wider">
+                    <p className="text-success text-xs font-body font-semibold mb-1.5 uppercase tracking-wider">
                       Benign Criteria
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                       {ACMG_BENIGN_CRITERIA.map(c => (
-                        <div key={c.code} className="flex items-start gap-2 p-1.5 rounded bg-helix-green/[0.04]">
-                          <span className="font-mono text-xs text-helix-green/70 shrink-0 w-8">{c.code}</span>
+                        <div key={c.code} className="flex items-start gap-2 p-1.5 rounded bg-success-light">
+                          <span className="font-mono text-xs text-success/70 shrink-0 w-8">{c.code}</span>
                           <span className="text-text-muted text-xs">{c.description}</span>
                         </div>
                       ))}
@@ -464,13 +464,13 @@ export default function VariantDetailModal({
                 </div>
               </Section>
 
-              {/* ── Section D: Population Frequencies ── */}
+              {/* -- Section D: Population Frequencies -- */}
               <Section title="Population Frequencies">
                 {sortedPopFreqs.length > 0 ? (
                   <div>
                     <div className="flex items-center gap-3 mb-4">
                       <span className="text-text-muted text-xs font-body">Overall AF:</span>
-                      <span className="font-mono text-sm text-cyan">
+                      <span className="font-mono text-sm text-primary">
                         {variant.allele_frequency > 0 ? variant.allele_frequency.toExponential(3) : '—'}
                       </span>
                       {variant.allele_count > 0 && (
@@ -491,10 +491,10 @@ export default function VariantDetailModal({
                           <div key={pf.population} className="flex items-center gap-3">
                             <span className="text-text-muted text-xs font-body w-44 shrink-0 truncate">
                               {POPULATION_LABELS[popKey] || pf.population.toUpperCase()}
-                              {isHighest && <span className="text-amber ml-1 text-[10px]">highest</span>}
-                              {isLowest && <span className="text-cyan ml-1 text-[10px]">lowest</span>}
+                              {isHighest && <span className="text-warning ml-1 text-[10px]">highest</span>}
+                              {isLowest && <span className="text-primary ml-1 text-[10px]">lowest</span>}
                             </span>
-                            <div className="flex-1 h-3 bg-space-800/60 rounded-full overflow-hidden">
+                            <div className="flex-1 h-3 bg-ocean-50 rounded-full overflow-hidden">
                               <motion.div
                                 className="h-full rounded-full"
                                 style={{ backgroundColor: color }}
@@ -503,7 +503,7 @@ export default function VariantDetailModal({
                                 transition={{ duration: 0.5, delay: idx * 0.03 }}
                               />
                             </div>
-                            <span className="font-mono text-xs text-text-primary w-20 text-right shrink-0">
+                            <span className="font-mono text-xs text-text-heading w-20 text-right shrink-0">
                               {pf.af > 0 ? pf.af.toExponential(2) : '0'}
                             </span>
                           </div>
@@ -518,7 +518,7 @@ export default function VariantDetailModal({
                 )}
               </Section>
 
-              {/* ── Section E: Protein Impact ── */}
+              {/* -- Section E: Protein Impact -- */}
               {isProteinAltering && variant.hgvsp && proteinChange && protein && (
                 <Section title="Protein Impact">
                   <DataGrid>
@@ -531,7 +531,7 @@ export default function VariantDetailModal({
                   {/* Mini protein bar */}
                   {protein.protein_length > 0 && (
                     <div className="mt-3">
-                      <div className="relative h-5 bg-space-800/60 rounded-full overflow-hidden border border-space-600/20">
+                      <div className="relative h-5 bg-ocean-50 rounded-full overflow-hidden border border-ocean-100">
                         {/* Domains */}
                         {protein.domains.map((d, i) => (
                           <div
@@ -540,13 +540,13 @@ export default function VariantDetailModal({
                             style={{
                               left: `${(d.start / protein.protein_length) * 100}%`,
                               width: `${Math.max(((d.end - d.start) / protein.protein_length) * 100, 0.5)}%`,
-                              backgroundColor: ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#a855f7'][i % 5],
+                              backgroundColor: ['#1B4965', '#D64045', '#2B9F78', '#D4A843', '#a855f7'][i % 5],
                             }}
                           />
                         ))}
                         {/* Variant position marker */}
                         <div
-                          className="absolute top-0 h-full w-0.5 bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]"
+                          className="absolute top-0 h-full w-0.5 bg-gray-800 shadow-sm"
                           style={{
                             left: `${(proteinChange.position / protein.protein_length) * 100}%`,
                           }}
@@ -561,7 +561,7 @@ export default function VariantDetailModal({
                 </Section>
               )}
 
-              {/* ── Section F: External Links ── */}
+              {/* -- Section F: External Links -- */}
               <Section title="External Links">
                 <div className="flex flex-wrap gap-2">
                   {clinvarId && (
@@ -600,12 +600,12 @@ export default function VariantDetailModal({
   );
 }
 
-// ── Sub-components ──
+// -- Sub-components --
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="border-t border-space-600/20 pt-4">
-      <h3 className="text-xs font-heading font-semibold text-text-primary uppercase tracking-wider mb-3">
+    <div className="border-t border-ocean-100 pt-4">
+      <h3 className="text-xs font-heading font-semibold text-text-heading uppercase tracking-wider mb-3">
         {title}
       </h3>
       {children}
@@ -640,7 +640,7 @@ function DataItem({
           {value}
         </GlowBadge>
       ) : (
-        <span className={`text-text-primary text-sm ${mono ? 'font-mono' : 'font-body'} break-all`}>
+        <span className={`text-text-heading text-sm ${mono ? 'font-mono' : 'font-body'} break-all`}>
           {value}
         </span>
       )}

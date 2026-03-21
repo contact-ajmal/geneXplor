@@ -79,12 +79,12 @@ function getSignificanceDistribution(variants: ClinVarData): { label: string; co
     counts[sig] = (counts[sig] || 0) + 1;
   }
   const colorMap: Record<string, string> = {
-    'Pathogenic': '#ff3366',
-    'Likely pathogenic': '#ff8c00',
-    'Uncertain significance': '#ffaa00',
-    'Likely benign': '#00d4ff',
-    'Benign': '#00ff88',
-    'Pathogenic/Likely pathogenic': '#ff3366',
+    'Pathogenic': '#D64045',
+    'Likely pathogenic': '#D4A843',
+    'Uncertain significance': '#D4A843',
+    'Likely benign': '#5294C4',
+    'Benign': '#2B9F78',
+    'Pathogenic/Likely pathogenic': '#D64045',
   };
   return Object.entries(counts)
     .map(([label, count]) => ({ label, count, color: colorMap[label] || '#94a3b8' }))
@@ -253,13 +253,13 @@ function ScrollSpy({ activeChapter, chapters }: { activeChapter: string; chapter
           <span className={`
             block w-2.5 h-2.5 rounded-full border transition-all duration-300
             ${activeChapter === ch.id
-              ? 'bg-cyan border-cyan shadow-[0_0_8px_rgba(0,212,255,0.5)] scale-125'
-              : 'border-text-muted/30 hover:border-cyan/50'
+              ? 'bg-primary border-primary shadow-md scale-125'
+              : 'border-text-muted/30 hover:border-ocean-200'
             }
           `} />
           <span className={`
             text-xs font-body opacity-0 group-hover:opacity-100 transition-opacity duration-200
-            ${activeChapter === ch.id ? 'text-cyan' : 'text-text-muted'}
+            ${activeChapter === ch.id ? 'text-primary' : 'text-text-muted'}
           `}>
             {ch.label}
           </span>
@@ -273,15 +273,15 @@ function ScrollSpy({ activeChapter, chapters }: { activeChapter: string; chapter
 
 function ModeToggle({ symbol }: { symbol: string }) {
   return (
-    <div className="flex items-center gap-1 rounded-lg border border-space-600/60 p-1 bg-space-800/60 backdrop-blur-sm">
+    <div className="flex items-center gap-1 rounded-lg border border-ocean-100 p-1 bg-white">
       <Link
         to={`/gene/${symbol}`}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body text-text-secondary hover:text-text-primary transition-colors"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body text-text-secondary hover:text-text-heading transition-colors"
       >
         <LayoutDashboard className="w-3.5 h-3.5" />
         Dashboard
       </Link>
-      <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body bg-cyan/10 text-cyan border border-cyan/20">
+      <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body bg-primary-light text-primary border border-ocean-200">
         <BookOpen className="w-3.5 h-3.5" />
         Story
       </span>
@@ -310,7 +310,7 @@ function PopulationBars({ variant }: { variant: GnomADVariant }) {
           <span className="text-xs font-mono text-text-muted w-28 text-right shrink-0">
             {POP_NAMES[p.population] || p.population}
           </span>
-          <div className="flex-1 h-5 bg-space-700/50 rounded-full overflow-hidden">
+          <div className="flex-1 h-5 bg-ocean-50 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full"
               initial={{ width: 0 }}
@@ -361,10 +361,10 @@ export default function GeneStoryPage() {
     return (
       <div className="max-w-2xl mx-auto px-6 pt-32 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <AlertTriangle className="w-16 h-16 text-magenta/40 mx-auto mb-6" />
-          <h2 className="text-lg font-heading font-semibold text-text-primary mb-2">Gene not found</h2>
+          <AlertTriangle className="w-16 h-16 text-danger/40 mx-auto mb-6" />
+          <h2 className="text-lg font-heading font-semibold text-text-heading mb-2">Gene not found</h2>
           <p className="text-text-secondary text-sm font-body mb-6">
-            Could not find a story for <span className="font-mono text-cyan">{upperSymbol}</span>.
+            Could not find a story for <span className="font-mono text-primary">{upperSymbol}</span>.
           </p>
           <Link to="/">
             <AnimatedButton variant="primary">Back to search</AnimatedButton>
@@ -388,7 +388,7 @@ export default function GeneStoryPage() {
       <div className="fixed top-16 left-0 right-0 z-30 px-6 py-3 flex items-center justify-between">
         <button
           onClick={() => navigate(`/gene/${upperSymbol}`)}
-          className="flex items-center gap-2 text-text-secondary hover:text-cyan transition-colors group"
+          className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           <span className="text-sm font-body">Back to Dashboard</span>
@@ -489,9 +489,9 @@ function HeroChapter({ gene, setActive }: { gene: EnsemblGeneData; setActive: (i
             const x2 = 100 - Math.sin(i * 0.5) * 40;
             return (
               <g key={i}>
-                <circle cx={x1} cy={y} r={3} fill="#00d4ff" opacity={0.6} />
-                <circle cx={x2} cy={y} r={3} fill="#ff3366" opacity={0.6} />
-                <line x1={x1} y1={y} x2={x2} y2={y} stroke="#00d4ff" strokeWidth={0.5} opacity={0.3} />
+                <circle cx={x1} cy={y} r={3} fill="#1B4965" opacity={0.6} />
+                <circle cx={x2} cy={y} r={3} fill="#D64045" opacity={0.6} />
+                <line x1={x1} y1={y} x2={x2} y2={y} stroke="#1B4965" strokeWidth={0.5} opacity={0.3} />
               </g>
             );
           })}
@@ -506,7 +506,7 @@ function HeroChapter({ gene, setActive }: { gene: EnsemblGeneData; setActive: (i
       >
         {/* Gene symbol - massive */}
         <h1 className="text-[100px] sm:text-[130px] md:text-[160px] font-mono font-bold leading-none mb-4">
-          <DecodeText text={gene.gene_symbol} className="text-cyan" speed={30} />
+          <DecodeText text={gene.gene_symbol} className="text-primary" speed={30} />
         </h1>
 
         {/* Gene name */}
@@ -514,7 +514,7 @@ function HeroChapter({ gene, setActive }: { gene: EnsemblGeneData; setActive: (i
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
-          className="text-2xl sm:text-3xl md:text-4xl font-body text-text-primary mb-6"
+          className="text-2xl sm:text-3xl md:text-4xl font-body text-text-heading mb-6"
         >
           {gene.gene_name || gene.description}
         </motion.p>
@@ -550,7 +550,7 @@ function HeroChapter({ gene, setActive }: { gene: EnsemblGeneData; setActive: (i
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
         >
-          <ArrowDown className="w-5 h-5 text-cyan/60" />
+          <ArrowDown className="w-5 h-5 text-primary/60" />
         </motion.div>
       </motion.div>
     </section>
@@ -586,12 +586,12 @@ function FunctionChapter({ gene, protein, setActive }: {
           {/* Simple chromosome ideogram */}
           <div className="relative w-16 h-64 mx-auto">
             {/* Chromosome body */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-space-600 via-space-700 to-space-600 border border-space-500/30" />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-ocean-200 via-ocean-100 to-ocean-200 border border-ocean-100" />
             {/* Centromere pinch */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-3 bg-space-800 rounded-full" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-3 bg-white rounded-full" />
             {/* Gene position marker */}
             <motion.div
-              className="absolute left-1/2 -translate-x-1/2 w-20 h-2 bg-cyan rounded-full shadow-[0_0_12px_rgba(0,212,255,0.6)]"
+              className="absolute left-1/2 -translate-x-1/2 w-20 h-2 bg-primary rounded-full shadow-md"
               style={{ top: `${30 + ((gene.start % 1000000) / 1000000) * 40}%` }}
               animate={{ opacity: [0.6, 1, 0.6] }}
               transition={{ repeat: Infinity, duration: 2 }}
@@ -609,13 +609,13 @@ function FunctionChapter({ gene, protein, setActive }: {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-6">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-heading mb-6">
             What Does It Do?
           </h2>
 
           <p className="text-text-secondary font-body text-lg leading-relaxed mb-6">
-            <span className="font-mono text-cyan">{gene.gene_symbol}</span> is {plainBiotype} located
-            on <span className="text-cyan">chromosome {gene.chromosome}</span>.
+            <span className="font-mono text-primary">{gene.gene_symbol}</span> is {plainBiotype} located
+            on <span className="text-primary">chromosome {gene.chromosome}</span>.
             {description && (
               <> {description.endsWith('.') ? description : `${description}.`}</>
             )}
@@ -624,23 +624,23 @@ function FunctionChapter({ gene, protein, setActive }: {
           {/* Stats that count up */}
           <div className="grid grid-cols-3 gap-4">
             {protein && (
-              <div className="text-center p-4 rounded-xl bg-space-700/30 border border-space-600/20">
+              <div className="text-center p-4 rounded-xl bg-ocean-50 border border-ocean-100">
                 <CountUp
                   end={protein.protein_length}
-                  className="text-2xl font-mono font-bold text-cyan"
+                  className="text-2xl font-mono font-bold text-primary"
                   formatter={(n) => Math.round(n).toLocaleString()}
                 />
                 <p className="text-text-muted text-xs font-body mt-1">amino acids</p>
               </div>
             )}
-            <div className="text-center p-4 rounded-xl bg-space-700/30 border border-space-600/20">
-              <span className="text-2xl font-mono font-bold text-cyan">{gene.chromosome}</span>
+            <div className="text-center p-4 rounded-xl bg-ocean-50 border border-ocean-100">
+              <span className="text-2xl font-mono font-bold text-primary">{gene.chromosome}</span>
               <p className="text-text-muted text-xs font-body mt-1">chromosome</p>
             </div>
-            <div className="text-center p-4 rounded-xl bg-space-700/30 border border-space-600/20">
+            <div className="text-center p-4 rounded-xl bg-ocean-50 border border-ocean-100">
               <CountUp
                 end={gene.transcript_count}
-                className="text-2xl font-mono font-bold text-cyan"
+                className="text-2xl font-mono font-bold text-primary"
                 formatter={(n) => Math.round(n).toLocaleString()}
               />
               <p className="text-text-muted text-xs font-body mt-1">transcripts</p>
@@ -651,11 +651,11 @@ function FunctionChapter({ gene, protein, setActive }: {
           {protein && protein.domains.length > 0 && (
             <div className="mt-6">
               <p className="text-text-muted text-xs font-body mb-2">Protein domains</p>
-              <div className="relative h-6 bg-space-700/50 rounded-full overflow-hidden border border-space-600/20">
+              <div className="relative h-6 bg-ocean-50 rounded-full overflow-hidden border border-ocean-100">
                 {protein.domains.map((domain, i) => {
                   const start = (domain.start / protein.protein_length) * 100;
                   const width = ((domain.end - domain.start) / protein.protein_length) * 100;
-                  const colors = ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#748ffc', '#da77f2'];
+                  const colors = ['#1B4965', '#D64045', '#2B9F78', '#D4A843', '#5294C4', '#627D98'];
                   return (
                     <motion.div
                       key={i}
@@ -677,7 +677,7 @@ function FunctionChapter({ gene, protein, setActive }: {
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 {protein.domains.slice(0, 4).map((domain, i) => {
-                  const colors = ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#748ffc', '#da77f2'];
+                  const colors = ['#1B4965', '#D64045', '#2B9F78', '#D4A843', '#5294C4', '#627D98'];
                   return (
                     <span key={i} className="flex items-center gap-1.5 text-[10px] font-mono text-text-muted">
                       <span className="w-2 h-2 rounded-full" style={{ backgroundColor: colors[i % colors.length] }} />
@@ -738,7 +738,7 @@ function VariantsChapter({ gene, variants, gnomadVariants, protein, conflictCoun
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-heading mb-4 text-center">
             What Can Go Wrong?
           </h2>
 
@@ -748,11 +748,11 @@ function VariantsChapter({ gene, variants, gnomadVariants, protein, conflictCoun
             <span className="inline-block">
               <CountUp
                 end={variants.variants.length}
-                className="font-mono font-bold text-cyan text-3xl"
+                className="font-mono font-bold text-primary text-3xl"
                 formatter={(n) => Math.round(n).toLocaleString()}
               />
             </span>
-            {' '}variants in <span className="font-mono text-cyan">{gene.gene_symbol}</span>
+            {' '}variants in <span className="font-mono text-primary">{gene.gene_symbol}</span>
           </p>
 
           {/* Donut + pathogenic callout */}
@@ -765,7 +765,7 @@ function VariantsChapter({ gene, variants, gnomadVariants, protein, conflictCoun
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.5 }}
-                  className="text-magenta text-xl font-body font-semibold mb-4"
+                  className="text-danger text-xl font-body font-semibold mb-4"
                 >
                   <CountUp
                     end={pathogenicCount}
@@ -790,7 +790,7 @@ function VariantsChapter({ gene, variants, gnomadVariants, protein, conflictCoun
           {/* Disease cards */}
           {topDiseases.length > 0 && (
             <div className="space-y-3">
-              <h3 className="text-lg font-heading font-semibold text-text-primary mb-4">
+              <h3 className="text-lg font-heading font-semibold text-text-heading mb-4">
                 Associated Conditions
               </h3>
               {topDiseases.map((disease, i) => (
@@ -800,14 +800,14 @@ function VariantsChapter({ gene, variants, gnomadVariants, protein, conflictCoun
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="p-4 rounded-xl bg-space-700/30 border border-space-600/20 hover:border-magenta/20 transition-colors"
+                  className="p-4 rounded-xl bg-ocean-50 border border-ocean-100 hover:border-danger/20 transition-colors"
                 >
-                  <p className="font-body font-semibold text-text-primary text-lg">
+                  <p className="font-body font-semibold text-text-heading text-lg">
                     {disease.disease_name}
                   </p>
                   <p className="text-text-muted text-sm font-body mt-1">
                     Linked to{' '}
-                    <span className="font-mono text-magenta">{disease.variant_count}</span>
+                    <span className="font-mono text-danger">{disease.variant_count}</span>
                     {' '}variant{disease.variant_count !== 1 ? 's' : ''} in this gene
                   </p>
                 </motion.div>
@@ -893,11 +893,11 @@ function PopulationChapter({ gene, gnomadVariants, clinvarVariants, setActive }:
       const lowest = pops[pops.length - 1];
       narrative = (
         <p className="text-text-secondary font-body text-lg leading-relaxed mb-8 text-center max-w-2xl mx-auto">
-          The <span className="font-mono text-cyan">{stratifiedVariant.variant_id}</span> variant
-          is found in <span className="font-mono text-cyan">{(highest.af * 100).toFixed(2)}%</span> of{' '}
-          <span className="text-text-primary">{POP_NAMES[highest.population] || highest.population}</span> people,
-          but only <span className="font-mono text-cyan">{(lowest.af * 100).toFixed(4)}%</span> of{' '}
-          <span className="text-text-primary">{POP_NAMES[lowest.population] || lowest.population}</span> people.
+          The <span className="font-mono text-primary">{stratifiedVariant.variant_id}</span> variant
+          is found in <span className="font-mono text-primary">{(highest.af * 100).toFixed(2)}%</span> of{' '}
+          <span className="text-text-heading">{POP_NAMES[highest.population] || highest.population}</span> people,
+          but only <span className="font-mono text-primary">{(lowest.af * 100).toFixed(4)}%</span> of{' '}
+          <span className="text-text-heading">{POP_NAMES[lowest.population] || lowest.population}</span> people.
         </p>
       );
     }
@@ -912,7 +912,7 @@ function PopulationChapter({ gene, gnomadVariants, clinvarVariants, setActive }:
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-heading mb-4 text-center">
             Where in the World?
           </h2>
 
@@ -923,7 +923,7 @@ function PopulationChapter({ gene, gnomadVariants, clinvarVariants, setActive }:
           {narrative}
 
           {/* Population map or bar chart fallback */}
-          <div className="rounded-2xl border border-cyan/[0.08] p-4 glass-bg backdrop-blur-xl">
+          <div className="rounded-2xl border border-ocean-100 p-4 shadow-sm">
             <Suspense
               fallback={
                 <div className="h-[400px] flex items-center justify-center">
@@ -991,32 +991,32 @@ function ResearchChapter({ gene, publications, timeline, setActive }: {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-heading mb-4 text-center">
             The Research Story
           </h2>
 
           {/* Key stats */}
           <div className="flex flex-wrap justify-center gap-6 mb-10">
-            <div className="text-center p-5 rounded-xl bg-space-700/30 border border-space-600/20 min-w-[140px]">
+            <div className="text-center p-5 rounded-xl bg-ocean-50 border border-ocean-100 min-w-[140px]">
               <CountUp
                 end={publications.total_results}
-                className="text-3xl font-mono font-bold text-cyan"
+                className="text-3xl font-mono font-bold text-primary"
                 formatter={(n) => Math.round(n).toLocaleString()}
               />
               <p className="text-text-muted text-xs font-body mt-1">papers published</p>
             </div>
             {timeline && (
               <>
-                <div className="text-center p-5 rounded-xl bg-space-700/30 border border-space-600/20 min-w-[140px]">
-                  <span className="text-3xl font-mono font-bold text-cyan">
+                <div className="text-center p-5 rounded-xl bg-ocean-50 border border-ocean-100 min-w-[140px]">
+                  <span className="text-3xl font-mono font-bold text-primary">
                     {timeline.first_submission_date?.slice(0, 4) || '—'}
                   </span>
                   <p className="text-text-muted text-xs font-body mt-1">first ClinVar entry</p>
                 </div>
-                <div className="text-center p-5 rounded-xl bg-space-700/30 border border-space-600/20 min-w-[140px]">
+                <div className="text-center p-5 rounded-xl bg-ocean-50 border border-ocean-100 min-w-[140px]">
                   <CountUp
                     end={timeline.unique_submitters}
-                    className="text-3xl font-mono font-bold text-cyan"
+                    className="text-3xl font-mono font-bold text-primary"
                     formatter={(n) => Math.round(n).toLocaleString()}
                   />
                   <p className="text-text-muted text-xs font-body mt-1">submitters</p>
@@ -1024,7 +1024,7 @@ function ResearchChapter({ gene, publications, timeline, setActive }: {
               </>
             )}
             {momentum && (
-              <div className="text-center p-5 rounded-xl bg-space-700/30 border border-space-600/20 min-w-[140px]">
+              <div className="text-center p-5 rounded-xl bg-ocean-50 border border-ocean-100 min-w-[140px]">
                 <GlowBadge
                   color={momentum === 'accelerating' ? 'green' : momentum === 'decelerating' ? 'amber' : 'cyan'}
                   className="text-sm"
@@ -1048,7 +1048,7 @@ function ResearchChapter({ gene, publications, timeline, setActive }: {
                     title={`${year}: ${count} papers`}
                   >
                     <motion.div
-                      className="w-3 sm:w-4 bg-cyan/60 rounded-t hover:bg-cyan transition-colors"
+                      className="w-3 sm:w-4 bg-primary/60 rounded-t hover:bg-primary transition-colors"
                       initial={{ height: 0 }}
                       whileInView={{ height: `${(count / maxCount) * 80 + 4}px` }}
                       viewport={{ once: true }}
@@ -1070,7 +1070,7 @@ function ResearchChapter({ gene, publications, timeline, setActive }: {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="border-l-2 border-cyan/30 pl-4 py-2 mb-8 max-w-2xl mx-auto"
+              className="border-l-2 border-ocean-200 pl-4 py-2 mb-8 max-w-2xl mx-auto"
             >
               <p className="text-text-secondary font-body italic text-sm leading-relaxed">
                 "{notableTitle}"
@@ -1087,7 +1087,7 @@ function ResearchChapter({ gene, publications, timeline, setActive }: {
               href={`https://pubmed.ncbi.nlm.nih.gov/?term=${gene.gene_symbol}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-cyan hover:text-cyan/80 font-body text-sm transition-colors"
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-body text-sm transition-colors"
             >
               View all {publications.total_results.toLocaleString()} papers on PubMed
               <ExternalLink className="w-3.5 h-3.5" />
@@ -1139,14 +1139,14 @@ function NetworkChapter({ gene, interactions, setActive }: {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-heading mb-4 text-center">
             Connected Genes
           </h2>
 
           <p className="text-text-secondary font-body text-lg text-center mb-10 max-w-2xl mx-auto">
-            <span className="font-mono text-cyan">{gene.gene_symbol}</span> works closely with{' '}
-            <span className="font-mono text-cyan">{top1}</span>
-            {top2 && (<> and <span className="font-mono text-cyan">{top2}</span></>)}
+            <span className="font-mono text-primary">{gene.gene_symbol}</span> works closely with{' '}
+            <span className="font-mono text-primary">{top1}</span>
+            {top2 && (<> and <span className="font-mono text-primary">{top2}</span></>)}
             {topEnrichment.length > 0 && (
               <> in {topEnrichment[0].description.toLowerCase()}</>
             )}
@@ -1156,8 +1156,8 @@ function NetworkChapter({ gene, interactions, setActive }: {
           <div className="relative flex flex-wrap justify-center gap-4 mb-10">
             {/* Center gene */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none hidden md:block">
-              <div className="w-48 h-48 rounded-full border border-cyan/10" />
-              <div className="absolute inset-0 w-80 h-80 -left-16 -top-16 rounded-full border border-cyan/5" />
+              <div className="w-48 h-48 rounded-full border border-ocean-100" />
+              <div className="absolute inset-0 w-80 h-80 -left-16 -top-16 rounded-full border border-ocean-100" />
             </div>
 
             {topInteractors.map((interactor, i) => (
@@ -1170,15 +1170,15 @@ function NetworkChapter({ gene, interactions, setActive }: {
               >
                 <Link
                   to={`/gene/${interactor.gene}/story`}
-                  className="block p-4 rounded-xl bg-space-700/40 border border-space-600/30 hover:border-cyan/30
-                    hover:shadow-[0_0_20px_rgba(0,212,255,0.1)] transition-all group"
+                  className="block p-4 rounded-xl bg-ocean-50 border border-ocean-100 hover:border-ocean-200
+                    hover:shadow-md transition-all group"
                 >
-                  <p className="font-mono text-cyan font-bold text-lg group-hover:text-cyan/80">
+                  <p className="font-mono text-primary font-bold text-lg group-hover:text-primary/80">
                     {interactor.gene}
                   </p>
                   <div className="flex items-center gap-1 mt-1">
                     <div
-                      className="h-1.5 rounded-full bg-cyan/60"
+                      className="h-1.5 rounded-full bg-primary/60"
                       style={{ width: `${interactor.score * 100}%`, maxWidth: '80px' }}
                     />
                     <span className="text-[10px] font-mono text-text-muted">
@@ -1237,43 +1237,43 @@ function ExploreChapter({ gene, setActive }: {
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-8">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-heading mb-8">
             Explore Further
           </h2>
 
           <div className="grid sm:grid-cols-3 gap-4 mb-10">
             <Link
               to={`/gene/${gene.gene_symbol}`}
-              className="p-6 rounded-xl bg-space-700/40 border border-cyan/10 hover:border-cyan/30
-                hover:shadow-[0_0_24px_rgba(0,212,255,0.1)] transition-all group"
+              className="p-6 rounded-xl bg-ocean-50 border border-ocean-100 hover:border-ocean-200
+                hover:shadow-md transition-all group"
             >
-              <LayoutDashboard className="w-8 h-8 text-cyan mx-auto mb-3 group-hover:scale-110 transition-transform" />
-              <p className="font-heading font-semibold text-text-primary">Full Dashboard</p>
+              <LayoutDashboard className="w-8 h-8 text-primary mx-auto mb-3 group-hover:scale-110 transition-transform" />
+              <p className="font-heading font-semibold text-text-heading">Full Dashboard</p>
               <p className="text-text-muted text-xs font-body mt-1">Detailed data view</p>
             </Link>
 
             <Link
               to="/compare"
-              className="p-6 rounded-xl bg-space-700/40 border border-cyan/10 hover:border-cyan/30
-                hover:shadow-[0_0_24px_rgba(0,212,255,0.1)] transition-all group"
+              className="p-6 rounded-xl bg-ocean-50 border border-ocean-100 hover:border-ocean-200
+                hover:shadow-md transition-all group"
             >
-              <svg viewBox="0 0 24 24" className="w-8 h-8 text-cyan mx-auto mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg viewBox="0 0 24 24" className="w-8 h-8 text-primary mx-auto mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
               </svg>
-              <p className="font-heading font-semibold text-text-primary">Compare Genes</p>
+              <p className="font-heading font-semibold text-text-heading">Compare Genes</p>
               <p className="text-text-muted text-xs font-body mt-1">Side-by-side analysis</p>
             </Link>
 
             <Link
               to="/"
-              className="p-6 rounded-xl bg-space-700/40 border border-cyan/10 hover:border-cyan/30
-                hover:shadow-[0_0_24px_rgba(0,212,255,0.1)] transition-all group"
+              className="p-6 rounded-xl bg-ocean-50 border border-ocean-100 hover:border-ocean-200
+                hover:shadow-md transition-all group"
             >
-              <svg viewBox="0 0 24 24" className="w-8 h-8 text-cyan mx-auto mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg viewBox="0 0 24 24" className="w-8 h-8 text-primary mx-auto mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth={2}>
                 <circle cx={11} cy={11} r={8} />
                 <line x1={21} y1={21} x2={16.65} y2={16.65} />
               </svg>
-              <p className="font-heading font-semibold text-text-primary">Search Another</p>
+              <p className="font-heading font-semibold text-text-heading">Search Another</p>
               <p className="text-text-muted text-xs font-body mt-1">Discover a different gene</p>
             </Link>
           </div>
@@ -1281,8 +1281,8 @@ function ExploreChapter({ gene, setActive }: {
           {/* Share button */}
           <button
             onClick={handleShare}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-space-600/40
-              text-text-secondary hover:text-cyan hover:border-cyan/30 transition-all text-sm font-body cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-ocean-100
+              text-text-secondary hover:text-primary hover:border-ocean-200 transition-all text-sm font-body cursor-pointer"
           >
             <Share2 className="w-4 h-4" />
             {copied ? 'Link copied!' : 'Share this gene story'}

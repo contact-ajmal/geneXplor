@@ -17,7 +17,7 @@ export default function SimulatorTab() {
 
   if (clinvarVariants.length === 0) {
     return (
-      <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
+      <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center">
         <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
           Impact Simulator
         </p>
@@ -34,8 +34,8 @@ export default function SimulatorTab() {
       >
         <GlassCard>
           <div className="flex items-center gap-2 mb-4">
-            <Zap className="w-5 h-5 text-cyan" />
-            <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+            <Zap className="w-5 h-5 text-primary" />
+            <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
               Select a variant to simulate
             </h2>
           </div>
@@ -47,11 +47,11 @@ export default function SimulatorTab() {
               <button
                 key={v.variant_id}
                 onClick={() => setSelectedVariantId(v.variant_id)}
-                className="text-left rounded-lg bg-space-800/40 border border-space-600/20 p-3
-                  hover:border-cyan/20 hover:bg-cyan/[0.03] transition-all cursor-pointer"
+                className="text-left rounded-lg bg-ocean-50 border border-ocean-100
+                  hover:border-ocean-200 hover:bg-ocean-50 transition-all cursor-pointer"
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-mono text-[10px] text-cyan/70">
+                  <span className="font-mono text-[10px] text-primary/70">
                     ID: {v.variant_id}
                   </span>
                   <GlowBadge
@@ -64,7 +64,7 @@ export default function SimulatorTab() {
                     {v.clinical_significance}
                   </GlowBadge>
                 </div>
-                <p className="text-xs font-mono text-text-primary truncate" title={v.title}>
+                <p className="text-xs font-mono text-text-heading truncate" title={v.title}>
                   {v.title}
                 </p>
                 <p className="text-[10px] font-body text-text-muted mt-0.5">
@@ -86,13 +86,13 @@ export default function SimulatorTab() {
       <div className="mb-4">
         <button
           onClick={() => setSelectedVariantId(null)}
-          className="text-xs font-body text-text-muted hover:text-cyan transition-colors cursor-pointer bg-transparent border-none"
+          className="text-xs font-body text-text-muted hover:text-primary transition-colors cursor-pointer bg-transparent border-none"
         >
           ← Choose different variant
         </button>
       </div>
       <Suspense fallback={
-        <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+        <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
           <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
           <div className="h-[400px] rounded skeleton-shimmer" />
         </div>

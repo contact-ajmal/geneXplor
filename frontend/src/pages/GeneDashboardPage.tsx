@@ -76,12 +76,12 @@ export default function GeneDashboardPage() {
     setDiseaseFilter(sig);
   }, []);
 
-  // ── Loading State: Full-screen loading page ──
+  // -- Loading State: Full-screen loading page --
   if (isLoading) {
     return <LoadingPage symbol={upperSymbol} />;
   }
 
-  // ── Error: Gene Not Found ──
+  // -- Error: Gene Not Found --
   if (error) {
     return (
       <div className="max-w-2xl mx-auto px-6 pt-32 text-center">
@@ -92,19 +92,19 @@ export default function GeneDashboardPage() {
         >
           {/* DNA illustration */}
           <div className="relative w-20 h-20 mx-auto mb-6">
-            <Dna className="w-20 h-20 text-magenta/40" />
+            <Dna className="w-20 h-20 text-danger/40" />
           </div>
 
-          <div className="p-6 rounded-2xl bg-magenta/5 border border-magenta/20 mb-6">
-            <AlertCircle className="w-6 h-6 text-magenta mx-auto mb-3" />
-            <h2 className="text-lg font-heading font-semibold text-text-primary mb-2">
+          <div className="p-6 rounded-2xl bg-danger-light border border-danger/20 mb-6">
+            <AlertCircle className="w-6 h-6 text-danger mx-auto mb-3" />
+            <h2 className="text-lg font-heading font-semibold text-text-heading mb-2">
               Gene not found
             </h2>
             <p className="text-text-secondary text-sm font-body mb-4">
-              Gene &lsquo;<span className="font-mono text-cyan">{upperSymbol}</span>&rsquo; was not found.
-              Try searching for <span className="font-mono text-cyan">TP53</span>,{' '}
-              <span className="font-mono text-cyan">BRCA1</span>, or{' '}
-              <span className="font-mono text-cyan">EGFR</span>.
+              Gene &lsquo;<span className="font-mono text-primary">{upperSymbol}</span>&rsquo; was not found.
+              Try searching for <span className="font-mono text-primary">TP53</span>,{' '}
+              <span className="font-mono text-primary">BRCA1</span>, or{' '}
+              <span className="font-mono text-primary">EGFR</span>.
             </p>
             <p className="text-text-muted text-xs font-body">{error.message}</p>
           </div>
@@ -138,14 +138,14 @@ export default function GeneDashboardPage() {
 
       {/* Mode Toggle: Dashboard | Story */}
       <div className="flex items-center gap-2 mb-6">
-        <div className="flex items-center gap-1 rounded-lg border border-space-600/60 p-1 bg-space-800/60 backdrop-blur-sm">
-          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body bg-cyan/10 text-cyan border border-cyan/20">
+        <div className="flex items-center gap-1 rounded-lg border border-ocean-200 p-1 bg-ocean-50">
+          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body bg-primary-light text-primary border border-primary/20">
             <LayoutDashboard className="w-3.5 h-3.5" />
             Dashboard
           </span>
           <Link
             to={`/gene/${upperSymbol}/story`}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body text-text-secondary hover:text-text-primary transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-body text-text-secondary hover:text-text-heading transition-colors"
           >
             <BookOpen className="w-3.5 h-3.5" />
             Story
@@ -198,7 +198,7 @@ export default function GeneDashboardPage() {
           <ScrollReveal delay={0.08}>
             <div id="export-protein-structure">
               <Suspense fallback={
-                <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
                   <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
                   <div className="h-[350px] md:h-[450px] lg:h-[600px] rounded skeleton-shimmer" />
                 </div>
@@ -257,7 +257,7 @@ export default function GeneDashboardPage() {
           <ScrollReveal delay={0.2}>
             <div id="export-variant-analytics">
               <Suspense fallback={
-                <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
                   <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
                   <div className="h-48 rounded skeleton-shimmer" />
                 </div>
@@ -279,7 +279,7 @@ export default function GeneDashboardPage() {
             <div id="export-population-map">
               <Suspense
                 fallback={
-                  <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                  <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
                     <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
                     <div className="h-[400px] rounded skeleton-shimmer" />
                   </div>
@@ -302,7 +302,7 @@ export default function GeneDashboardPage() {
             <div id="export-variant-timeline">
               <Suspense
                 fallback={
-                  <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                  <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
                     <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
                     <div className="h-[380px] rounded skeleton-shimmer" />
                   </div>
@@ -324,7 +324,7 @@ export default function GeneDashboardPage() {
           <ScrollReveal delay={0.23}>
             <div id="export-reconciliation">
               <Suspense fallback={
-                <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
                   <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
                   <div className="h-[300px] rounded skeleton-shimmer" />
                 </div>
@@ -400,7 +400,7 @@ export default function GeneDashboardPage() {
             <div id="export-interaction-network">
               <Suspense
                 fallback={
-                  <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+                  <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
                     <div className="h-5 w-56 rounded skeleton-shimmer mb-4" />
                     <div className="h-[500px] rounded skeleton-shimmer" />
                   </div>
@@ -461,13 +461,13 @@ function CompareWithSection({
   };
 
   return (
-    <div className="rounded-2xl border border-cyan/[0.08] p-6 glass-bg backdrop-blur-xl">
+    <div className="rounded-2xl border border-ocean-100 p-6 bg-white">
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <div className="flex items-center gap-3 shrink-0">
-          <GitCompare className="w-6 h-6 text-cyan" />
+          <GitCompare className="w-6 h-6 text-primary" />
           <div>
-            <p className="text-sm font-heading font-semibold text-text-primary">
-              Compare <span className="font-mono text-cyan">{symbol}</span> with another gene
+            <p className="text-sm font-heading font-semibold text-text-heading">
+              Compare <span className="font-mono text-primary">{symbol}</span> with another gene
             </p>
             <p className="text-text-muted text-xs font-body">Side-by-side comparison</p>
           </div>
@@ -480,9 +480,9 @@ function CompareWithSection({
             onKeyDown={(e) => e.key === 'Enter' && handleCompare()}
             placeholder="e.g. BRCA1"
             className="flex-1 px-3 py-2 rounded-lg text-sm font-mono
-              bg-space-800/60 border border-space-600/60 text-text-primary
+              bg-ocean-50 border border-ocean-200 text-text-heading
               placeholder:text-text-muted/50
-              focus:outline-none focus:border-cyan/30 focus:ring-1 focus:ring-cyan/20
+              focus:outline-none focus:border-primary/30 focus:ring-1 focus:ring-primary/20
               transition-all"
           />
           <AnimatedButton
@@ -503,7 +503,7 @@ function CompareWithSection({
 
 function UnavailableSection({ title, message }: { title: string; message: string }) {
   return (
-    <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
+    <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center">
       <h2 className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
         {title}
       </h2>

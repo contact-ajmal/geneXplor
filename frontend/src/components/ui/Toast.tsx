@@ -20,9 +20,9 @@ const iconMap = {
 };
 
 const colorMap = {
-  success: 'border-helix-green/30 text-helix-green',
-  error: 'border-magenta/30 text-magenta',
-  info: 'border-cyan/30 text-cyan',
+  success: 'border-l-success text-success',
+  error: 'border-l-danger text-danger',
+  info: 'border-l-primary text-primary',
 };
 
 export default function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
@@ -53,16 +53,16 @@ function ToastItem({ toast, onDismiss }: { toast: ToastMessage; onDismiss: (id: 
       transition={{ duration: 0.25 }}
       className={`
         pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl
-        bg-[rgba(20,27,45,0.85)] backdrop-blur-xl border
-        shadow-[0_8px_32px_rgba(0,0,0,0.4)]
+        bg-white border border-ocean-100 border-l-4
+        shadow-[0_4px_12px_rgba(16,42,67,0.1)]
         ${colorMap[toast.type]}
       `}
     >
       <Icon className="w-4 h-4 shrink-0" />
-      <span className="text-text-primary text-sm font-body">{toast.message}</span>
+      <span className="text-text-body text-sm font-body">{toast.message}</span>
       <button
         onClick={() => onDismiss(toast.id)}
-        className="ml-2 text-text-muted hover:text-text-primary transition-colors cursor-pointer shrink-0"
+        className="ml-2 text-text-muted hover:text-text-body transition-colors cursor-pointer shrink-0"
       >
         <X className="w-3.5 h-3.5" />
       </button>

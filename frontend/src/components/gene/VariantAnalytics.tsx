@@ -17,12 +17,12 @@ interface VariantAnalyticsProps {
 
 // ── Color mapping ──
 const SIG_COLORS: Record<string, string> = {
-  'Pathogenic': '#ff3366',
-  'Likely pathogenic': '#ffaa00',
-  'Uncertain significance': '#94a3b8',
-  'Likely benign': '#00d4ff',
-  'Benign': '#00ff88',
-  'Other': '#64748b',
+  'Pathogenic': '#D64045',
+  'Likely pathogenic': '#D4A843',
+  'Uncertain significance': '#829AB1',
+  'Likely benign': '#5294C4',
+  'Benign': '#2B9F78',
+  'Other': '#627D98',
 };
 
 function normalizeSig(sig: string): string {
@@ -46,10 +46,10 @@ function formatConsequence(consequence: string): string {
 function GlassTooltipContent({ active, payload, label }: { active?: boolean; payload?: Array<{ name: string; value: number; color?: string }>; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="px-3 py-2 rounded-lg bg-[rgba(20,27,45,0.9)] backdrop-blur-xl border border-cyan/20 shadow-lg">
+    <div className="px-3 py-2 rounded-lg bg-white border border-ocean-100 shadow-lg">
       {label && <p className="text-text-secondary text-xs font-body mb-1">{label}</p>}
       {payload.map((entry, i) => (
-        <p key={i} className="text-text-primary text-xs font-mono" style={{ color: entry.color }}>
+        <p key={i} className="text-text-heading text-xs font-mono" style={{ color: entry.color }}>
           {entry.name}: {entry.value}
         </p>
       ))}
@@ -133,7 +133,7 @@ export default function VariantAnalytics({ clinvarVariants, gnomadVariants, dela
   return (
     <GlassCard delay={delay}>
       <div className="mb-5">
-        <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
           Variant Analytics
         </h2>
         <p className="text-text-muted text-xs font-body mt-1">
@@ -186,7 +186,7 @@ export default function VariantAnalytics({ clinvarVariants, gnomadVariants, dela
             {/* Center label */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center">
-                <span className="block text-2xl font-heading font-bold text-text-primary">
+                <span className="block text-2xl font-heading font-bold text-text-heading">
                   <CountUp end={totalVariants} formatter={n => Math.round(n).toLocaleString()} />
                 </span>
                 <span className="text-text-muted text-[10px] font-body">total</span>
@@ -199,7 +199,7 @@ export default function VariantAnalytics({ clinvarVariants, gnomadVariants, dela
               <button
                 key={entry.name}
                 onClick={() => onSignificanceClick?.(entry.name)}
-                className="flex items-center gap-1.5 text-[10px] font-body text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 text-[10px] font-body text-text-secondary hover:text-text-heading transition-colors cursor-pointer"
               >
                 <span
                   className="w-2 h-2 rounded-full shrink-0"
@@ -239,7 +239,7 @@ export default function VariantAnalytics({ clinvarVariants, gnomadVariants, dela
                   tickLine={false}
                 />
                 <RechartsTooltip content={<GlassTooltipContent />} />
-                <Bar dataKey="count" name="Variants" fill="#00d4ff" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" name="Variants" fill="#1B4965" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -20,15 +20,15 @@ interface PopulationGeo {
 }
 
 const POPULATION_GEO: Record<string, PopulationGeo> = {
-  afr: { name: 'African / African American', center: [20, 0], color: '#ff6b6b' },
-  amr: { name: 'Latino / Admixed American', center: [-60, 0], color: '#ff8c00' },
-  asj: { name: 'Ashkenazi Jewish', center: [35, 32], color: '#00d4ff' },
-  eas: { name: 'East Asian', center: [115, 35], color: '#ffd93d' },
-  fin: { name: 'Finnish', center: [26, 64], color: '#9b59b6' },
-  mid: { name: 'Middle Eastern', center: [45, 30], color: '#e74c3c' },
-  nfe: { name: 'Non-Finnish European', center: [10, 50], color: '#6bcb77' },
-  sas: { name: 'South Asian', center: [78, 25], color: '#4d96ff' },
-  oth: { name: 'Other', center: [0, -60], color: '#64748b' },
+  afr: { name: 'African / African American', center: [20, 0], color: '#D64045' },
+  amr: { name: 'Latino / Admixed American', center: [-60, 0], color: '#E07A3A' },
+  asj: { name: 'Ashkenazi Jewish', center: [35, 32], color: '#1B4965' },
+  eas: { name: 'East Asian', center: [115, 35], color: '#D4A843' },
+  fin: { name: 'Finnish', center: [26, 64], color: '#7C5CBF' },
+  mid: { name: 'Middle Eastern', center: [45, 30], color: '#D64045' },
+  nfe: { name: 'Non-Finnish European', center: [10, 50], color: '#2B9F78' },
+  sas: { name: 'South Asian', center: [78, 25], color: '#5294C4' },
+  oth: { name: 'Other', center: [0, -60], color: '#7B8794' },
 };
 
 interface PopulationMapProps {
@@ -170,8 +170,8 @@ export default function PopulationMap({
     return (
       <Wrapper>
         <div className="flex items-center gap-3 mb-4">
-          <Globe className="w-5 h-5 text-cyan" />
-          <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+          <Globe className="w-5 h-5 text-primary" />
+          <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
             Global Variant Distribution
           </h2>
         </div>
@@ -190,14 +190,14 @@ export default function PopulationMap({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
         <div className="flex items-center gap-3">
-          <Globe className="w-5 h-5 text-cyan" />
+          <Globe className="w-5 h-5 text-primary" />
           <div>
-            <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+            <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
               Global Variant Distribution
             </h2>
             <p className="text-text-muted text-xs font-body mt-0.5">
               Population frequencies for{' '}
-              <span className="font-mono text-cyan">{selectedVariantId}</span>
+              <span className="font-mono text-primary">{selectedVariantId}</span>
             </p>
           </div>
         </div>
@@ -208,8 +208,8 @@ export default function PopulationMap({
         <button
           onClick={() => setDropdownOpen(!dropdownOpen)}
           className="w-full sm:w-auto min-w-[320px] flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs font-mono
-            bg-space-800/60 border border-space-600/60 text-text-primary
-            hover:border-cyan/20 transition-colors cursor-pointer"
+            bg-ocean-50 border border-ocean-100 text-text-heading
+            hover:border-primary/20 transition-colors cursor-pointer"
         >
           <span className="truncate">
             {selectedVariantId}
@@ -234,7 +234,7 @@ export default function PopulationMap({
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15 }}
               className="absolute z-30 top-full mt-1 left-0 w-full sm:w-[420px] max-h-60 overflow-y-auto
-                rounded-lg border border-space-600/40 bg-space-800/95 backdrop-blur-xl shadow-xl"
+                rounded-lg border border-ocean-100 bg-white shadow-xl"
             >
               {variantOptions.map(v => (
                 <button
@@ -243,8 +243,8 @@ export default function PopulationMap({
                     setSelectedVariantId(v.variant_id);
                     setDropdownOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 text-xs hover:bg-cyan/[0.06] transition-colors cursor-pointer
-                    ${v.variant_id === selectedVariantId ? 'bg-cyan/[0.08] text-cyan' : 'text-text-primary'}`}
+                  className={`w-full text-left px-3 py-2 text-xs hover:bg-primary-light transition-colors cursor-pointer
+                    ${v.variant_id === selectedVariantId ? 'bg-primary-light text-primary' : 'text-text-heading'}`}
                 >
                   <span className="font-mono">{v.variant_id}</span>
                   {v.clinical_significance && (
@@ -277,12 +277,12 @@ export default function PopulationMap({
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill="#1a2332"
-                  stroke="#2a3442"
+                  fill="#E8EEF4"
+                  stroke="#D9E2EC"
                   strokeWidth={0.4}
                   style={{
                     default: { outline: 'none' },
-                    hover: { outline: 'none', fill: '#243044' },
+                    hover: { outline: 'none', fill: '#D9E2EC' },
                     pressed: { outline: 'none' },
                   }}
                 />
@@ -304,9 +304,9 @@ export default function PopulationMap({
                 {/* Visible bubble — CSS transition only, no framer re-animation */}
                 <circle
                   r={size}
-                  fill={af > 0 ? geo.color : '#2a3442'}
+                  fill={af > 0 ? geo.color : '#D9E2EC'}
                   fillOpacity={af > 0 ? (isHovered ? 1 : 0.8) : 0.3}
-                  stroke={af > 0 ? geo.color : '#3a4452'}
+                  stroke={af > 0 ? geo.color : '#BCCCDC'}
                   strokeWidth={isHovered ? 2.5 : isHighest ? 2 : 1}
                   strokeOpacity={isHovered ? 0.9 : 0.6}
                   style={{
@@ -330,7 +330,7 @@ export default function PopulationMap({
                   style={{
                     fontFamily: '"Plus Jakarta Sans", sans-serif',
                     fontSize: 8,
-                    fill: af > 0 ? '#e2e8f0' : '#64748b',
+                    fill: af > 0 ? '#334E68' : '#7B8794',
                     pointerEvents: 'none',
                   }}
                 >
@@ -360,8 +360,8 @@ export default function PopulationMap({
           <div
             ref={tooltipRef}
             className="fixed z-50 pointer-events-none px-3 py-2.5 rounded-lg
-              border border-cyan/[0.12] bg-[rgba(15,22,40,0.95)] backdrop-blur-xl
-              shadow-[0_0_30px_rgba(0,212,255,0.1)]
+              border border-[#D9E2EC] bg-white
+              shadow-lg
               transition-opacity duration-150"
             style={{ left: -9999, top: -9999 }}
           >
@@ -376,7 +376,7 @@ export default function PopulationMap({
 
       {/* Population Comparison Bar */}
       <div className="mt-5">
-        <h3 className="text-xs font-heading font-semibold text-text-primary uppercase tracking-wider mb-3">
+        <h3 className="text-xs font-heading font-semibold text-text-heading uppercase tracking-wider mb-3">
           Population Comparison
         </h3>
         <div className="space-y-2">
@@ -393,7 +393,7 @@ export default function PopulationMap({
                 <span className="text-text-muted text-xs font-body w-44 shrink-0 truncate">
                   {geo?.name || pf.population}
                 </span>
-                <div className="flex-1 h-4 bg-space-800/60 rounded-full overflow-hidden relative">
+                <div className="flex-1 h-4 bg-ocean-50 rounded-full overflow-hidden relative">
                   {/* Global AF reference line */}
                   {maxAF > 0 && globalAF > 0 && (
                     <div
@@ -403,30 +403,30 @@ export default function PopulationMap({
                   )}
                   <motion.div
                     className="h-full rounded-full"
-                    style={{ backgroundColor: geo?.color || '#64748b' }}
+                    style={{ backgroundColor: geo?.color || '#7B8794' }}
                     initial={{ width: 0 }}
                     animate={{ width: `${Math.max(barWidth, pf.af > 0 ? 1 : 0)}%` }}
                     transition={{ duration: 0.5, delay: idx * 0.04 }}
                   />
                 </div>
-                <span className="font-mono text-xs text-text-primary w-20 text-right shrink-0">
+                <span className="font-mono text-xs text-text-heading w-20 text-right shrink-0">
                   {formatAF(pf.af)}
                 </span>
                 {/* Mobile: colored dot */}
                 <span
                   className="md:hidden w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ backgroundColor: geo?.color || '#64748b' }}
+                  style={{ backgroundColor: geo?.color || '#7B8794' }}
                 />
               </div>
             );
           })}
           {barData.length > 0 && globalAF > 0 && (
-            <div className="flex items-center gap-3 pt-1 border-t border-space-600/20">
+            <div className="flex items-center gap-3 pt-1 border-t border-ocean-100">
               <span className="text-text-muted text-xs font-body w-44 shrink-0">
                 Global Average
               </span>
               <div className="flex-1" />
-              <span className="font-mono text-xs text-cyan w-20 text-right shrink-0">
+              <span className="font-mono text-xs text-primary w-20 text-right shrink-0">
                 {formatAF(globalAF)}
               </span>
             </div>
@@ -440,9 +440,9 @@ export default function PopulationMap({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-amber/[0.06] border border-amber/20"
+          className="mt-4 flex items-start gap-3 p-3 rounded-lg bg-warning/[0.06] border border-warning/20"
         >
-          <AlertTriangle className="w-4 h-4 text-amber shrink-0 mt-0.5" />
+          <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
           <div>
             <div className="flex items-center gap-2 mb-1">
               <GlowBadge color="amber">Population-Stratified</GlowBadge>
@@ -452,7 +452,7 @@ export default function PopulationMap({
               AF ranges from {formatAF(stratification.minAF)} ({stratification.minPop}) to{' '}
               {formatAF(stratification.maxAF)} ({stratification.maxPop}).
               {stratification.ratio >= 100 && (
-                <span className="text-amber">
+                <span className="text-warning">
                   {' '}({Math.round(stratification.ratio)}× difference)
                 </span>
               )}
@@ -490,36 +490,36 @@ function PopTooltip({
       <div className="space-y-1 text-[10px]">
         <div className="flex justify-between gap-4">
           <span className="text-text-muted">Allele Frequency</span>
-          <span className="font-mono text-text-primary">{formatAF(pf.af)}</span>
+          <span className="font-mono text-text-heading">{formatAF(pf.af)}</span>
         </div>
         {pf.ac > 0 && (
           <div className="flex justify-between gap-4">
             <span className="text-text-muted">Allele Count</span>
-            <span className="font-mono text-text-primary">{pf.ac.toLocaleString()} / {pf.an.toLocaleString()}</span>
+            <span className="font-mono text-text-heading">{pf.ac.toLocaleString()} / {pf.an.toLocaleString()}</span>
           </div>
         )}
         <div className="flex justify-between gap-4">
           <span className="text-text-muted">vs Global</span>
-          <span className="font-mono text-cyan">{ratioLabel}</span>
+          <span className="font-mono text-primary">{ratioLabel}</span>
         </div>
         {/* Mini comparison bar */}
-        <div className="mt-1.5 pt-1.5 border-t border-space-600/20">
+        <div className="mt-1.5 pt-1.5 border-t border-ocean-100">
           <div className="flex items-center gap-2">
-            <div className="flex-1 h-1.5 bg-space-800/60 rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-ocean-50 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{
                   width: `${Math.min((pf.af / Math.max(globalAF * 3, pf.af)) * 100, 100)}%`,
-                  backgroundColor: geo?.color || '#64748b',
+                  backgroundColor: geo?.color || '#7B8794',
                 }}
               />
             </div>
             <span className="text-text-muted text-[9px]">Pop</span>
           </div>
           <div className="flex items-center gap-2 mt-0.5">
-            <div className="flex-1 h-1.5 bg-space-800/60 rounded-full overflow-hidden">
+            <div className="flex-1 h-1.5 bg-ocean-50 rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full bg-cyan/60"
+                className="h-full rounded-full bg-primary/60"
                 style={{
                   width: `${Math.min((globalAF / Math.max(globalAF * 3, pf.af)) * 100, 100)}%`,
                 }}

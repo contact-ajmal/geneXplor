@@ -34,12 +34,12 @@ interface VariantTimelineProps {
 }
 
 const SIG_COLORS: Record<string, string> = {
-  pathogenic: '#ff3366',
-  likely_pathogenic: '#ff8c00',
-  vus: '#ffaa00',
-  likely_benign: '#4a9eff',
-  benign: '#00ff88',
-  other: '#64748b',
+  pathogenic: '#D64045',
+  likely_pathogenic: '#E07A3A',
+  vus: '#D4A843',
+  likely_benign: '#5294C4',
+  benign: '#2B9F78',
+  other: '#7B8794',
 };
 
 const SIG_LABELS: Record<string, string> = {
@@ -162,15 +162,15 @@ export default function VariantTimeline({
   if (filteredBuckets.length < 5) {
     return (
       <GlassCard delay={delay}>
-        <h2 className="text-sm font-heading font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-cyan" />
+        <h2 className="text-sm font-heading font-semibold text-text-heading mb-4 uppercase tracking-wider flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-primary" />
           Variant Discovery Timeline
         </h2>
         <div className="text-center py-6">
           <Clock className="w-10 h-10 text-text-muted mx-auto mb-3 opacity-40" />
           <p className="text-text-secondary text-sm font-body mb-2">
             Limited submission history available for{' '}
-            <span className="font-mono text-cyan">{geneSymbol}</span>
+            <span className="font-mono text-primary">{geneSymbol}</span>
           </p>
           <p className="text-text-muted text-xs font-body">
             {timeline.total_submissions} variant{timeline.total_submissions !== 1 ? 's' : ''} submitted
@@ -187,13 +187,13 @@ export default function VariantTimeline({
       {/* Header */}
       <div className="flex items-center justify-between mb-1 flex-wrap gap-2">
         <div>
-          <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-cyan" />
+          <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-primary" />
             Variant Discovery Timeline
           </h2>
           <p className="text-text-muted text-xs font-body mt-0.5">
             History of variant reporting in ClinVar for{' '}
-            <span className="font-mono text-cyan">{geneSymbol}</span>
+            <span className="font-mono text-primary">{geneSymbol}</span>
           </p>
         </div>
 
@@ -209,8 +209,8 @@ export default function VariantTimeline({
             onClick={() => setTimeRange(range)}
             className={`px-3 py-1 rounded-lg text-xs font-body border transition-all ${
               timeRange === range
-                ? 'bg-cyan/15 border-cyan/30 text-cyan'
-                : 'bg-space-800/50 border-space-600/30 text-text-muted hover:border-space-600/50'
+                ? 'bg-primary-light border-primary/30 text-primary'
+                : 'bg-ocean-50 border-ocean-100 text-text-muted hover:border-ocean-100'
             }`}
           >
             {range === 'all' ? 'All Time' : `Last ${range.replace('y', 'yr')}`}
@@ -222,25 +222,25 @@ export default function VariantTimeline({
       <div className="w-full h-[320px] md:h-[380px]">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 20, right: 10, left: -10, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(100,116,139,0.12)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#D9E2EC" />
             <XAxis
               dataKey="label"
-              tick={{ fill: '#94a3b8', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+              tick={{ fill: '#7B8794', fontSize: 10, fontFamily: 'JetBrains Mono' }}
               tickLine={false}
-              axisLine={{ stroke: 'rgba(100,116,139,0.2)' }}
+              axisLine={{ stroke: '#D9E2EC' }}
               interval="preserveStartEnd"
               minTickGap={40}
             />
             <YAxis
               yAxisId="left"
-              tick={{ fill: '#94a3b8', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+              tick={{ fill: '#7B8794', fontSize: 10, fontFamily: 'JetBrains Mono' }}
               tickLine={false}
               axisLine={false}
               label={{
                 value: 'New variants',
                 angle: -90,
                 position: 'insideLeft',
-                fill: '#64748b',
+                fill: '#7B8794',
                 fontSize: 10,
                 fontFamily: 'Plus Jakarta Sans',
                 offset: 15,
@@ -249,14 +249,14 @@ export default function VariantTimeline({
             <YAxis
               yAxisId="right"
               orientation="right"
-              tick={{ fill: '#00d4ff', fontSize: 10, fontFamily: 'JetBrains Mono' }}
+              tick={{ fill: '#1B4965', fontSize: 10, fontFamily: 'JetBrains Mono' }}
               tickLine={false}
               axisLine={false}
               label={{
                 value: 'Cumulative',
                 angle: 90,
                 position: 'insideRight',
-                fill: '#00d4ff',
+                fill: '#1B4965',
                 fontSize: 10,
                 fontFamily: 'Plus Jakarta Sans',
                 offset: 15,
@@ -273,12 +273,12 @@ export default function VariantTimeline({
                   key={m.date}
                   x={formatMonthShort(m.date)}
                   yAxisId="left"
-                  stroke="rgba(0,212,255,0.25)"
+                  stroke="rgba(27,73,101,0.25)"
                   strokeDasharray="4 4"
                   label={{
                     value: m.label,
                     position: 'top',
-                    fill: '#94a3b8',
+                    fill: '#7B8794',
                     fontSize: 9,
                     fontFamily: 'Plus Jakarta Sans',
                   }}
@@ -304,10 +304,10 @@ export default function VariantTimeline({
               yAxisId="right"
               type="monotone"
               dataKey="cumulative"
-              stroke="#00d4ff"
+              stroke="#1B4965"
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 4, fill: '#00d4ff', stroke: '#0a0e1a', strokeWidth: 2 }}
+              activeDot={{ r: 4, fill: '#1B4965', stroke: '#FFFFFF', strokeWidth: 2 }}
               animationBegin={600}
               animationDuration={1000}
             />
@@ -317,8 +317,8 @@ export default function VariantTimeline({
               <Brush
                 dataKey="label"
                 height={20}
-                stroke="rgba(0,212,255,0.3)"
-                fill="rgba(20,27,45,0.8)"
+                stroke="rgba(27,73,101,0.3)"
+                fill="#F0F4F8"
                 travellerWidth={8}
                 tickFormatter={() => ''}
               />
@@ -339,7 +339,7 @@ export default function VariantTimeline({
           </div>
         ))}
         <div className="flex items-center gap-1.5 text-[10px] text-text-secondary font-body">
-          <span className="w-4 h-[2px] bg-cyan inline-block rounded" />
+          <span className="w-4 h-[2px] bg-primary inline-block rounded" />
           Cumulative
         </div>
       </div>
@@ -358,9 +358,9 @@ export default function VariantTimeline({
               <button
                 key={v.variant_id}
                 onClick={() => handleVariantClick(v.variant_id)}
-                className="shrink-0 rounded-lg bg-space-800/50 border border-space-600/30 px-3 py-2 text-left hover:border-cyan/30 transition-all min-w-[180px]"
+                className="shrink-0 rounded-lg bg-ocean-50 border border-ocean-100 px-3 py-2 text-left hover:border-primary/30 transition-all min-w-[180px]"
               >
-                <p className="text-text-primary text-xs font-mono truncate max-w-[160px]">
+                <p className="text-text-heading text-xs font-mono truncate max-w-[160px]">
                   {v.title || v.variant_id}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
@@ -458,11 +458,11 @@ function StatsRow({ timeline }: { timeline: TimelineData }) {
       {stats.map((s) => (
         <div
           key={s.label}
-          className="rounded-xl bg-space-800/50 border border-space-600/30 p-3 text-center"
+          className="rounded-xl bg-ocean-50 border border-ocean-100 p-3 text-center"
         >
-          <s.icon className="w-3.5 h-3.5 text-cyan mx-auto mb-1 opacity-60" />
+          <s.icon className="w-3.5 h-3.5 text-primary mx-auto mb-1 opacity-60" />
           <p className="text-text-muted text-[10px] font-body mb-0.5">{s.label}</p>
-          <p className="text-text-primary text-xs font-mono truncate" title={s.value}>
+          <p className="text-text-heading text-xs font-mono truncate" title={s.value}>
             {s.value}
           </p>
         </div>
@@ -485,11 +485,11 @@ function GlassTooltip({ active, payload, label }: any) {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="rounded-lg bg-space-700/95 border border-cyan/20 backdrop-blur-sm shadow-lg px-3 py-2 text-xs"
+      className="rounded-lg bg-white border border-[#D9E2EC] shadow-lg px-3 py-2 text-xs"
     >
-      <p className="font-mono text-cyan font-semibold mb-1">{label}</p>
+      <p className="font-mono text-primary font-semibold mb-1">{label}</p>
       <p className="text-text-secondary mb-1">
-        New: <span className="font-mono text-text-primary">{totalNew}</span>
+        New: <span className="font-mono text-text-heading">{totalNew}</span>
       </p>
       {payload
         .filter((p: any) => p.dataKey !== 'cumulative' && p.value > 0)
@@ -503,7 +503,7 @@ function GlassTooltip({ active, payload, label }: any) {
           </p>
         ))}
       {cumulativeEntry && (
-        <p className="text-cyan mt-1 border-t border-space-600/30 pt-1">
+        <p className="text-primary mt-1 border-t border-[#D9E2EC] pt-1">
           Cumulative: <span className="font-mono">{cumulativeEntry.value}</span>
         </p>
       )}

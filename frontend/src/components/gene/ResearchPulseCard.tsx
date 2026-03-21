@@ -32,7 +32,7 @@ function Sparkline({ data, trend, width = 120, height = 40 }: {
     return `${x},${y}`;
   }).join(' ');
 
-  const color = trend === 'rising' ? '#00ff88' : trend === 'declining' ? '#ff3366' : '#ffaa00';
+  const color = trend === 'rising' ? '#2B9F78' : trend === 'declining' ? '#D64045' : '#D4A843';
 
   return (
     <svg width={width} height={height} className="inline-block">
@@ -94,8 +94,8 @@ export default function ResearchPulseCard({ geneSymbol, delay = 0 }: ResearchPul
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-cyan" />
-            <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+            <BarChart3 className="w-4 h-4 text-primary" />
+            <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
               Research Pulse
             </h2>
           </div>
@@ -111,15 +111,15 @@ export default function ResearchPulseCard({ geneSymbol, delay = 0 }: ResearchPul
 
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4 mb-4">
-        <div className="text-center p-3 rounded-xl bg-space-700/30 border border-space-600/20">
+        <div className="text-center p-3 rounded-xl bg-ocean-50 border border-ocean-100">
           <CountUp
             end={pulse.last_12_months}
-            className="text-xl font-mono font-bold text-cyan"
+            className="text-xl font-mono font-bold text-primary"
             formatter={(n) => Math.round(n).toLocaleString()}
           />
           <p className="text-text-muted text-[10px] font-body mt-0.5">Last 12 months</p>
         </div>
-        <div className="text-center p-3 rounded-xl bg-space-700/30 border border-space-600/20">
+        <div className="text-center p-3 rounded-xl bg-ocean-50 border border-ocean-100">
           <CountUp
             end={pulse.prior_12_months}
             className="text-xl font-mono font-bold text-text-secondary"
@@ -127,9 +127,9 @@ export default function ResearchPulseCard({ geneSymbol, delay = 0 }: ResearchPul
           />
           <p className="text-text-muted text-[10px] font-body mt-0.5">Prior 12 months</p>
         </div>
-        <div className="text-center p-3 rounded-xl bg-space-700/30 border border-space-600/20">
+        <div className="text-center p-3 rounded-xl bg-ocean-50 border border-ocean-100">
           {changePercent !== null ? (
-            <span className={`text-xl font-mono font-bold ${changePercent >= 0 ? 'text-helix-green' : 'text-magenta'}`}>
+            <span className={`text-xl font-mono font-bold ${changePercent >= 0 ? 'text-success' : 'text-danger'}`}>
               {changePercent >= 0 ? '+' : ''}{changePercent}%
             </span>
           ) : (
@@ -156,7 +156,7 @@ export default function ResearchPulseCard({ geneSymbol, delay = 0 }: ResearchPul
                 >
                   <motion.div
                     className={`w-full rounded-t transition-colors ${
-                      isLast ? 'bg-cyan' : 'bg-cyan/40 group-hover:bg-cyan/60'
+                      isLast ? 'bg-primary' : 'bg-primary/40 group-hover:bg-primary/60'
                     }`}
                     initial={{ height: 0 }}
                     animate={{ height: `${Math.max(heightPercent, 2)}%` }}

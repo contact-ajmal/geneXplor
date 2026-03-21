@@ -22,7 +22,7 @@ export default function DataSourcesFooter({ metadata, delay = 0 }: DataSourcesFo
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay }}
-      className="mt-12 pt-6 border-t border-space-600/20"
+      className="mt-12 pt-6 border-t border-ocean-100"
     >
       <p className="text-text-muted text-xs font-body text-center mb-4">
         Data aggregated from:
@@ -35,7 +35,7 @@ export default function DataSourcesFooter({ metadata, delay = 0 }: DataSourcesFo
           return (
             <div key={key} className="flex items-center gap-1.5">
               {ok ? (
-                <Check className="w-3.5 h-3.5 text-helix-green" />
+                <Check className="w-3.5 h-3.5 text-success" />
               ) : (
                 <X className="w-3.5 h-3.5 text-text-muted" />
               )}

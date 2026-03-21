@@ -171,13 +171,13 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
     columnHelper.accessor('variant_id', {
       header: 'Variant ID',
       cell: info => (
-        <span className="font-mono text-cyan text-xs">{info.getValue()}</span>
+        <span className="font-mono text-primary text-xs">{info.getValue()}</span>
       ),
     }),
     columnHelper.accessor('position', {
       header: 'Position',
       cell: info => (
-        <span className="font-mono text-xs text-text-primary">
+        <span className="font-mono text-xs text-text-heading">
           {info.getValue() > 0 ? info.getValue().toLocaleString() : '—'}
         </span>
       ),
@@ -203,7 +203,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
       cell: info => {
         const af = info.getValue();
         return (
-          <span className="font-mono text-xs text-text-primary">
+          <span className="font-mono text-xs text-text-heading">
             {af > 0 ? af.toExponential(2) : '—'}
           </span>
         );
@@ -214,11 +214,11 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
       cell: info => {
         const severity = info.getValue();
         if (!severity) return <span className="text-text-muted text-xs">—</span>;
-        const colors: Record<string, string> = { HIGH: '#ff3366', MEDIUM: '#ffaa00', LOW: '#64748b' };
+        const colors: Record<string, string> = { HIGH: '#D64045', MEDIUM: '#D4A843', LOW: '#64748b' };
         return (
           <div className="relative group">
             <AlertTriangle className="w-4 h-4" style={{ color: colors[severity] || '#64748b' }} />
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-space-800 border border-space-600/50 text-text-secondary text-[10px] font-body w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-lg">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-white border border-ocean-100 text-text-secondary text-[10px] font-body w-48 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-lg">
               {info.row.original.conflict_description}
             </div>
           </div>
@@ -234,7 +234,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
             e.stopPropagation();
             onSimulateClick(row.original.variant_id);
           }}
-          className="p-1.5 rounded-lg bg-cyan/[0.06] border border-cyan/10 text-cyan/60 hover:text-cyan hover:border-cyan/30 hover:bg-cyan/10 hover:shadow-[0_0_8px_rgba(0,212,255,0.15)] transition-all cursor-pointer"
+          className="p-1.5 rounded-lg bg-primary-light border border-ocean-100 text-primary/60 hover:text-primary hover:border-ocean-200 hover:bg-ocean-50 transition-all cursor-pointer"
           title="Simulate Impact"
         >
           <Zap className="w-3.5 h-3.5" />
@@ -260,7 +260,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
   return (
     <GlassCard delay={delay}>
       <div className="mb-4">
-        <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
           Variant Table
         </h2>
         <p className="text-text-muted text-xs font-body mt-1">
@@ -269,7 +269,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
       </div>
 
       {/* Filter bar */}
-      <div className="flex flex-wrap gap-3 mb-4 pb-4 border-b border-space-600/30">
+      <div className="flex flex-wrap gap-3 mb-4 pb-4 border-b border-ocean-100">
         {/* Significance filter */}
         <div className="relative">
           <select
@@ -279,12 +279,12 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
               const values = Array.from(e.target.selectedOptions, o => o.value);
               setSigFilter(values);
             }}
-            className="bg-space-800/80 border border-space-600/50 rounded-lg px-3 py-1.5 text-xs text-text-secondary font-body min-w-[160px] appearance-none cursor-pointer focus:border-cyan/30 focus:outline-none"
+            className="bg-ocean-50 border border-ocean-100 rounded-lg px-3 py-1.5 text-xs text-text-secondary font-body min-w-[160px] appearance-none cursor-pointer focus:border-ocean-200 focus:outline-none"
             style={{ height: sigFilter.length > 0 ? 'auto' : '30px', maxHeight: '120px' }}
           >
             <option value="" disabled>Clinical Significance</option>
             {SIGNIFICANCE_OPTIONS.map(opt => (
-              <option key={opt} value={opt} className="bg-space-800 text-text-secondary py-1">
+              <option key={opt} value={opt} className="bg-white text-text-secondary py-1">
                 {opt}
               </option>
             ))}
@@ -292,7 +292,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
           {sigFilter.length > 0 && (
             <button
               onClick={() => setSigFilter([])}
-              className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-magenta text-space-900 text-[8px] flex items-center justify-center cursor-pointer"
+              className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-danger text-white text-[8px] flex items-center justify-center cursor-pointer"
             >
               ×
             </button>
@@ -308,12 +308,12 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
               const values = Array.from(e.target.selectedOptions, o => o.value);
               setConsequenceFilter(values);
             }}
-            className="bg-space-800/80 border border-space-600/50 rounded-lg px-3 py-1.5 text-xs text-text-secondary font-body min-w-[160px] appearance-none cursor-pointer focus:border-cyan/30 focus:outline-none"
+            className="bg-ocean-50 border border-ocean-100 rounded-lg px-3 py-1.5 text-xs text-text-secondary font-body min-w-[160px] appearance-none cursor-pointer focus:border-ocean-200 focus:outline-none"
             style={{ height: consequenceFilter.length > 0 ? 'auto' : '30px', maxHeight: '120px' }}
           >
             <option value="" disabled>Consequence Type</option>
             {CONSEQUENCE_OPTIONS.map(opt => (
-              <option key={opt} value={opt} className="bg-space-800 text-text-secondary py-1">
+              <option key={opt} value={opt} className="bg-white text-text-secondary py-1">
                 {opt}
               </option>
             ))}
@@ -321,7 +321,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
           {consequenceFilter.length > 0 && (
             <button
               onClick={() => setConsequenceFilter([])}
-              className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-magenta text-space-900 text-[8px] flex items-center justify-center cursor-pointer"
+              className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-danger text-white text-[8px] flex items-center justify-center cursor-pointer"
             >
               ×
             </button>
@@ -343,7 +343,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
               const val = parseFloat(e.target.value);
               setAfThreshold(val >= 0 ? 1 : Math.pow(10, val));
             }}
-            className="w-24 accent-cyan h-1"
+            className="w-24 accent-primary h-1"
           />
           <span className="text-text-muted text-xs font-mono w-16">
             {afThreshold >= 1 ? 'All' : afThreshold.toExponential(0)}
@@ -357,10 +357,10 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
               type="checkbox"
               checked={conflictsOnly}
               onChange={e => setConflictsOnly(e.target.checked)}
-              className="accent-amber w-3.5 h-3.5"
+              className="accent-warning w-3.5 h-3.5"
             />
             <span className="text-text-muted text-xs font-body whitespace-nowrap flex items-center gap-1">
-              <AlertTriangle className="w-3 h-3 text-amber" />
+              <AlertTriangle className="w-3 h-3 text-warning" />
               Conflicts only
             </span>
           </label>
@@ -377,13 +377,13 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
                   <th
                     key={header.id}
                     onClick={header.column.getToggleSortingHandler()}
-                    className="text-left py-3 px-3 text-text-muted text-xs font-body font-semibold uppercase tracking-wider cursor-pointer hover:text-cyan transition-colors sticky top-0 bg-[rgba(20,27,45,0.95)] backdrop-blur-md z-10 border-b border-space-600/30"
+                    className="text-left py-3 px-3 text-text-muted text-xs font-body font-semibold uppercase tracking-wider cursor-pointer hover:text-primary transition-colors sticky top-0 bg-white z-10 border-b border-ocean-100"
                   >
                     <span className="flex items-center gap-1">
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {{
-                        asc: <ChevronUp className="w-3 h-3 text-cyan" />,
-                        desc: <ChevronDown className="w-3 h-3 text-cyan" />,
+                        asc: <ChevronUp className="w-3 h-3 text-primary" />,
+                        desc: <ChevronDown className="w-3 h-3 text-primary" />,
                       }[header.column.getIsSorted() as string] ?? (
                         <ChevronsUpDown className="w-3 h-3 opacity-30" />
                       )}
@@ -406,14 +406,14 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
                   }}
                   className={`
                     cursor-pointer transition-all duration-200
-                    ${i % 2 === 0 ? 'bg-transparent' : 'bg-space-800/20'}
+                    ${i % 2 === 0 ? 'bg-transparent' : 'bg-ocean-50/50'}
                     ${expandedRow === row.id
-                      ? 'bg-cyan/5 shadow-[inset_0_0_20px_rgba(0,212,255,0.04)]'
-                      : 'hover:bg-cyan/[0.03] hover:shadow-[inset_0_0_30px_rgba(0,212,255,0.03)]'}
+                      ? 'bg-primary-light'
+                      : 'hover:bg-ocean-50'}
                   `}
                 >
                   {row.getVisibleCells().map(cell => (
-                    <td key={cell.id} className="py-2.5 px-3 border-b border-space-600/10">
+                    <td key={cell.id} className="py-2.5 px-3 border-b border-ocean-100/50">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
@@ -431,7 +431,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
                           transition={{ duration: 0.2 }}
                           className="overflow-hidden"
                         >
-                          <div className="p-3 bg-space-800/30 rounded-lg mx-3 mb-2">
+                          <div className="p-3 bg-ocean-50 rounded-lg mx-3 mb-2">
                             <p className="text-text-muted text-xs font-body mb-2 font-semibold">
                               Population Frequencies
                             </p>
@@ -439,7 +439,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
                               {row.original.population_frequencies.map(pf => (
                                 <div key={pf.population} className="flex justify-between gap-2 text-xs">
                                   <span className="text-text-muted font-mono uppercase">{pf.population}</span>
-                                  <span className="text-text-primary font-mono">
+                                  <span className="text-text-heading font-mono">
                                     {pf.af > 0 ? pf.af.toExponential(2) : '0'}
                                   </span>
                                 </div>
@@ -464,7 +464,7 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
 
       {/* Pagination */}
       {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-space-600/30">
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-ocean-100">
           <span className="text-text-muted text-xs font-body">
             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
           </span>
@@ -472,14 +472,14 @@ export default function VariantTable({ clinvarVariants, gnomadVariants, conflict
             <button
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className="p-1.5 rounded-lg bg-space-800/50 border border-space-600/30 text-text-secondary disabled:opacity-30 hover:border-cyan/20 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg bg-ocean-50 border border-ocean-100 text-text-secondary disabled:opacity-30 hover:border-ocean-200 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className="p-1.5 rounded-lg bg-space-800/50 border border-space-600/30 text-text-secondary disabled:opacity-30 hover:border-cyan/20 transition-colors cursor-pointer disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg bg-ocean-50 border border-ocean-100 text-text-secondary disabled:opacity-30 hover:border-ocean-200 transition-colors cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

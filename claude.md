@@ -4,42 +4,51 @@
 Gene knowledge platform — search any human gene, get a comprehensive
 dashboard aggregating data from Ensembl, ClinVar, gnomAD, UniProt, and PubMed.
 
-## Design System (MUST MATCH GeneMapr)
+## Design System — Ocean Depth
 
-### Visual Identity — Dark Sci-Fi Genomics
-- Primary dark theme (dark-first, light mode secondary)
+### Visual Identity — Professional Scientific Platform
+- Light-first design (light primary, dark mode optional/secondary)
 - Color palette:
-  * Background: #0a0e1a (deep space navy), #0f1628 (panels)
-  * Surface: #141b2d (cards), #1a2332 (elevated)
-  * DNA Cyan accent: #00d4ff (primary interactive)
-  * DNA Magenta accent: #ff3366 (alerts/critical findings)
-  * Helix Green: #00ff88 (benign/success)
-  * Amber Warning: #ffaa00 (caution)
-  * Text Primary: #e2e8f0, Secondary: #94a3b8
-  * Subtle glow: rgba(0, 212, 255, 0.1) for hover states
+  * Page background: #F0F4F8 (cool blue-gray)
+  * Cards: #FFFFFF (white, clean)
+  * Surface: #D9E2EC (blue-gray secondary)
+  * Nav/Header: #243B53 (deep navy — only dark element)
+  * Primary accent: #1B4965 (deep ocean blue)
+  * Primary hover: #5294C4 (lighter blue)
+  * Primary tint: #E6F0F6 (selected/active backgrounds)
+  * Text heading: #102A43 (near-black navy)
+  * Text body: #243B53 (deep navy)
+  * Text secondary: #486581 (medium blue-gray)
+  * Text muted: #829AB1 (light blue-gray)
+  * Borders: #D9E2EC (default), #BCCCDC (hover), #829AB1 (strong)
+  * Pathogenic: #D64045 | Likely Path: #E07A3A | VUS: #D4A843
+  * Likely Benign: #5294C4 | Benign: #2B9F78
+  * Success: #2B9F78 | Warning: #D4A843 | Error: #D64045
 
-### Typography
+### Typography (UNCHANGED)
 - Headlines: "Outfit" (Google Fonts)
 - Body/UI text: "Plus Jakarta Sans"
 - Scientific data / gene symbols / variant IDs: "JetBrains Mono"
 - NEVER use Inter, Roboto, Arial, or system fonts
 
 ### Components
-- GlassCard: bg rgba(20, 27, 45, 0.7) + backdrop-blur-xl + subtle cyan border
-- AnimatedButton: gradient bg with glow hover
-- GlowBadge: colored pill with pulsing glow
-- DecodeText: characters cycle before resolving (DNA decoding effect)
-- DNA Helix animated background (subtle, CSS-only)
-- Particle field (CSS @keyframes, low opacity)
+- Card: white bg, 1px #D9E2EC border, 12px radius, subtle shadow
+- Badge: tint background + dark text from same color family
+- Button: solid #1B4965 primary, white outlined secondary
+- Inputs: white bg, #D9E2EC border, #1B4965 focus ring
+- Tables: white bg, subtle alternating rows, #F0F4F8 hover
+- Tabs: #E6F0F6 active bg, #1B4965 text + left border accent
+- Toast: white card, colored left border, light shadow
 
-### Animation
-- framer-motion for all React animations
-- Page transitions: fade + slide (200ms)
-- Cards: staggered reveal (50ms delay between)
+### Animation (simplified)
+- framer-motion for React animations
+- Page transitions: fade (200ms)
+- Cards: staggered fade-in (50ms delay)
 - Numbers: count-up animation
-- Data loading: "decode" shimmer effect (not gray pulse)
-- Hover: subtle glow increase
+- Hover: subtle shadow increase or 1px lift
+- Loading: light shimmer skeleton
 - All animations respect prefers-reduced-motion
+- NO glow, NO particles, NO decode effects, NO neon
 
 ### Code Conventions
 - Python: ruff linting, black formatting, type hints everywhere

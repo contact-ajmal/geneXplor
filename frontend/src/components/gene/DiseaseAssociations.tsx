@@ -21,7 +21,7 @@ export default function DiseaseAssociations({ diseases, geneSymbol, onDiseaseCli
   return (
     <GlassCard delay={delay}>
       <div className="mb-4">
-        <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
           Associated Conditions
         </h2>
         <p className="text-text-muted text-xs font-body mt-1">
@@ -59,7 +59,7 @@ export default function DiseaseAssociations({ diseases, geneSymbol, onDiseaseCli
       {hasMore && (
         <button
           onClick={() => setShowAll(!showAll)}
-          className="flex items-center gap-1 mt-4 text-text-muted hover:text-cyan text-xs font-body transition-colors cursor-pointer"
+          className="flex items-center gap-1 mt-4 text-text-muted hover:text-primary text-xs font-body transition-colors cursor-pointer"
         >
           {showAll ? 'Show less' : `Show all ${diseases.length} conditions`}
           <ChevronDown

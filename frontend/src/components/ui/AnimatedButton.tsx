@@ -13,17 +13,17 @@ interface AnimatedButtonProps {
 
 const styleVariants = {
   primary: `
-    bg-gradient-to-r from-cyan to-cyan-dim text-space-900 font-semibold
-    hover:shadow-[0_0_24px_rgba(0,212,255,0.35)]
+    bg-primary text-white font-semibold
+    hover:bg-primary-dark
     disabled:opacity-40 disabled:cursor-not-allowed
   `,
   secondary: `
-    bg-space-700/80 border border-space-500 text-text-primary
-    hover:border-cyan/30 hover:shadow-[0_0_16px_rgba(0,212,255,0.1)]
+    bg-white border border-ocean-100 text-primary
+    hover:bg-ocean-50 hover:border-ocean-200
   `,
   ghost: `
-    bg-transparent text-text-secondary hover:text-cyan
-    hover:bg-cyan/[0.05]
+    bg-transparent text-text-secondary
+    hover:text-primary hover:bg-ocean-50
   `,
 };
 
@@ -38,13 +38,13 @@ export default function AnimatedButton({
 }: AnimatedButtonProps) {
   return (
     <motion.button
-      whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
+      whileHover={{ scale: disabled || loading ? 1 : 1.01 }}
       whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
       type={type}
       onClick={onClick}
       className={`
         relative rounded-lg px-5 py-2.5 text-sm font-body
-        transition-all duration-200 cursor-pointer
+        transition-all duration-150 cursor-pointer
         ${styleVariants[variant]}
         ${loading ? 'overflow-hidden' : ''}
         ${className}

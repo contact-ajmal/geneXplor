@@ -14,8 +14,8 @@ interface ReconciliationPanelProps {
 }
 
 const SEVERITY_COLORS = {
-  HIGH: '#ff3366',
-  MEDIUM: '#ffaa00',
+  HIGH: '#D64045',
+  MEDIUM: '#D4A843',
   LOW: '#64748b',
 } as const;
 
@@ -29,10 +29,10 @@ const CONFLICT_TYPE_LABELS: Record<string, string> = {
 };
 
 function getScoreColor(score: number): string {
-  if (score >= 90) return '#00ff88';
-  if (score >= 70) return '#00d4ff';
-  if (score >= 50) return '#ffaa00';
-  return '#ff3366';
+  if (score >= 90) return '#2B9F78';
+  if (score >= 70) return '#1B4965';
+  if (score >= 50) return '#D4A843';
+  return '#D64045';
 }
 
 function getScoreLabel(score: number): string {
@@ -71,7 +71,7 @@ function ScoreRing({ score, size = 160 }: { score: number; size?: number }) {
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(148, 163, 184, 0.1)"
+          stroke="rgba(148, 163, 184, 0.15)"
           strokeWidth={8}
         />
         {/* Progress ring */}
@@ -87,7 +87,6 @@ function ScoreRing({ score, size = 160 }: { score: number; size?: number }) {
           initial={{ strokeDashoffset: circumference }}
           animate={{ strokeDashoffset: circumference - progress }}
           transition={{ duration: 1.5, ease: 'easeOut' }}
-          style={{ filter: `drop-shadow(0 0 6px ${color}40)` }}
         />
       </svg>
       {/* Center text */}
@@ -119,26 +118,26 @@ function VennDiagram({
     <div className="flex flex-col items-center">
       <svg width={280} height={180} viewBox="0 0 280 180">
         {/* ClinVar circle */}
-        <circle cx={105} cy={90} r={70} fill="rgba(0, 212, 255, 0.12)" stroke="#00d4ff" strokeWidth={1.5} />
+        <circle cx={105} cy={90} r={70} fill="rgba(27, 73, 101, 0.1)" stroke="#1B4965" strokeWidth={1.5} />
         {/* gnomAD circle */}
-        <circle cx={175} cy={90} r={70} fill="rgba(255, 51, 102, 0.12)" stroke="#ff3366" strokeWidth={1.5} />
+        <circle cx={175} cy={90} r={70} fill="rgba(214, 64, 69, 0.1)" stroke="#D64045" strokeWidth={1.5} />
 
         {/* Labels */}
-        <text x={65} y={90} textAnchor="middle" className="fill-cyan text-lg font-mono font-bold">
+        <text x={65} y={90} textAnchor="middle" className="fill-primary text-lg font-mono font-bold">
           {clinvarOnly}
         </text>
         <text x={65} y={108} textAnchor="middle" className="fill-text-muted text-[10px] font-body">
           ClinVar only
         </text>
 
-        <text x={140} y={85} textAnchor="middle" className="text-lg font-mono font-bold" style={{ fill: '#a78bfa' }}>
+        <text x={140} y={85} textAnchor="middle" className="text-lg font-mono font-bold" style={{ fill: '#7c3aed' }}>
           {both}
         </text>
         <text x={140} y={103} textAnchor="middle" className="fill-text-muted text-[10px] font-body">
           Both
         </text>
 
-        <text x={215} y={90} textAnchor="middle" className="fill-magenta text-lg font-mono font-bold">
+        <text x={215} y={90} textAnchor="middle" className="fill-danger text-lg font-mono font-bold">
           {gnomadOnly}
         </text>
         <text x={215} y={108} textAnchor="middle" className="fill-text-muted text-[10px] font-body">
@@ -147,15 +146,15 @@ function VennDiagram({
       </svg>
       <div className="flex items-center gap-4 mt-1">
         <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-cyan" />
+          <span className="w-2.5 h-2.5 rounded-full bg-primary" />
           <span className="text-text-muted text-[10px] font-body">ClinVar</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#a78bfa' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: '#7c3aed' }} />
           <span className="text-text-muted text-[10px] font-body">Both</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-magenta" />
+          <span className="w-2.5 h-2.5 rounded-full bg-danger" />
           <span className="text-text-muted text-[10px] font-body">gnomAD</span>
         </div>
       </div>
@@ -182,7 +181,7 @@ function ConflictCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
-      className="rounded-xl bg-[rgba(20,27,45,0.5)] border border-space-600/30 overflow-hidden hover:border-space-600/50 transition-colors"
+      className="rounded-xl bg-white border border-ocean-100 overflow-hidden hover:border-ocean-200 transition-colors"
       style={{ borderLeftWidth: 3, borderLeftColor: severityColor }}
     >
       <div className="p-4">
@@ -190,7 +189,7 @@ function ConflictCard({
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-2 flex-wrap">
             <span
-              className="font-mono text-cyan text-sm cursor-pointer hover:underline"
+              className="font-mono text-primary text-sm cursor-pointer hover:underline"
               onClick={() => onVariantClick?.(conflict.variant_id)}
             >
               {conflict.variant_id}
@@ -212,33 +211,33 @@ function ConflictCard({
         {/* Side-by-side comparison */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           {/* ClinVar side */}
-          <div className="rounded-lg bg-space-800/40 p-3">
-            <p className="text-cyan text-[10px] font-body font-semibold uppercase tracking-wider mb-2">ClinVar</p>
+          <div className="rounded-lg bg-ocean-50 p-3">
+            <p className="text-primary text-[10px] font-body font-semibold uppercase tracking-wider mb-2">ClinVar</p>
             <div className="space-y-1.5">
               <div className="flex justify-between">
                 <span className="text-text-muted text-xs">Significance</span>
-                <span className="text-text-primary text-xs font-mono">{conflict.clinvar_significance}</span>
+                <span className="text-text-heading text-xs font-mono">{conflict.clinvar_significance}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-text-muted text-xs">Review Status</span>
-                <span className="text-text-primary text-xs font-mono truncate ml-2">{conflict.clinvar_review_status || '\u2014'}</span>
+                <span className="text-text-heading text-xs font-mono truncate ml-2">{conflict.clinvar_review_status || '\u2014'}</span>
               </div>
               {conflict.clinvar_last_evaluated && (
                 <div className="flex justify-between">
                   <span className="text-text-muted text-xs">Last Evaluated</span>
-                  <span className="text-text-primary text-xs font-mono">{conflict.clinvar_last_evaluated.slice(0, 10)}</span>
+                  <span className="text-text-heading text-xs font-mono">{conflict.clinvar_last_evaluated.slice(0, 10)}</span>
                 </div>
               )}
             </div>
           </div>
 
           {/* gnomAD side */}
-          <div className="rounded-lg bg-space-800/40 p-3">
-            <p className="text-magenta text-[10px] font-body font-semibold uppercase tracking-wider mb-2">gnomAD</p>
+          <div className="rounded-lg bg-ocean-50 p-3">
+            <p className="text-danger text-[10px] font-body font-semibold uppercase tracking-wider mb-2">gnomAD</p>
             <div className="space-y-1.5">
               <div className="flex justify-between">
                 <span className="text-text-muted text-xs">Allele Freq</span>
-                <span className="text-text-primary text-xs font-mono">
+                <span className="text-text-heading text-xs font-mono">
                   {conflict.gnomad_af > 0 ? conflict.gnomad_af.toExponential(2) : '\u2014'}
                 </span>
               </div>
@@ -248,9 +247,9 @@ function ConflictCard({
                   {popEntries.slice(0, 5).map(([pop, af]) => (
                     <div key={pop} className="flex items-center gap-2">
                       <span className="text-text-muted text-[10px] font-mono w-8 uppercase">{pop}</span>
-                      <div className="flex-1 h-1.5 bg-space-700 rounded-full overflow-hidden">
+                      <div className="flex-1 h-1.5 bg-ocean-100 rounded-full overflow-hidden">
                         <motion.div
-                          className="h-full rounded-full bg-magenta/60"
+                          className="h-full rounded-full bg-danger/60"
                           initial={{ width: 0 }}
                           animate={{ width: `${maxPopAf > 0 ? (af / maxPopAf) * 100 : 0}%` }}
                           transition={{ duration: 0.5, delay: 0.2 }}
@@ -266,8 +265,8 @@ function ConflictCard({
         </div>
 
         {/* Recommendation */}
-        <div className="rounded-lg bg-amber/[0.04] border border-amber/10 p-2.5 mb-3">
-          <p className="text-amber/80 text-[11px] font-body">
+        <div className="rounded-lg bg-warning-light border border-warning/10 p-2.5 mb-3">
+          <p className="text-warning/80 text-[11px] font-body">
             <span className="font-semibold">Recommendation:</span> {conflict.recommendation}
           </p>
         </div>
@@ -279,7 +278,7 @@ function ConflictCard({
               href={conflict.external_links.clinvar}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-cyan/60 hover:text-cyan text-[10px] font-body transition-colors"
+              className="flex items-center gap-1 text-primary/60 hover:text-primary text-[10px] font-body transition-colors"
             >
               <ExternalLink className="w-3 h-3" /> ClinVar
             </a>
@@ -289,7 +288,7 @@ function ConflictCard({
               href={conflict.external_links.gnomad}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-magenta/60 hover:text-magenta text-[10px] font-body transition-colors"
+              className="flex items-center gap-1 text-danger/60 hover:text-danger text-[10px] font-body transition-colors"
             >
               <ExternalLink className="w-3 h-3" /> gnomAD
             </a>
@@ -307,9 +306,9 @@ function CustomTooltip(props: any) {
   if (!active || !payload?.length) return null;
   const data = payload[0].payload;
   return (
-    <div className="bg-space-800 border border-space-600/50 rounded-lg px-3 py-2 shadow-lg">
-      <p className="text-text-primary text-xs font-body">{data.name}</p>
-      <p className="text-cyan text-sm font-mono font-bold">{data.count}</p>
+    <div className="bg-white border border-ocean-100 rounded-lg px-3 py-2 shadow-lg">
+      <p className="text-text-heading text-xs font-body">{data.name}</p>
+      <p className="text-primary text-sm font-mono font-bold">{data.count}</p>
     </div>
   );
 }
@@ -346,10 +345,10 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
   }, [summary.by_type]);
 
   const TYPE_COLORS: Record<string, string> = {
-    pathogenic_but_common: '#ff3366',
-    vus_high_frequency: '#ffaa00',
-    population_stratification: '#00d4ff',
-    conflicting_submissions: '#a78bfa',
+    pathogenic_but_common: '#D64045',
+    vus_high_frequency: '#D4A843',
+    population_stratification: '#1B4965',
+    conflicting_submissions: '#7c3aed',
     classification_age: '#64748b',
     benign_but_absent: '#94a3b8',
   };
@@ -360,8 +359,8 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
       <GlassCard delay={delay}>
         <div className="mb-4">
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-helix-green" />
-            <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+            <Shield className="w-5 h-5 text-success" />
+            <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
               Database Reconciliation
             </h2>
           </div>
@@ -376,9 +375,9 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, delay: 0.3 }}
           >
-            <CheckCircle className="w-16 h-16 text-helix-green mb-4" style={{ filter: 'drop-shadow(0 0 12px rgba(0, 255, 136, 0.3))' }} />
+            <CheckCircle className="w-16 h-16 text-success mb-4" />
           </motion.div>
-          <p className="text-helix-green font-heading font-semibold text-lg mb-1">All Clear</p>
+          <p className="text-success font-heading font-semibold text-lg mb-1">All Clear</p>
           <p className="text-text-secondary text-sm font-body text-center">
             All variants show consistent data across databases
           </p>
@@ -399,8 +398,8 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
       {/* Title */}
       <div className="mb-5">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-cyan" />
-          <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+          <Shield className="w-5 h-5 text-primary" />
+          <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
             Database Reconciliation
           </h2>
         </div>
@@ -427,7 +426,7 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
         <div className="flex flex-col justify-center">
           <p className="text-text-muted text-[10px] font-body uppercase tracking-wider mb-2">Conflicts by Severity</p>
           {/* Stacked bar */}
-          <div className="h-6 rounded-full overflow-hidden flex bg-space-700/50">
+          <div className="h-6 rounded-full overflow-hidden flex bg-ocean-100">
             {(['HIGH', 'MEDIUM', 'LOW'] as const).map(sev => {
               const count = summary.by_severity[sev] || 0;
               if (count === 0) return null;
@@ -444,7 +443,7 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
                   title={`${sev}: ${count}`}
                 >
                   {pct > 15 && (
-                    <span className="text-[10px] font-mono font-bold text-space-900">{count}</span>
+                    <span className="text-[10px] font-mono font-bold text-white">{count}</span>
                   )}
                 </motion.div>
               );
@@ -490,7 +489,7 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
                   type="category"
                   dataKey="name"
                   width={120}
-                  tick={{ fill: '#94a3b8', fontSize: 10, fontFamily: 'Plus Jakarta Sans' }}
+                  tick={{ fill: '#64748b', fontSize: 10, fontFamily: 'Plus Jakarta Sans' }}
                   axisLine={false}
                   tickLine={false}
                 />
@@ -515,7 +514,7 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
           {severityFilter && (
             <button
               onClick={() => setSeverityFilter(null)}
-              className="text-cyan text-[10px] font-body hover:underline cursor-pointer"
+              className="text-primary text-[10px] font-body hover:underline cursor-pointer"
             >
               Clear filter
             </button>
@@ -537,7 +536,7 @@ export default function ReconciliationPanel({ reconciliation, delay = 0, onVaria
         {(severityFilter ? conflicts.filter(c => c.severity === severityFilter) : conflicts).length > 5 && (
           <button
             onClick={() => setShowAll(!showAll)}
-            className="flex items-center gap-1.5 mx-auto text-cyan text-xs font-body hover:underline cursor-pointer mt-2"
+            className="flex items-center gap-1.5 mx-auto text-primary text-xs font-body hover:underline cursor-pointer mt-2"
           >
             <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showAll ? 'rotate-180' : ''}`} />
             {showAll

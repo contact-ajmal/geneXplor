@@ -8,11 +8,11 @@ interface CompareLoadingPageProps {
 }
 
 const DATA_SOURCES = [
-  { name: 'Ensembl', label: 'Querying genome database...', color: '#00d4ff' },
-  { name: 'UniProt', label: 'Fetching protein data...', color: '#ffaa00' },
-  { name: 'ClinVar', label: 'Loading clinical variants...', color: '#ff3366' },
-  { name: 'gnomAD', label: 'Retrieving frequencies...', color: '#00ff88' },
-  { name: 'PubMed', label: 'Searching literature...', color: '#00d4ff' },
+  { name: 'Ensembl', label: 'Querying genome database...', color: '#1A7FA0' },
+  { name: 'UniProt', label: 'Fetching protein data...', color: '#D97706' },
+  { name: 'ClinVar', label: 'Loading clinical variants...', color: '#DC2626' },
+  { name: 'gnomAD', label: 'Retrieving frequencies...', color: '#059669' },
+  { name: 'PubMed', label: 'Searching literature...', color: '#1A7FA0' },
 ];
 
 export default function CompareLoadingPage({
@@ -36,23 +36,15 @@ export default function CompareLoadingPage({
     ((completedA + completedB) / (DATA_SOURCES.length * 2)) * 100;
 
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-space-900/95 backdrop-blur-md">
+    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-white/95">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         className="relative mb-6"
       >
         <GitCompare
-          className="w-16 h-16 text-cyan"
+          className="w-16 h-16 text-primary"
           style={{ animation: 'spin-slow 3s linear infinite' }}
-        />
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            boxShadow:
-              '0 0 40px rgba(0,212,255,0.2), 0 0 80px rgba(0,212,255,0.1)',
-            animation: 'glow-pulse 2s ease-in-out infinite',
-          }}
         />
       </motion.div>
 
@@ -62,11 +54,11 @@ export default function CompareLoadingPage({
         transition={{ delay: 0.2 }}
         className="text-center mb-8"
       >
-        <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
+        <h2 className="text-2xl font-heading font-bold text-text-heading mb-2">
           Comparing{' '}
-          <span className="font-mono text-cyan">{symbolA}</span>
+          <span className="font-mono text-primary">{symbolA}</span>
           <span className="text-text-muted mx-2">vs</span>
-          <span className="font-mono text-magenta">{symbolB}</span>
+          <span className="font-mono text-danger">{symbolB}</span>
         </h2>
         <p className="text-text-secondary text-sm font-body">
           Fetching data for both genes simultaneously
@@ -77,7 +69,7 @@ export default function CompareLoadingPage({
       <div className="grid grid-cols-2 gap-x-8 gap-y-0 w-full max-w-lg">
         {/* Gene A column */}
         <div>
-          <p className="text-xs font-mono text-cyan text-center mb-2">
+          <p className="text-xs font-mono text-primary text-center mb-2">
             {symbolA}
           </p>
           {DATA_SOURCES.map((source, i) => {
@@ -90,7 +82,7 @@ export default function CompareLoadingPage({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + i * 0.08 }}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-300 ${
-                  active ? 'bg-space-700/60 border border-cyan/20' : ''
+                  active ? 'bg-ocean-50 border border-ocean-200' : ''
                 }`}
               >
                 <AnimatePresence mode="wait">
@@ -126,7 +118,7 @@ export default function CompareLoadingPage({
                       }}
                     />
                   ) : (
-                    <div className="w-3.5 h-3.5 rounded-full border border-space-500/50 shrink-0" />
+                    <div className="w-3.5 h-3.5 rounded-full border border-ocean-200 shrink-0" />
                   )}
                 </AnimatePresence>
                 <span
@@ -134,7 +126,7 @@ export default function CompareLoadingPage({
                     done
                       ? 'text-text-secondary'
                       : active
-                        ? 'text-text-primary'
+                        ? 'text-text-heading'
                         : 'text-text-muted'
                   }`}
                 >
@@ -147,7 +139,7 @@ export default function CompareLoadingPage({
 
         {/* Gene B column */}
         <div>
-          <p className="text-xs font-mono text-magenta text-center mb-2">
+          <p className="text-xs font-mono text-danger text-center mb-2">
             {symbolB}
           </p>
           {DATA_SOURCES.map((source, i) => {
@@ -160,7 +152,7 @@ export default function CompareLoadingPage({
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.35 + i * 0.08 }}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all duration-300 ${
-                  active ? 'bg-space-700/60 border border-magenta/20' : ''
+                  active ? 'bg-ocean-50 border border-ocean-200' : ''
                 }`}
               >
                 <AnimatePresence mode="wait">
@@ -196,7 +188,7 @@ export default function CompareLoadingPage({
                       }}
                     />
                   ) : (
-                    <div className="w-3.5 h-3.5 rounded-full border border-space-500/50 shrink-0" />
+                    <div className="w-3.5 h-3.5 rounded-full border border-ocean-200 shrink-0" />
                   )}
                 </AnimatePresence>
                 <span
@@ -204,7 +196,7 @@ export default function CompareLoadingPage({
                     done
                       ? 'text-text-secondary'
                       : active
-                        ? 'text-text-primary'
+                        ? 'text-text-heading'
                         : 'text-text-muted'
                   }`}
                 >
@@ -223,9 +215,9 @@ export default function CompareLoadingPage({
         transition={{ delay: 0.6 }}
         className="w-full max-w-lg mt-6"
       >
-        <div className="h-1 rounded-full bg-space-700 overflow-hidden">
+        <div className="h-1 rounded-full bg-ocean-100 overflow-hidden">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-cyan via-purple-400 to-magenta"
+            className="h-full rounded-full bg-gradient-to-r from-primary via-chart-5 to-danger"
             initial={{ width: '0%' }}
             animate={{ width: `${totalProgress}%` }}
             transition={{ duration: 0.5, ease: 'easeOut' }}

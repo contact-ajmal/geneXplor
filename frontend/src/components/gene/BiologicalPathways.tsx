@@ -1,6 +1,6 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, ChevronDown, ChevronUp, Network } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import type { PathwayData, PathwayEntry } from '../../lib/api';
 import GlassCard from '../ui/GlassCard';
@@ -14,12 +14,12 @@ interface BiologicalPathwaysProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'Signal Transduction': '#00d4ff',
-  'Cell Cycle': '#ff3366',
-  'DNA Repair': '#ffaa00',
+  'Signal Transduction': '#1B4965',
+  'Cell Cycle': '#D64045',
+  'DNA Repair': '#D4A843',
   'Immune System': '#a855f7',
   'Apoptosis': '#ff8c00',
-  'Metabolism': '#00ff88',
+  'Metabolism': '#2B9F78',
   'Gene Expression': '#4a9eff',
   'Transport': '#e879f9',
   'Disease': '#f97316',
@@ -27,7 +27,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   'Unclassified': '#475569',
 };
 
-const FALLBACK_COLORS = ['#00d4ff', '#ff3366', '#00ff88', '#ffaa00', '#a855f7', '#4a9eff', '#ff8c00', '#e879f9'];
+const FALLBACK_COLORS = ['#1B4965', '#D64045', '#2B9F78', '#D4A843', '#a855f7', '#4a9eff', '#ff8c00', '#e879f9'];
 
 function getCategoryColor(category: string): string {
   return CATEGORY_COLORS[category] || FALLBACK_COLORS[Math.abs(hashCode(category)) % FALLBACK_COLORS.length];
@@ -79,11 +79,11 @@ export default function BiologicalPathways({ pathways, geneSymbol, delay = 0 }: 
   return (
     <GlassCard delay={delay}>
       <div className="mb-4">
-        <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
           Biological Pathways
         </h2>
         <p className="text-text-muted text-xs font-body mt-1">
-          Pathways and processes involving <span className="font-mono text-cyan">{geneSymbol}</span>
+          Pathways and processes involving <span className="font-mono text-primary">{geneSymbol}</span>
           {' '}&mdash; {pathways.total_pathways} pathways found
         </p>
       </div>
@@ -125,9 +125,9 @@ export default function BiologicalPathways({ pathways, geneSymbol, delay = 0 }: 
                         if (!payload?.length) return null;
                         const d = payload[0].payload;
                         return (
-                          <div className="bg-space-700/95 backdrop-blur-md border border-cyan/20 rounded-lg px-3 py-2 shadow-lg">
-                            <p className="text-text-primary text-xs font-body">{d.name}</p>
-                            <p className="text-cyan text-xs font-mono">{d.value} pathways</p>
+                          <div className="bg-white border border-ocean-100 rounded-lg px-3 py-2 shadow-lg">
+                            <p className="text-text-heading text-xs font-body">{d.name}</p>
+                            <p className="text-primary text-xs font-mono">{d.value} pathways</p>
                           </div>
                         );
                       }}
@@ -141,7 +141,7 @@ export default function BiologicalPathways({ pathways, geneSymbol, delay = 0 }: 
                     key={cat.name}
                     onClick={() => handleCategoryClick(cat.name)}
                     className={`flex items-center gap-2 text-left px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                      categoryFilter === cat.name ? 'bg-cyan/10' : 'hover:bg-cyan/[0.04]'
+                      categoryFilter === cat.name ? 'bg-primary-light' : 'hover:bg-ocean-50'
                     }`}
                   >
                     <span
@@ -155,7 +155,7 @@ export default function BiologicalPathways({ pathways, geneSymbol, delay = 0 }: 
                 {categoryFilter && (
                   <button
                     onClick={() => setCategoryFilter(null)}
-                    className="text-cyan text-xs font-body mt-1 text-left px-2 cursor-pointer hover:underline"
+                    className="text-primary text-xs font-body mt-1 text-left px-2 cursor-pointer hover:underline"
                   >
                     Clear filter
                   </button>
@@ -200,7 +200,7 @@ export default function BiologicalPathways({ pathways, geneSymbol, delay = 0 }: 
   );
 }
 
-// ── Pathway Card ──
+// -- Pathway Card --
 
 function PathwayCard({
   pathway,
@@ -217,8 +217,8 @@ function PathwayCard({
     <div
       className={`rounded-xl border transition-colors ${
         isExpanded
-          ? 'border-cyan/15 bg-space-700/40'
-          : 'border-space-600/20 bg-space-800/20 hover:border-space-600/40'
+          ? 'border-ocean-200 bg-ocean-50'
+          : 'border-ocean-100 bg-white hover:border-ocean-200'
       }`}
     >
       <button
@@ -228,7 +228,7 @@ function PathwayCard({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h3 className="text-sm font-body font-semibold text-text-primary">
+              <h3 className="text-sm font-body font-semibold text-text-heading">
                 {pathway.name}
               </h3>
               <GlowBadge color={pathway.source === 'Reactome' ? 'cyan' : 'amber'} className="text-[9px] px-1.5 py-0">
@@ -257,7 +257,7 @@ function PathwayCard({
               target="_blank"
               rel="noopener noreferrer"
               onClick={e => e.stopPropagation()}
-              className="p-1 rounded text-text-muted hover:text-cyan transition-colors"
+              className="p-1 rounded text-text-muted hover:text-primary transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
@@ -294,7 +294,7 @@ function PathwayCard({
                   <ul className="space-y-1">
                     {pathway.sub_events.map((event, i) => (
                       <li key={i} className="text-text-secondary text-xs font-body flex items-start gap-2">
-                        <span className="text-cyan/50 mt-0.5 shrink-0">&#8226;</span>
+                        <span className="text-primary/50 mt-0.5 shrink-0">&#8226;</span>
                         {event}
                       </li>
                     ))}
@@ -320,7 +320,7 @@ function PathwayCard({
   );
 }
 
-// ── Pathway Network Mini-Viz (SVG force-like layout) ──
+// -- Pathway Network Mini-Viz (SVG force-like layout) --
 
 function PathwayNetworkViz({
   pathways,
@@ -396,20 +396,9 @@ function PathwayNetworkViz({
               r={hoveredNode === node.pathway.id ? node.r + 2 : node.r}
               fill={node.color}
               opacity={hoveredNode === node.pathway.id ? 0.9 : 0.6}
-              stroke={hoveredNode === node.pathway.id ? '#fff' : 'none'}
+              stroke={hoveredNode === node.pathway.id ? '#333' : 'none'}
               strokeWidth={1}
             />
-            {hoveredNode === node.pathway.id && (
-              <circle
-                cx={node.x}
-                cy={node.y}
-                r={node.r + 6}
-                fill="none"
-                stroke={node.color}
-                strokeWidth={0.8}
-                opacity={0.3}
-              />
-            )}
           </g>
         ))}
 
@@ -418,9 +407,9 @@ function PathwayNetworkViz({
           cx={cx}
           cy={cy}
           r={14}
-          fill="#00d4ff"
+          fill="#1B4965"
           opacity={0.9}
-          stroke="#fff"
+          stroke="#333"
           strokeWidth={1.5}
         />
         <circle
@@ -428,7 +417,7 @@ function PathwayNetworkViz({
           cy={cy}
           r={20}
           fill="none"
-          stroke="#00d4ff"
+          stroke="#1B4965"
           strokeWidth={0.8}
           opacity={0.2}
         />
@@ -437,7 +426,7 @@ function PathwayNetworkViz({
           y={cy + 1}
           textAnchor="middle"
           dominantBaseline="middle"
-          fill="#0a0e1a"
+          fill="#ffffff"
           fontSize={7}
           fontFamily="JetBrains Mono, monospace"
           fontWeight={600}
@@ -453,9 +442,9 @@ function PathwayNetworkViz({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-space-700/95 backdrop-blur-md border border-cyan/20 rounded-lg px-3 py-1.5 shadow-lg pointer-events-none"
+            className="absolute bottom-1 left-1/2 -translate-x-1/2 bg-white border border-ocean-100 rounded-lg px-3 py-1.5 shadow-lg pointer-events-none"
           >
-            <p className="text-text-primary text-xs font-body truncate max-w-[200px]">
+            <p className="text-text-heading text-xs font-body truncate max-w-[200px]">
               {nodes.find(n => n.pathway.id === hoveredNode)?.pathway.name}
             </p>
             <p className="text-text-muted text-[10px] font-mono">

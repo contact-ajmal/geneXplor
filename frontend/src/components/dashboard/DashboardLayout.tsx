@@ -78,16 +78,16 @@ export default function DashboardLayout() {
           transition={{ duration: 0.5 }}
         >
           <div className="relative w-20 h-20 mx-auto mb-6">
-            <Dna className="w-20 h-20 text-magenta/40" />
+            <Dna className="w-20 h-20 text-danger/40" />
           </div>
-          <div className="p-6 rounded-2xl bg-magenta/5 border border-magenta/20 mb-6">
-            <AlertCircle className="w-6 h-6 text-magenta mx-auto mb-3" />
-            <h2 className="text-lg font-heading font-semibold text-text-primary mb-2">Gene not found</h2>
+          <div className="p-6 rounded-2xl bg-danger-light border border-danger/20 mb-6">
+            <AlertCircle className="w-6 h-6 text-danger mx-auto mb-3" />
+            <h2 className="text-lg font-heading font-semibold text-text-heading mb-2">Gene not found</h2>
             <p className="text-text-secondary text-sm font-body mb-4">
-              Gene &lsquo;<span className="font-mono text-cyan">{upperSymbol}</span>&rsquo; was not found.
-              Try searching for <span className="font-mono text-cyan">TP53</span>,{' '}
-              <span className="font-mono text-cyan">BRCA1</span>, or{' '}
-              <span className="font-mono text-cyan">EGFR</span>.
+              Gene &lsquo;<span className="font-mono text-primary">{upperSymbol}</span>&rsquo; was not found.
+              Try searching for <span className="font-mono text-primary">TP53</span>,{' '}
+              <span className="font-mono text-primary">BRCA1</span>, or{' '}
+              <span className="font-mono text-primary">EGFR</span>.
             </p>
             <p className="text-text-muted text-xs font-body">{error.message}</p>
           </div>
@@ -118,7 +118,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-0">
+    <div className="flex flex-col flex-1 min-h-0 bg-ocean-50">
       {/* Breadcrumb */}
       <Breadcrumb symbol={upperSymbol} />
 
@@ -143,7 +143,7 @@ export default function DashboardLayout() {
         />
 
         {/* Tab Content */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden bg-ocean-50">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

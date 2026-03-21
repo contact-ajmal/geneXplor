@@ -35,7 +35,7 @@ export default function VariantsTab() {
 
   if (!variants || variants.variants.length === 0) {
     return (
-      <div className="rounded-2xl border border-space-600/20 p-6 bg-space-800/20 text-center">
+      <div className="rounded-2xl border border-ocean-100 p-6 bg-ocean-50 text-center">
         <p className="text-sm font-heading font-semibold text-text-muted uppercase tracking-wider mb-2">
           Variant Explorer
         </p>
@@ -74,7 +74,7 @@ export default function VariantsTab() {
           className="xl:col-span-2"
         >
           <Suspense fallback={
-            <div className="rounded-2xl border border-cyan/[0.05] p-5 bg-[rgba(20,27,45,0.5)] backdrop-blur-xl">
+            <div className="rounded-2xl border border-ocean-100 p-5 bg-white">
               <div className="h-5 w-48 rounded skeleton-shimmer mb-4" />
               <div className="h-48 rounded skeleton-shimmer" />
             </div>

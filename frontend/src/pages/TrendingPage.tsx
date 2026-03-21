@@ -96,8 +96,8 @@ export default function TrendingPage() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <h1 className="text-4xl md:text-5xl font-heading font-bold text-text-primary mb-2">
-          <DecodeText text="Trending Genes" speed={35} className="text-cyan" />
+        <h1 className="text-4xl md:text-5xl font-heading font-bold text-text-heading mb-2">
+          <DecodeText text="Trending Genes" speed={35} className="text-primary" />
         </h1>
         <p className="text-text-secondary font-body text-lg">
           Which genes are getting the most research attention right now?
@@ -108,17 +108,17 @@ export default function TrendingPage() {
       {geneOfDay && (
         <ScrollReveal>
           <GlassCard className="mb-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-cyan/5 to-transparent pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/5 to-transparent pointer-events-none" />
             <div className="flex items-center gap-2 mb-3">
-              <Flame className="w-5 h-5 text-amber" />
-              <span className="text-xs font-heading font-semibold text-amber uppercase tracking-wider">
+              <Flame className="w-5 h-5 text-warning" />
+              <span className="text-xs font-heading font-semibold text-warning uppercase tracking-wider">
                 Gene of the Day
               </span>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-3xl font-mono font-bold text-cyan">{geneOfDay.gene_symbol}</span>
+                  <span className="text-3xl font-mono font-bold text-primary">{geneOfDay.gene_symbol}</span>
                   <TrendBadge direction={geneOfDay.trend_direction} ratio={geneOfDay.trend_ratio} />
                   {geneOfDay.category && (
                     <GlowBadge color="muted" className="text-[10px]">
@@ -127,7 +127,7 @@ export default function TrendingPage() {
                   )}
                 </div>
                 <p className="text-text-secondary text-sm font-body">
-                  <span className="font-mono text-cyan">{geneOfDay.last_12_months.toLocaleString()}</span> papers in the last 12 months
+                  <span className="font-mono text-primary">{geneOfDay.last_12_months.toLocaleString()}</span> papers in the last 12 months
                   {geneOfDay.prior_12_months > 0 && (
                     <>, up from <span className="font-mono">{geneOfDay.prior_12_months.toLocaleString()}</span> the year before</>
                   )}
@@ -163,8 +163,8 @@ export default function TrendingPage() {
               onClick={() => setCategoryFilter(cat.key)}
               className={`px-3 py-1.5 rounded-full text-xs font-body transition-all cursor-pointer border
                 ${categoryFilter === cat.key
-                  ? 'bg-cyan/10 text-cyan border-cyan/25'
-                  : 'bg-space-800/40 text-text-muted border-space-600/20 hover:border-space-500/40 hover:text-text-secondary'
+                  ? 'bg-primary-light text-primary border-primary/25'
+                  : 'bg-ocean-50 text-text-muted border-ocean-100 hover:border-ocean-200 hover:text-text-secondary'
                 }
               `}
             >
@@ -180,7 +180,7 @@ export default function TrendingPage() {
         <ScrollReveal delay={0.1} className="lg:col-span-5">
           <GlassCard hover={false}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider">
+              <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider">
                 {categoryFilter === 'all' ? 'All Trending' : data.categories[categoryFilter] || categoryFilter}
               </h2>
               <span className="text-text-muted text-xs font-body">{filteredTrending.length} genes</span>
@@ -189,7 +189,7 @@ export default function TrendingPage() {
             <div className="overflow-x-auto -mx-5 px-5">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-space-600/30">
+                  <tr className="border-b border-ocean-100">
                     <th className="text-left py-2 px-2 text-text-muted text-xs font-body font-semibold uppercase tracking-wider">#</th>
                     <th className="text-left py-2 px-2 text-text-muted text-xs font-body font-semibold uppercase tracking-wider">Gene</th>
                     <th className="text-right py-2 px-2 text-text-muted text-xs font-body font-semibold uppercase tracking-wider">Last 12mo</th>
@@ -205,19 +205,19 @@ export default function TrendingPage() {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.03 }}
-                      className="border-b border-space-600/10 hover:bg-cyan/[0.02] transition-colors cursor-pointer"
+                      className="border-b border-ocean-50 hover:bg-ocean-50 transition-colors cursor-pointer"
                       onClick={() => navigate(`/gene/${gene.gene_symbol}`)}
                     >
                       <td className="py-2.5 px-2 text-text-muted text-xs font-mono">{i + 1}</td>
                       <td className="py-2.5 px-2">
-                        <span className="font-mono text-cyan text-sm font-semibold">{gene.gene_symbol}</span>
+                        <span className="font-mono text-primary text-sm font-semibold">{gene.gene_symbol}</span>
                         {gene.category && (
                           <span className="ml-2 text-text-muted text-[10px] font-body hidden md:inline">
                             {data.categories[gene.category] || ''}
                           </span>
                         )}
                       </td>
-                      <td className="py-2.5 px-2 text-right font-mono text-xs text-text-primary">
+                      <td className="py-2.5 px-2 text-right font-mono text-xs text-text-heading">
                         {gene.last_12_months.toLocaleString()}
                       </td>
                       <td className="py-2.5 px-2 text-center">
@@ -253,21 +253,21 @@ export default function TrendingPage() {
         {/* Bubble Chart (45%) */}
         <ScrollReveal delay={0.15} className="lg:col-span-4">
           <GlassCard hover={false}>
-            <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider mb-4">
+            <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider mb-4">
               Research Landscape
             </h2>
             <BubbleChart genes={filteredTrending} onGeneClick={(sym) => navigate(`/gene/${sym}`)} />
             <div className="grid grid-cols-2 gap-2 mt-4 text-[10px] font-body text-text-muted">
               <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-helix-green/60" />
+                <span className="w-2 h-2 rounded-full bg-success/60" />
                 Top-right: Hot & Established
               </div>
               <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-cyan/60" />
+                <span className="w-2 h-2 rounded-full bg-primary/60" />
                 Top-left: Emerging
               </div>
               <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-amber/60" />
+                <span className="w-2 h-2 rounded-full bg-warning/60" />
                 Bottom-right: Stable & Established
               </div>
               <div className="flex items-center gap-1">
@@ -289,7 +289,7 @@ export default function TrendingPage() {
   );
 }
 
-// ── Bubble Chart ──
+// -- Bubble Chart --
 
 function BubbleChart({ genes, onGeneClick }: {
   genes: TrendingGeneEntry[];
@@ -326,8 +326,8 @@ function BubbleChart({ genes, onGeneClick }: {
     <div className="relative">
       <svg viewBox="0 0 300 240" className="w-full h-auto">
         {/* Quadrant lines */}
-        <line x1={150} y1={0} x2={150} y2={240} stroke="currentColor" className="text-space-600/20" strokeDasharray="4,4" />
-        <line x1={0} y1={120} x2={300} y2={120} stroke="currentColor" className="text-space-600/20" strokeDasharray="4,4" />
+        <line x1={150} y1={0} x2={150} y2={240} stroke="currentColor" className="text-ocean-200" strokeDasharray="4,4" />
+        <line x1={0} y1={120} x2={300} y2={120} stroke="currentColor" className="text-ocean-200" strokeDasharray="4,4" />
 
         {/* Axis labels */}
         <text x={150} y={236} textAnchor="middle" className="fill-text-muted text-[8px] font-body">
@@ -340,10 +340,10 @@ function BubbleChart({ genes, onGeneClick }: {
         {/* Bubbles */}
         {chartData.map((d, i) => {
           const color = d.direction === 'rising'
-            ? d.x > 150 ? '#00ff88' : '#00d4ff'  // Hot/Emerging
+            ? d.x > 150 ? '#2B9F78' : '#1B4965'  // Hot/Emerging
             : d.direction === 'declining'
-              ? '#ff3366'
-              : '#ffaa00';
+              ? '#D64045'
+              : '#D4A843';
 
           return (
             <g
@@ -359,7 +359,7 @@ function BubbleChart({ genes, onGeneClick }: {
                 r={d.r}
                 fill={color}
                 opacity={hoveredIdx === i ? 0.9 : 0.5}
-                stroke={hoveredIdx === i ? '#fff' : 'none'}
+                stroke={hoveredIdx === i ? '#1e293b' : 'none'}
                 strokeWidth={1}
                 className="transition-all duration-200"
               />
@@ -368,7 +368,7 @@ function BubbleChart({ genes, onGeneClick }: {
                   x={d.x + 10}
                   y={d.y + 3}
                   textAnchor="middle"
-                  className="fill-text-primary font-mono font-bold pointer-events-none"
+                  className="fill-text-heading font-mono font-bold pointer-events-none"
                   fontSize={hoveredIdx === i ? 9 : 7}
                 >
                   {d.symbol}
@@ -381,8 +381,8 @@ function BubbleChart({ genes, onGeneClick }: {
 
       {/* Tooltip */}
       {hoveredIdx !== null && chartData[hoveredIdx] && (
-        <div className="absolute top-2 right-2 p-2 rounded-lg bg-space-800/90 border border-cyan/20 text-xs z-10">
-          <p className="font-mono text-cyan font-bold">{chartData[hoveredIdx].symbol}</p>
+        <div className="absolute top-2 right-2 p-2 rounded-lg bg-white border border-ocean-200 text-xs z-10 shadow-md">
+          <p className="font-mono text-primary font-bold">{chartData[hoveredIdx].symbol}</p>
           <p className="text-text-muted">Total: {chartData[hoveredIdx].total.toLocaleString()}</p>
           <p className="text-text-muted">Last 12mo: {chartData[hoveredIdx].last12.toLocaleString()}</p>
           <p className="text-text-muted">Trend: {chartData[hoveredIdx].direction}</p>

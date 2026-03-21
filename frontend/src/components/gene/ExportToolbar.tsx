@@ -116,29 +116,29 @@ export default function ExportToolbar({
     };
 
     // ── Cover page ──
-    pdf.setFillColor(10, 14, 26);
+    pdf.setFillColor(255, 255, 255);
     pdf.rect(0, 0, pageWidth, pageHeight, 'F');
 
     // Logo text
     pdf.setFontSize(12);
-    pdf.setTextColor(0, 212, 255);
+    pdf.setTextColor(27, 73, 101);
     pdf.text('GeneXplor', pageWidth / 2, 40, { align: 'center' });
 
     // Gene symbol
     pdf.setFontSize(48);
-    pdf.setTextColor(0, 212, 255);
+    pdf.setTextColor(27, 73, 101);
     pdf.text(gene.gene_symbol, pageWidth / 2, 80, { align: 'center' });
 
     // Gene name
     pdf.setFontSize(14);
-    pdf.setTextColor(226, 232, 240);
+    pdf.setTextColor(30, 41, 59);
     const geneName = gene.gene_name || gene.description;
     const nameLines = pdf.splitTextToSize(geneName, contentWidth);
     pdf.text(nameLines, pageWidth / 2, 95, { align: 'center' });
 
     // Report title
     pdf.setFontSize(18);
-    pdf.setTextColor(148, 163, 184);
+    pdf.setTextColor(100, 116, 139);
     pdf.text('Gene Dashboard Report', pageWidth / 2, 120, { align: 'center' });
 
     // Date
@@ -152,13 +152,13 @@ export default function ExportToolbar({
 
     // Data sources
     pdf.setFontSize(10);
-    pdf.setTextColor(148, 163, 184);
+    pdf.setTextColor(100, 116, 139);
     pdf.text('Data Sources', pageWidth / 2, 170, { align: 'center' });
 
     const sources = Object.entries(metadata.data_sources);
     pdf.setFontSize(8);
     sources.forEach(([source, ok], i) => {
-      pdf.setTextColor(ok ? 0 : 150, ok ? 255 : 80, ok ? 136 : 80);
+      pdf.setTextColor(ok ? 43 : 150, ok ? 159 : 80, ok ? 120 : 80);
       pdf.text(
         `${ok ? '\u2713' : '\u2717'} ${source.charAt(0).toUpperCase() + source.slice(1)}`,
         pageWidth / 2,
@@ -176,12 +176,12 @@ export default function ExportToolbar({
       if (!el) continue;
 
       pdf.addPage();
-      pdf.setFillColor(10, 14, 26);
+      pdf.setFillColor(255, 255, 255);
       pdf.rect(0, 0, pageWidth, pageHeight, 'F');
 
       try {
         const canvas = await html2canvas(el, {
-          backgroundColor: '#0a0e1a',
+          backgroundColor: '#ffffff',
           scale: 2,
           useCORS: true,
           logging: false,
@@ -282,10 +282,10 @@ export default function ExportToolbar({
             initial={{ opacity: 0, width: 0 }}
             animate={{ opacity: 1, width: 120 }}
             exit={{ opacity: 0, width: 0 }}
-            className="h-1 rounded-full bg-space-700 overflow-hidden ml-2"
+            className="h-1 rounded-full bg-ocean-100 overflow-hidden ml-2"
           >
             <motion.div
-              className="h-full bg-cyan rounded-full"
+              className="h-full bg-primary rounded-full"
               initial={{ width: '0%' }}
               animate={{
                 width: `${(pdfProgress.current / pdfProgress.total) * 100}%`,

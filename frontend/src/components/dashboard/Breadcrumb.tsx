@@ -33,12 +33,8 @@ export default function Breadcrumb({ symbol }: BreadcrumbProps) {
 
   return (
     <div
-      className="hidden md:block border-b border-cyan/[0.04] px-6"
-      style={{
-        height: '36px',
-        background: 'rgba(10, 14, 26, 0.5)',
-        backdropFilter: 'blur(8px)',
-      }}
+      className="hidden md:block bg-white border-b border-ocean-100 px-6"
+      style={{ height: '36px' }}
     >
       <div className="max-w-[1600px] mx-auto h-full flex items-center gap-1.5">
         {crumbs.map((crumb, i) => (
@@ -47,13 +43,13 @@ export default function Breadcrumb({ symbol }: BreadcrumbProps) {
             {crumb.href && i < crumbs.length - 1 ? (
               <Link
                 to={crumb.href}
-                className="text-xs font-body text-text-muted hover:text-cyan transition-colors flex items-center gap-1"
+                className="text-xs font-body text-text-muted hover:text-primary transition-colors flex items-center gap-1"
               >
                 {i === 0 && <Home className="w-3 h-3" />}
                 {crumb.label}
               </Link>
             ) : (
-              <span className={`text-xs font-body ${i === crumbs.length - 1 ? 'text-text-primary' : 'text-text-muted'}`}>
+              <span className={`text-xs font-body ${i === crumbs.length - 1 ? 'text-text-heading' : 'text-text-muted'}`}>
                 {i === 0 && <Home className="w-3 h-3 inline mr-1" />}
                 {crumb.label}
               </span>

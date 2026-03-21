@@ -22,14 +22,14 @@ import { Sparkline } from '../components/gene/ResearchPulseCard';
 const POPULAR_GENES = ['TP53', 'BRCA1', 'EGFR', 'CFTR', 'BRAF', 'APOE', 'HTT', 'HBB'];
 
 const DATA_SOURCES = [
-  { name: 'Ensembl', desc: 'Gene Structure & Transcripts', detail: 'Comprehensive genome annotations, transcript variants, and regulatory regions', icon: Dna, color: 'text-cyan' },
-  { name: 'ClinVar', desc: 'Clinical Variant Classifications', detail: 'Clinical significance of genomic variants linked to human diseases', icon: Activity, color: 'text-magenta' },
-  { name: 'gnomAD', desc: 'Population Allele Frequencies', detail: 'Allele frequencies across 140,000+ exomes and genomes worldwide', icon: Database, color: 'text-helix-green' },
-  { name: 'UniProt', desc: 'Protein Function & Domains', detail: 'Curated protein sequences, functional domains, and post-translational modifications', icon: FlaskConical, color: 'text-amber' },
-  { name: 'PubMed', desc: 'Research Publications', detail: 'Over 35 million biomedical literature citations and abstracts', icon: BookOpen, color: 'text-cyan' },
-  { name: 'AlphaFold', desc: '3D Protein Structures', detail: 'AI-predicted 3D structures for nearly every known human protein', icon: Layers, color: 'text-purple-400' },
-  { name: 'STRING', desc: 'Protein Interactions', detail: 'Known and predicted protein-protein interaction networks', icon: Network, color: 'text-helix-green' },
-  { name: 'Reactome', desc: 'Biological Pathways', detail: 'Curated molecular pathways and biological processes', icon: Sparkles, color: 'text-amber' },
+  { name: 'Ensembl', desc: 'Gene Structure & Transcripts', detail: 'Comprehensive genome annotations, transcript variants, and regulatory regions', icon: Dna, color: 'text-primary' },
+  { name: 'ClinVar', desc: 'Clinical Variant Classifications', detail: 'Clinical significance of genomic variants linked to human diseases', icon: Activity, color: 'text-danger' },
+  { name: 'gnomAD', desc: 'Population Allele Frequencies', detail: 'Allele frequencies across 140,000+ exomes and genomes worldwide', icon: Database, color: 'text-success' },
+  { name: 'UniProt', desc: 'Protein Function & Domains', detail: 'Curated protein sequences, functional domains, and post-translational modifications', icon: FlaskConical, color: 'text-warning' },
+  { name: 'PubMed', desc: 'Research Publications', detail: 'Over 35 million biomedical literature citations and abstracts', icon: BookOpen, color: 'text-primary' },
+  { name: 'AlphaFold', desc: '3D Protein Structures', detail: 'AI-predicted 3D structures for nearly every known human protein', icon: Layers, color: 'text-chart-5' },
+  { name: 'STRING', desc: 'Protein Interactions', detail: 'Known and predicted protein-protein interaction networks', icon: Network, color: 'text-success' },
+  { name: 'Reactome', desc: 'Biological Pathways', detail: 'Curated molecular pathways and biological processes', icon: Sparkles, color: 'text-warning' },
 ];
 
 const PLATFORM_STATS = [
@@ -106,7 +106,7 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="mb-4"
           >
-            <h1 className="text-5xl md:text-7xl font-heading font-bold tracking-tight text-text-primary">
+            <h1 className="text-5xl md:text-7xl font-heading font-bold tracking-tight text-text-heading">
               <DecodeText text="GeneXplor" speed={35} />
             </h1>
           </motion.div>
@@ -115,7 +115,7 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="text-cyan/80 font-mono text-sm tracking-[0.2em] uppercase mb-2"
+            className="text-primary font-mono text-sm tracking-[0.2em] uppercase mb-2"
           >
             Comprehensive Gene Intelligence Platform
           </motion.p>
@@ -183,7 +183,7 @@ export default function HomePage() {
                     transition={{ duration: 0.3, delay: 1.55 + i * 0.07 }}
                     className="flex items-center gap-2"
                   >
-                    <Icon className="w-4 h-4 text-cyan/60" />
+                    <Icon className="w-4 h-4 text-primary/60" />
                     <span className="text-xs font-mono text-text-secondary">{stat.label}</span>
                   </motion.div>
                 );
@@ -199,7 +199,7 @@ export default function HomePage() {
           >
             <Link
               to="/trending"
-              className="inline-flex items-center gap-1.5 text-xs font-body text-helix-green/70 hover:text-helix-green transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-body text-success/70 hover:text-success transition-colors"
             >
               <TrendingUp className="w-3.5 h-3.5" />
               Explore Trending Genes
@@ -219,7 +219,7 @@ export default function HomePage() {
           className="max-w-6xl mx-auto"
         >
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
+            <h2 className="text-2xl font-heading font-bold text-text-heading mb-2">
               Powered by World-Class Genomic Databases
             </h2>
             <p className="text-text-secondary font-body text-sm max-w-2xl mx-auto">
@@ -239,14 +239,14 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <div className="rounded-xl border border-cyan/[0.08] p-4 glass-bg backdrop-blur-xl h-full hover:border-cyan/20 transition-colors duration-300">
+                  <div className="rounded-xl border border-ocean-100 p-4 bg-white h-full hover:border-ocean-200 transition-colors duration-300">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className={`w-9 h-9 rounded-lg bg-space-700/50 flex items-center justify-center`}>
+                      <div className="w-9 h-9 rounded-lg bg-ocean-50 flex items-center justify-center">
                         <Icon className={`w-4.5 h-4.5 ${source.color} opacity-80`} />
                       </div>
                       <div>
-                        <p className="text-sm font-mono font-semibold text-text-primary">{source.name}</p>
-                        <p className="text-[10px] font-body text-cyan/60">{source.desc}</p>
+                        <p className="text-sm font-mono font-semibold text-text-heading">{source.name}</p>
+                        <p className="text-[10px] font-body text-primary/70">{source.desc}</p>
                       </div>
                     </div>
                     <p className="text-[11px] font-body text-text-muted leading-relaxed">{source.detail}</p>
@@ -266,17 +266,17 @@ export default function HomePage() {
           viewport={{ once: true }}
           className="max-w-6xl mx-auto"
         >
-          <h2 className="text-2xl font-heading font-bold text-text-primary text-center mb-8">
+          <h2 className="text-2xl font-heading font-bold text-text-heading text-center mb-8">
             What You Can Do
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1: Explore */}
             <GlassCard hover>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-cyan/10 flex items-center justify-center mx-auto mb-4">
-                  <Dna className="w-6 h-6 text-cyan" />
+                <div className="w-12 h-12 rounded-xl bg-primary-light flex items-center justify-center mx-auto mb-4">
+                  <Dna className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-heading font-semibold text-text-heading mb-2">
                   Explore Any Gene
                 </h3>
                 <p className="text-text-secondary text-sm font-body mb-4 leading-relaxed">
@@ -296,10 +296,10 @@ export default function HomePage() {
             {/* Card 2: Compare */}
             <GlassCard hover>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-magenta/10 flex items-center justify-center mx-auto mb-4">
-                  <GitCompare className="w-6 h-6 text-magenta" />
+                <div className="w-12 h-12 rounded-xl bg-danger-light flex items-center justify-center mx-auto mb-4">
+                  <GitCompare className="w-6 h-6 text-danger" />
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-heading font-semibold text-text-heading mb-2">
                   Compare Genes
                 </h3>
                 <p className="text-text-secondary text-sm font-body mb-4 leading-relaxed">
@@ -319,10 +319,10 @@ export default function HomePage() {
             {/* Card 3: Discover */}
             <GlassCard hover>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-helix-green/10 flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-6 h-6 text-helix-green" />
+                <div className="w-12 h-12 rounded-xl bg-success-light flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-6 h-6 text-success" />
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-heading font-semibold text-text-heading mb-2">
                   Discover Trends
                 </h3>
                 <p className="text-text-secondary text-sm font-body mb-4 leading-relaxed">
@@ -342,10 +342,10 @@ export default function HomePage() {
             {/* Card 4: Watchlist & Track */}
             <GlassCard hover>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-amber/10 flex items-center justify-center mx-auto mb-4">
-                  <Star className="w-6 h-6 text-amber" />
+                <div className="w-12 h-12 rounded-xl bg-warning-light flex items-center justify-center mx-auto mb-4">
+                  <Star className="w-6 h-6 text-warning" />
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-heading font-semibold text-text-heading mb-2">
                   Watchlist & Track
                 </h3>
                 <p className="text-text-secondary text-sm font-body mb-4 leading-relaxed">
@@ -364,10 +364,10 @@ export default function HomePage() {
             {/* Card 5: Generate Reports */}
             <GlassCard hover>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-purple-400/10 flex items-center justify-center mx-auto mb-4">
-                  <FileText className="w-6 h-6 text-purple-400" />
+                <div className="w-12 h-12 rounded-xl bg-[#F0EBF8] flex items-center justify-center mx-auto mb-4">
+                  <FileText className="w-6 h-6 text-chart-5" />
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-heading font-semibold text-text-heading mb-2">
                   Generate Reports
                 </h3>
                 <p className="text-text-secondary text-sm font-body mb-4 leading-relaxed">
@@ -384,10 +384,10 @@ export default function HomePage() {
             {/* Card 6: Visualize Impact */}
             <GlassCard hover>
               <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-magenta/10 flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-6 h-6 text-magenta" />
+                <div className="w-12 h-12 rounded-xl bg-danger-light flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-6 h-6 text-danger" />
                 </div>
-                <h3 className="text-lg font-heading font-semibold text-text-primary mb-2">
+                <h3 className="text-lg font-heading font-semibold text-text-heading mb-2">
                   Visualize Impact
                 </h3>
                 <p className="text-text-secondary text-sm font-body mb-4 leading-relaxed">
@@ -412,7 +412,7 @@ export default function HomePage() {
           viewport={{ once: true }}
           className="max-w-6xl mx-auto"
         >
-          <h2 className="text-2xl font-heading font-bold text-text-primary text-center mb-2">
+          <h2 className="text-2xl font-heading font-bold text-text-heading text-center mb-2">
             Platform Capabilities
           </h2>
           <p className="text-text-secondary font-body text-sm text-center mb-10 max-w-xl mx-auto">
@@ -431,10 +431,10 @@ export default function HomePage() {
                   transition={{ delay: i * 0.06 }}
                   className="flex items-center gap-3 group"
                 >
-                  <div className="w-7 h-7 rounded-lg bg-cyan/10 flex items-center justify-center shrink-0 group-hover:bg-cyan/20 transition-colors duration-200">
-                    <CheckCircle2 className="w-4 h-4 text-cyan" />
+                  <div className="w-7 h-7 rounded-lg bg-primary-light flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors duration-200">
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
                   </div>
-                  <span className="text-sm font-body text-text-secondary group-hover:text-text-primary transition-colors duration-200">
+                  <span className="text-sm font-body text-text-secondary group-hover:text-text-heading transition-colors duration-200">
                     {cap}
                   </span>
                 </motion.div>
@@ -453,11 +453,11 @@ export default function HomePage() {
                   {/* Header */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-cyan/10 flex items-center justify-center">
-                        <Dna className="w-5 h-5 text-cyan" />
+                      <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center">
+                        <Dna className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <p className="text-lg font-mono font-bold text-cyan">TP53</p>
+                        <p className="text-lg font-mono font-bold text-primary">TP53</p>
                         <p className="text-[11px] font-body text-text-muted">Tumor Protein P53</p>
                       </div>
                     </div>
@@ -466,44 +466,44 @@ export default function HomePage() {
 
                   {/* Mini stats grid */}
                   <div className="grid grid-cols-3 gap-3 mb-4">
-                    <div className="rounded-lg bg-space-800/50 p-3 text-center">
-                      <p className="text-lg font-mono font-bold text-cyan">1,247</p>
+                    <div className="rounded-lg bg-ocean-50 p-3 text-center">
+                      <p className="text-lg font-mono font-bold text-primary">1,247</p>
                       <p className="text-[10px] font-body text-text-muted">ClinVar Variants</p>
                     </div>
-                    <div className="rounded-lg bg-space-800/50 p-3 text-center">
-                      <p className="text-lg font-mono font-bold text-magenta">393</p>
+                    <div className="rounded-lg bg-ocean-50 p-3 text-center">
+                      <p className="text-lg font-mono font-bold text-danger">393</p>
                       <p className="text-[10px] font-body text-text-muted">Amino Acids</p>
                     </div>
-                    <div className="rounded-lg bg-space-800/50 p-3 text-center">
-                      <p className="text-lg font-mono font-bold text-helix-green">12.4k</p>
+                    <div className="rounded-lg bg-ocean-50 p-3 text-center">
+                      <p className="text-lg font-mono font-bold text-success">12.4k</p>
                       <p className="text-[10px] font-body text-text-muted">Publications</p>
                     </div>
                   </div>
 
                   {/* Mini pathway indicators */}
                   <div className="flex flex-wrap gap-1.5 mb-3">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber/10 text-amber border border-amber/20">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-warning-light text-warning border border-ocean-200">
                       Cell Cycle
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-magenta/10 text-magenta border border-magenta/20">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-danger-light text-danger border border-ocean-200">
                       Apoptosis
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan/10 text-cyan border border-cyan/20">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-primary-light text-primary border border-ocean-200">
                       DNA Repair
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-helix-green/10 text-helix-green border border-helix-green/20">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-success-light text-success border border-ocean-200">
                       p53 Signaling
                     </span>
                   </div>
 
                   {/* Bottom bar */}
-                  <div className="flex items-center justify-between pt-3 border-t border-space-500/20">
+                  <div className="flex items-center justify-between pt-3 border-t border-ocean-100">
                     <div className="flex items-center gap-1.5">
-                      <Shield className="w-3.5 h-3.5 text-helix-green" />
+                      <Shield className="w-3.5 h-3.5 text-success" />
                       <span className="text-[10px] font-body text-text-muted">AlphaFold structure available</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Activity className="w-3.5 h-3.5 text-cyan/50" />
+                      <Activity className="w-3.5 h-3.5 text-text-muted" />
                       <span className="text-[10px] font-mono text-text-muted">Chr 17p13.1</span>
                     </div>
                   </div>
@@ -524,13 +524,13 @@ export default function HomePage() {
             className="max-w-6xl mx-auto"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-heading font-bold text-text-primary flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-helix-green" />
+              <h2 className="text-xl font-heading font-bold text-text-heading flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-success" />
                 Trending in Research
               </h2>
               <Link
                 to="/trending"
-                className="text-xs font-body text-cyan hover:text-cyan-dim transition-colors flex items-center gap-1"
+                className="text-xs font-body text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
               >
                 View All <ArrowRight className="w-3 h-3" />
               </Link>
@@ -551,7 +551,7 @@ export default function HomePage() {
                       onClick={() => doSearch(gene.gene_symbol)}
                       className="w-full text-left bg-transparent border-none cursor-pointer"
                     >
-                      <p className="text-lg font-mono font-bold text-cyan mb-1">{gene.gene_symbol}</p>
+                      <p className="text-lg font-mono font-bold text-primary mb-1">{gene.gene_symbol}</p>
                       <GlowBadge
                         color={gene.trend_direction === 'rising' ? 'green' : gene.trend_direction === 'declining' ? 'magenta' : 'amber'}
                         className="mb-2"
@@ -586,7 +586,7 @@ export default function HomePage() {
             className="max-w-6xl mx-auto"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-heading font-bold text-text-primary flex items-center gap-2">
+              <h2 className="text-xl font-heading font-bold text-text-heading flex items-center gap-2">
                 <Clock className="w-5 h-5 text-text-muted" />
                 Recently Explored
               </h2>
@@ -618,13 +618,13 @@ export default function HomePage() {
             className="max-w-6xl mx-auto"
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-heading font-bold text-text-primary flex items-center gap-2">
-                <Star className="w-5 h-5 text-amber fill-amber" />
+              <h2 className="text-xl font-heading font-bold text-text-heading flex items-center gap-2">
+                <Star className="w-5 h-5 fill-warning text-warning" />
                 Your Watchlist
               </h2>
               <Link
                 to="/watchlist"
-                className="text-xs font-body text-amber/70 hover:text-amber transition-colors flex items-center gap-1"
+                className="text-xs font-body text-warning/70 hover:text-warning transition-colors flex items-center gap-1"
               >
                 View All ({watchlist.length}) <ArrowRight className="w-3 h-3" />
               </Link>
@@ -632,7 +632,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-2">
               {watchlist.slice(0, 4).map((entry) => (
                 <GlowBadge key={entry.gene_symbol} color="amber" onClick={() => doSearch(entry.gene_symbol)}>
-                  <Star className="w-3 h-3 fill-amber" />
+                  <Star className="w-3 h-3 fill-warning" />
                   {entry.gene_symbol}
                 </GlowBadge>
               ))}
@@ -649,61 +649,61 @@ export default function HomePage() {
           viewport={{ once: true }}
           className="max-w-5xl mx-auto"
         >
-          <h2 className="text-2xl font-heading font-bold text-text-primary text-center mb-10">
+          <h2 className="text-2xl font-heading font-bold text-text-heading text-center mb-10">
             How It Works
           </h2>
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-0">
             {/* Step 1: Search */}
             <div className="flex-1 text-center px-4">
-              <div className="w-14 h-14 rounded-2xl bg-cyan/10 flex items-center justify-center mx-auto mb-3">
-                <Search className="w-7 h-7 text-cyan" />
+              <div className="w-14 h-14 rounded-2xl bg-primary-light flex items-center justify-center mx-auto mb-3">
+                <Search className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="text-sm font-heading font-semibold text-text-primary mb-1">Search</h3>
+              <h3 className="text-sm font-heading font-semibold text-text-heading mb-1">Search</h3>
               <p className="text-text-muted text-xs font-body leading-relaxed">
                 Enter any human gene symbol. Autocomplete helps you find the right gene instantly.
               </p>
             </div>
 
             {/* Connector */}
-            <div className="hidden md:block w-12 h-px bg-gradient-to-r from-cyan/40 to-amber/40" />
-            <div className="md:hidden h-6 w-px bg-gradient-to-b from-cyan/40 to-amber/40" />
+            <div className="hidden md:block w-12 h-px bg-gradient-to-r from-primary/30 to-warning/30" />
+            <div className="md:hidden h-6 w-px bg-gradient-to-b from-primary/30 to-warning/30" />
 
             {/* Step 2: Aggregate */}
             <div className="flex-1 text-center px-4">
-              <div className="w-14 h-14 rounded-2xl bg-amber/10 flex items-center justify-center mx-auto mb-3">
-                <Network className="w-7 h-7 text-amber" />
+              <div className="w-14 h-14 rounded-2xl bg-warning-light flex items-center justify-center mx-auto mb-3">
+                <Network className="w-7 h-7 text-warning" />
               </div>
-              <h3 className="text-sm font-heading font-semibold text-text-primary mb-1">Aggregate</h3>
+              <h3 className="text-sm font-heading font-semibold text-text-heading mb-1">Aggregate</h3>
               <p className="text-text-muted text-xs font-body leading-relaxed">
                 We query 8 genomic databases simultaneously, collecting variants, proteins, pathways, and literature.
               </p>
             </div>
 
             {/* Connector */}
-            <div className="hidden md:block w-12 h-px bg-gradient-to-r from-amber/40 to-helix-green/40" />
-            <div className="md:hidden h-6 w-px bg-gradient-to-b from-amber/40 to-helix-green/40" />
+            <div className="hidden md:block w-12 h-px bg-gradient-to-r from-warning/30 to-success/30" />
+            <div className="md:hidden h-6 w-px bg-gradient-to-b from-warning/30 to-success/30" />
 
             {/* Step 3: Analyze */}
             <div className="flex-1 text-center px-4">
-              <div className="w-14 h-14 rounded-2xl bg-helix-green/10 flex items-center justify-center mx-auto mb-3">
-                <Microscope className="w-7 h-7 text-helix-green" />
+              <div className="w-14 h-14 rounded-2xl bg-success-light flex items-center justify-center mx-auto mb-3">
+                <Microscope className="w-7 h-7 text-success" />
               </div>
-              <h3 className="text-sm font-heading font-semibold text-text-primary mb-1">Analyze</h3>
+              <h3 className="text-sm font-heading font-semibold text-text-heading mb-1">Analyze</h3>
               <p className="text-text-muted text-xs font-body leading-relaxed">
                 Explore an interactive dashboard with 3D structures, variant tables, interaction networks, and research trends.
               </p>
             </div>
 
             {/* Connector */}
-            <div className="hidden md:block w-12 h-px bg-gradient-to-r from-helix-green/40 to-magenta/40" />
-            <div className="md:hidden h-6 w-px bg-gradient-to-b from-helix-green/40 to-magenta/40" />
+            <div className="hidden md:block w-12 h-px bg-gradient-to-r from-success/30 to-danger/30" />
+            <div className="md:hidden h-6 w-px bg-gradient-to-b from-success/30 to-danger/30" />
 
             {/* Step 4: Export */}
             <div className="flex-1 text-center px-4">
-              <div className="w-14 h-14 rounded-2xl bg-magenta/10 flex items-center justify-center mx-auto mb-3">
-                <FileText className="w-7 h-7 text-magenta" />
+              <div className="w-14 h-14 rounded-2xl bg-danger-light flex items-center justify-center mx-auto mb-3">
+                <FileText className="w-7 h-7 text-danger" />
               </div>
-              <h3 className="text-sm font-heading font-semibold text-text-primary mb-1">Export</h3>
+              <h3 className="text-sm font-heading font-semibold text-text-heading mb-1">Export</h3>
               <p className="text-text-muted text-xs font-body leading-relaxed">
                 Generate ACMG clinical reports, export data as PDF, JSON, or Markdown, and share findings with your team.
               </p>

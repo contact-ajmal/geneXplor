@@ -249,10 +249,10 @@ export default function InteractionNetwork({
         ctx.moveTo(src.x, src.y);
         ctx.lineTo(tgt.x, tgt.y);
         ctx.strokeStyle = isHovered
-          ? '#00d4ff'
+          ? '#1B4965'
           : hasExperimental
-            ? `rgba(0, 212, 255, ${0.15 + link.edge.combined_score * 0.35})`
-            : `rgba(148, 163, 184, ${0.1 + link.edge.combined_score * 0.2})`;
+            ? `rgba(27, 73, 101, ${0.15 + link.edge.combined_score * 0.35})`
+            : `rgba(123, 135, 148, ${0.1 + link.edge.combined_score * 0.2})`;
         ctx.lineWidth = isHovered ? lineWidth + 1 : lineWidth;
 
         if (!hasExperimental) {
@@ -272,7 +272,7 @@ export default function InteractionNetwork({
           ? 20
           : 10 + Math.min(node.interactionCount, 10) * 1;
 
-        // Glow for center node
+        // Subtle highlight for center node
         if (node.isCenter) {
           ctx.beginPath();
           ctx.arc(node.x, node.y, radius + 8, 0, Math.PI * 2);
@@ -284,8 +284,8 @@ export default function InteractionNetwork({
             node.y,
             radius + 8,
           );
-          gradient.addColorStop(0, 'rgba(0, 212, 255, 0.3)');
-          gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+          gradient.addColorStop(0, 'rgba(27, 73, 101, 0.2)');
+          gradient.addColorStop(1, 'rgba(27, 73, 101, 0)');
           ctx.fillStyle = gradient;
           ctx.fill();
         }
@@ -295,7 +295,7 @@ export default function InteractionNetwork({
         ctx.arc(node.x, node.y, isHovered ? radius + 2 : radius, 0, Math.PI * 2);
 
         if (node.isCenter) {
-          ctx.fillStyle = '#00d4ff';
+          ctx.fillStyle = '#1B4965';
         } else {
           // Color by score — find the max score edge to this node
           const maxScore = links
@@ -307,20 +307,20 @@ export default function InteractionNetwork({
             .reduce((max, l) => Math.max(max, l.edge.combined_score), 0);
 
           const t = (maxScore - 0.4) / 0.6; // normalize 0.4-1.0 to 0-1
-          const r = Math.round(20 + (1 - t) * 128);
-          const g = Math.round(27 + t * 185);
-          const b = Math.round(45 + t * 210);
-          ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+          const r = Math.round(82 + (1 - t) * 100);
+          const g = Math.round(148 + t * 10);
+          const b = Math.round(196 + (1 - t) * (-100));
+          ctx.fillStyle = `rgb(${Math.min(255, Math.max(0, r))}, ${Math.min(255, Math.max(0, g))}, ${Math.min(255, Math.max(0, b))})`;
         }
         ctx.fill();
         ctx.strokeStyle = isHovered
-          ? '#00d4ff'
-          : 'rgba(0, 212, 255, 0.3)';
+          ? '#1B4965'
+          : 'rgba(27, 73, 101, 0.3)';
         ctx.lineWidth = isHovered ? 2 : 1;
         ctx.stroke();
 
         // Label
-        ctx.fillStyle = node.isCenter ? '#ffffff' : '#e2e8f0';
+        ctx.fillStyle = node.isCenter ? '#FFFFFF' : '#334E68';
         ctx.font = `${node.isCenter ? 'bold ' : ''}${node.isCenter ? 11 : 9}px "JetBrains Mono", monospace`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -419,12 +419,12 @@ export default function InteractionNetwork({
           y: screenY,
           content: (
             <div className="text-xs">
-              <p className="font-mono text-cyan font-semibold text-sm mb-1">
+              <p className="font-mono text-primary font-semibold text-sm mb-1">
                 {node.id}
               </p>
               {!node.isCenter && maxEdge && (
                 <p className="text-text-secondary">
-                  Score: <span className="font-mono text-cyan">{maxEdge.edge.combined_score.toFixed(3)}</span>
+                  Score: <span className="font-mono text-primary">{maxEdge.edge.combined_score.toFixed(3)}</span>
                 </p>
               )}
               <p className="text-text-secondary">
@@ -455,7 +455,7 @@ export default function InteractionNetwork({
           y: screenY,
           content: (
             <div className="text-xs">
-              <p className="font-mono text-cyan font-semibold mb-1">
+              <p className="font-mono text-primary font-semibold mb-1">
                 {e.gene_a} — {e.gene_b}
               </p>
               <p>Combined: <span className="font-mono">{e.combined_score.toFixed(3)}</span></p>
@@ -596,15 +596,15 @@ export default function InteractionNetwork({
   if (interactions.interactions.length === 0) {
     return (
       <GlassCard delay={delay}>
-        <h2 className="text-sm font-heading font-semibold text-text-primary mb-4 uppercase tracking-wider flex items-center gap-2">
-          <Network className="w-4 h-4 text-cyan" />
+        <h2 className="text-sm font-heading font-semibold text-text-heading mb-4 uppercase tracking-wider flex items-center gap-2">
+          <Network className="w-4 h-4 text-primary" />
           Gene Interaction Network
         </h2>
         <div className="text-center py-12">
           <Network className="w-12 h-12 text-text-muted mx-auto mb-3 opacity-40" />
           <p className="text-text-secondary text-sm font-body mb-1">
             No high-confidence interactions found for{' '}
-            <span className="font-mono text-cyan">{geneSymbol}</span> in STRING DB
+            <span className="font-mono text-primary">{geneSymbol}</span> in STRING DB
           </p>
           <p className="text-text-muted text-xs font-body mb-3">
             Try lowering the confidence threshold
@@ -613,7 +613,7 @@ export default function InteractionNetwork({
             href={`https://string-db.org/network/${geneSymbol}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan/10 border border-cyan/20 text-cyan text-sm font-body hover:bg-cyan/20 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-light border border-primary/20 text-primary text-sm font-body hover:bg-primary-light transition-colors"
           >
             View on STRING DB
             <ExternalLink className="w-3.5 h-3.5" />
@@ -628,8 +628,8 @@ export default function InteractionNetwork({
       {/* Header */}
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
-          <h2 className="text-sm font-heading font-semibold text-text-primary uppercase tracking-wider flex items-center gap-2">
-            <Network className="w-4 h-4 text-cyan" />
+          <h2 className="text-sm font-heading font-semibold text-text-heading uppercase tracking-wider flex items-center gap-2">
+            <Network className="w-4 h-4 text-primary" />
             Gene Interaction Network
           </h2>
           <p className="text-text-muted text-xs font-body mt-0.5">
@@ -645,7 +645,7 @@ export default function InteractionNetwork({
             href={`https://string-db.org/network/${geneSymbol}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text-muted hover:text-cyan transition-colors"
+            className="text-text-muted hover:text-primary transition-colors"
             title="View on STRING DB"
           >
             <ExternalLink className="w-3.5 h-3.5" />
@@ -654,7 +654,7 @@ export default function InteractionNetwork({
       </div>
 
       {/* Controls */}
-      <div className="flex flex-wrap items-center gap-4 mb-3 pb-3 border-b border-space-600/20">
+      <div className="flex flex-wrap items-center gap-4 mb-3 pb-3 border-b border-ocean-100">
         {/* Threshold slider */}
         <div className="flex items-center gap-2">
           <label className="text-text-muted text-xs font-body whitespace-nowrap">
@@ -667,9 +667,9 @@ export default function InteractionNetwork({
             step={0.01}
             value={threshold}
             onChange={(e) => setThreshold(parseFloat(e.target.value))}
-            className="w-24 accent-cyan h-1"
+            className="w-24 accent-[#1B4965] h-1"
           />
-          <span className="font-mono text-cyan text-xs w-8">
+          <span className="font-mono text-primary text-xs w-8">
             {threshold.toFixed(2)}
           </span>
         </div>
@@ -683,8 +683,8 @@ export default function InteractionNetwork({
               onClick={() => toggleEvidence(key)}
               className={`px-2 py-0.5 rounded text-[10px] font-body border transition-all flex items-center gap-1 ${
                 evidenceFilters.has(key)
-                  ? 'bg-cyan/15 border-cyan/30 text-cyan'
-                  : 'bg-space-800/50 border-space-600/30 text-text-muted hover:border-space-600/50'
+                  ? 'bg-primary-light border-primary/30 text-primary'
+                  : 'bg-ocean-50 border-ocean-100 text-text-muted hover:border-ocean-100'
               }`}
             >
               <Icon className="w-2.5 h-2.5" />
@@ -701,8 +701,8 @@ export default function InteractionNetwork({
               onClick={() => setLayout(l)}
               className={`px-2 py-0.5 rounded text-[10px] font-body border transition-all capitalize ${
                 layout === l
-                  ? 'bg-cyan/15 border-cyan/30 text-cyan'
-                  : 'bg-space-800/50 border-space-600/30 text-text-muted hover:border-space-600/50'
+                  ? 'bg-primary-light border-primary/30 text-primary'
+                  : 'bg-ocean-50 border-ocean-100 text-text-muted hover:border-ocean-100'
               }`}
             >
               {l}
@@ -713,7 +713,7 @@ export default function InteractionNetwork({
         {/* Reset */}
         <button
           onClick={handleReset}
-          className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-body border border-space-600/30 text-text-muted hover:border-cyan/30 hover:text-cyan transition-all bg-space-800/50"
+          className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-body border border-ocean-100 text-text-muted hover:border-primary/30 hover:text-primary transition-all bg-ocean-50"
         >
           <RotateCcw className="w-2.5 h-2.5" />
           Reset
@@ -721,7 +721,7 @@ export default function InteractionNetwork({
       </div>
 
       {/* Canvas */}
-      <div ref={containerRef} className="relative rounded-xl overflow-hidden bg-space-900/50">
+      <div ref={containerRef} className="relative rounded-xl overflow-hidden bg-ocean-50">
         <canvas
           ref={canvasRef}
           style={{ width: '100%', height: '500px' }}
@@ -736,7 +736,7 @@ export default function InteractionNetwork({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.1 }}
-              className="absolute pointer-events-none z-10 px-3 py-2 rounded-lg bg-space-700/95 border border-cyan/20 backdrop-blur-sm shadow-lg"
+              className="absolute pointer-events-none z-10 px-3 py-2 rounded-lg bg-white border border-[#D9E2EC] shadow-lg"
               style={{
                 left: Math.min(tooltipState.x + 12, (containerRef.current?.clientWidth || 600) - 180),
                 top: tooltipState.y - 10,
@@ -758,11 +758,11 @@ export default function InteractionNetwork({
         {/* Legend */}
         <div className="absolute top-2 right-2 flex flex-col gap-1 text-[10px] text-text-muted font-body">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-cyan inline-block" />
+            <span className="w-2 h-2 rounded-full bg-primary inline-block" />
             Center gene
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-6 h-[2px] bg-cyan/50 inline-block" />
+            <span className="w-6 h-[2px] bg-primary/50 inline-block" />
             Validated
           </div>
           <div className="flex items-center gap-1.5">
@@ -770,7 +770,7 @@ export default function InteractionNetwork({
               className="w-6 h-[2px] inline-block"
               style={{
                 background:
-                  'repeating-linear-gradient(90deg, rgba(148,163,184,0.4) 0 3px, transparent 3px 6px)',
+                  'repeating-linear-gradient(90deg, rgba(123,135,148,0.4) 0 3px, transparent 3px 6px)',
               }}
             />
             Text-only
@@ -783,7 +783,7 @@ export default function InteractionNetwork({
         <div className="mt-4">
           <button
             onClick={() => setShowEnrichment(!showEnrichment)}
-            className="flex items-center gap-2 text-sm font-heading font-semibold text-text-primary uppercase tracking-wider hover:text-cyan transition-colors"
+            className="flex items-center gap-2 text-sm font-heading font-semibold text-text-heading uppercase tracking-wider hover:text-primary transition-colors"
           >
             Functional Enrichment
             {showEnrichment ? (
@@ -816,8 +816,8 @@ export default function InteractionNetwork({
                       onClick={() => setEnrichmentTab(key)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-body border transition-all ${
                         enrichmentTab === key
-                          ? 'bg-cyan/15 border-cyan/30 text-cyan'
-                          : 'bg-space-800/50 border-space-600/30 text-text-muted hover:border-space-600/50'
+                          ? 'bg-primary-light border-primary/30 text-primary'
+                          : 'bg-ocean-50 border-ocean-100 text-text-muted hover:border-ocean-100'
                       }`}
                     >
                       {label}
@@ -841,10 +841,10 @@ export default function InteractionNetwork({
                       return (
                         <div
                           key={term.term + i}
-                          className="rounded-lg bg-space-800/40 border border-space-600/20 p-2.5 flex items-center gap-3"
+                          className="rounded-lg bg-ocean-50 border border-ocean-100 p-2.5 flex items-center gap-3"
                         >
                           <div className="flex-1 min-w-0">
-                            <p className="text-text-primary text-xs font-body truncate">
+                            <p className="text-text-heading text-xs font-body truncate">
                               {term.description}
                             </p>
                             <p className="text-text-muted text-[10px] font-mono">
@@ -852,17 +852,17 @@ export default function InteractionNetwork({
                             </p>
                           </div>
                           <div className="w-24 shrink-0">
-                            <div className="h-1.5 rounded-full bg-space-700 overflow-hidden">
+                            <div className="h-1.5 rounded-full bg-ocean-50 overflow-hidden border border-ocean-100">
                               <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${barWidth}%` }}
                                 transition={{ duration: 0.5, delay: i * 0.05 }}
                                 className={`h-full rounded-full ${
                                   enrichmentTab === 'BP'
-                                    ? 'bg-cyan'
+                                    ? 'bg-primary'
                                     : enrichmentTab === 'MF'
-                                      ? 'bg-helix-green'
-                                      : 'bg-amber'
+                                      ? 'bg-success'
+                                      : 'bg-warning'
                                 }`}
                               />
                             </div>

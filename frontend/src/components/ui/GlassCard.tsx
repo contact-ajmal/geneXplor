@@ -11,13 +11,14 @@ interface GlassCardProps {
 export default function GlassCard({ children, className = '', hover = true, delay = 0 }: GlassCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay }}
+      transition={{ duration: 0.3, delay }}
       className={`
-        rounded-2xl border border-cyan/[0.08] p-5
-        glass-bg backdrop-blur-xl
-        ${hover ? 'hover:border-cyan/20 hover:shadow-[0_0_30px_rgba(0,212,255,0.06)] transition-all duration-300' : ''}
+        rounded-xl border border-ocean-100 p-5
+        bg-white
+        shadow-[0_1px_3px_rgba(16,42,67,0.04),0_1px_2px_rgba(16,42,67,0.06)]
+        ${hover ? 'hover:shadow-[0_4px_12px_rgba(16,42,67,0.08)] hover:border-ocean-200 transition-all duration-200' : ''}
         ${className}
       `}
     >

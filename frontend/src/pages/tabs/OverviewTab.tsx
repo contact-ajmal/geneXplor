@@ -75,31 +75,31 @@ export default function OverviewTab() {
         >
           <GlassCard hover className="h-full">
             <div className="flex items-center gap-2 mb-3">
-              <Microscope className="w-4 h-4 text-cyan" />
+              <Microscope className="w-4 h-4 text-primary" />
               <span className="text-xs font-heading font-semibold text-text-muted uppercase tracking-wider">
                 Variants
               </span>
             </div>
-            <p className="text-3xl font-mono font-bold text-text-primary mb-2">
+            <p className="text-3xl font-mono font-bold text-text-heading mb-2">
               <CountUp end={variantCount} duration={800} />
             </p>
             {sigBreakdown && variantCount > 0 && (
               <div className="space-y-1 mb-3">
                 {sigBreakdown.pathogenic > 0 && (
                   <div className="flex items-center gap-2 text-[11px]">
-                    <span className="w-2 h-2 rounded-full bg-magenta" />
+                    <span className="w-2 h-2 rounded-full bg-danger" />
                     <span className="text-text-muted font-body">Pathogenic: {sigBreakdown.pathogenic}</span>
                   </div>
                 )}
                 {sigBreakdown.vus > 0 && (
                   <div className="flex items-center gap-2 text-[11px]">
-                    <span className="w-2 h-2 rounded-full bg-amber" />
+                    <span className="w-2 h-2 rounded-full bg-warning" />
                     <span className="text-text-muted font-body">VUS: {sigBreakdown.vus}</span>
                   </div>
                 )}
                 {sigBreakdown.benign > 0 && (
                   <div className="flex items-center gap-2 text-[11px]">
-                    <span className="w-2 h-2 rounded-full bg-helix-green" />
+                    <span className="w-2 h-2 rounded-full bg-success" />
                     <span className="text-text-muted font-body">Benign: {sigBreakdown.benign}</span>
                   </div>
                 )}
@@ -107,7 +107,7 @@ export default function OverviewTab() {
             )}
             <button
               onClick={() => navigate(`/gene/${symbol}/variants`)}
-              className="flex items-center gap-1 text-xs font-body text-cyan hover:text-cyan-dim transition-colors cursor-pointer bg-transparent border-none mt-auto"
+              className="flex items-center gap-1 text-xs font-body text-primary hover:text-primary transition-colors cursor-pointer bg-transparent border-none mt-auto"
             >
               Explore Variants <ArrowRight className="w-3 h-3" />
             </button>
@@ -122,12 +122,12 @@ export default function OverviewTab() {
         >
           <GlassCard hover className="h-full">
             <div className="flex items-center gap-2 mb-3">
-              <Target className="w-4 h-4 text-magenta" />
+              <Target className="w-4 h-4 text-danger" />
               <span className="text-xs font-heading font-semibold text-text-muted uppercase tracking-wider">
                 Diseases
               </span>
             </div>
-            <p className="text-3xl font-mono font-bold text-text-primary mb-2">
+            <p className="text-3xl font-mono font-bold text-text-heading mb-2">
               <CountUp end={diseaseCount} duration={800} />
             </p>
             {variants?.diseases && variants.diseases.length > 0 && (
@@ -141,7 +141,7 @@ export default function OverviewTab() {
             )}
             <button
               onClick={() => navigate(`/gene/${symbol}/diseases`)}
-              className="flex items-center gap-1 text-xs font-body text-cyan hover:text-cyan-dim transition-colors cursor-pointer bg-transparent border-none mt-auto"
+              className="flex items-center gap-1 text-xs font-body text-primary hover:text-primary transition-colors cursor-pointer bg-transparent border-none mt-auto"
             >
               View All Diseases <ArrowRight className="w-3 h-3" />
             </button>
@@ -156,18 +156,18 @@ export default function OverviewTab() {
         >
           <GlassCard hover className="h-full">
             <div className="flex items-center gap-2 mb-3">
-              <BookOpen className="w-4 h-4 text-helix-green" />
+              <BookOpen className="w-4 h-4 text-success" />
               <span className="text-xs font-heading font-semibold text-text-muted uppercase tracking-wider">
                 Research
               </span>
             </div>
-            <p className="text-3xl font-mono font-bold text-text-primary mb-2">
+            <p className="text-3xl font-mono font-bold text-text-heading mb-2">
               <CountUp end={pubCount} duration={800} />
             </p>
             <p className="text-[11px] font-body text-text-muted mb-3">publications found</p>
             <button
               onClick={() => navigate(`/gene/${symbol}/publications`)}
-              className="flex items-center gap-1 text-xs font-body text-cyan hover:text-cyan-dim transition-colors cursor-pointer bg-transparent border-none mt-auto"
+              className="flex items-center gap-1 text-xs font-body text-primary hover:text-primary transition-colors cursor-pointer bg-transparent border-none mt-auto"
             >
               View Publications <ArrowRight className="w-3 h-3" />
             </button>
@@ -182,12 +182,12 @@ export default function OverviewTab() {
         >
           <GlassCard hover className="h-full">
             <div className="flex items-center gap-2 mb-3">
-              <Route className="w-4 h-4 text-amber" />
+              <Route className="w-4 h-4 text-warning" />
               <span className="text-xs font-heading font-semibold text-text-muted uppercase tracking-wider">
                 Pathways
               </span>
             </div>
-            <p className="text-3xl font-mono font-bold text-text-primary mb-2">
+            <p className="text-3xl font-mono font-bold text-text-heading mb-2">
               <CountUp end={pathwayCount} duration={800} />
             </p>
             {pathways?.pathways && pathways.pathways.length > 0 && (
@@ -201,7 +201,7 @@ export default function OverviewTab() {
             )}
             <button
               onClick={() => navigate(`/gene/${symbol}/pathways`)}
-              className="flex items-center gap-1 text-xs font-body text-cyan hover:text-cyan-dim transition-colors cursor-pointer bg-transparent border-none mt-auto"
+              className="flex items-center gap-1 text-xs font-body text-primary hover:text-primary transition-colors cursor-pointer bg-transparent border-none mt-auto"
             >
               View Pathways <ArrowRight className="w-3 h-3" />
             </button>
@@ -218,7 +218,7 @@ export default function OverviewTab() {
         >
           <GlassCard hover className="h-full">
             <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="w-4 h-4 text-amber" />
+              <AlertTriangle className="w-4 h-4 text-warning" />
               <span className="text-xs font-heading font-semibold text-text-muted uppercase tracking-wider">
                 Reconciliation Score
               </span>
@@ -238,18 +238,18 @@ export default function OverviewTab() {
                       <path
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                         fill="none"
-                        stroke={reconciliation.summary.concordance_score >= 0.8 ? '#00ff88' : reconciliation.summary.concordance_score >= 0.5 ? '#ffaa00' : '#ff3366'}
+                        stroke={reconciliation.summary.concordance_score >= 0.8 ? '#2B9F78' : reconciliation.summary.concordance_score >= 0.5 ? '#D4A843' : '#D64045'}
                         strokeWidth="3"
                         strokeDasharray={`${reconciliation.summary.concordance_score * 100}, 100`}
                         strokeLinecap="round"
                       />
                     </svg>
-                    <span className="absolute inset-0 flex items-center justify-center text-sm font-mono font-bold text-text-primary">
+                    <span className="absolute inset-0 flex items-center justify-center text-sm font-mono font-bold text-text-heading">
                       {Math.round(reconciliation.summary.concordance_score * 100)}%
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-mono text-text-primary">
+                    <p className="text-sm font-mono text-text-heading">
                       {conflictCount} conflict{conflictCount !== 1 ? 's' : ''}
                     </p>
                     <p className="text-[11px] font-body text-text-muted">
@@ -259,7 +259,7 @@ export default function OverviewTab() {
                 </div>
                 <button
                   onClick={() => navigate(`/gene/${symbol}/reconciliation`)}
-                  className="flex items-center gap-1 text-xs font-body text-cyan hover:text-cyan-dim transition-colors cursor-pointer bg-transparent border-none"
+                  className="flex items-center gap-1 text-xs font-body text-primary hover:text-primary transition-colors cursor-pointer bg-transparent border-none"
                 >
                   View Details <ArrowRight className="w-3 h-3" />
                 </button>
@@ -277,12 +277,12 @@ export default function OverviewTab() {
         >
           <GlassCard hover className="h-full">
             <div className="flex items-center gap-2 mb-3">
-              <Network className="w-4 h-4 text-cyan" />
+              <Network className="w-4 h-4 text-primary" />
               <span className="text-xs font-heading font-semibold text-text-muted uppercase tracking-wider">
                 Interactions
               </span>
             </div>
-            <p className="text-3xl font-mono font-bold text-text-primary mb-2">
+            <p className="text-3xl font-mono font-bold text-text-heading mb-2">
               <CountUp end={interactionCount} duration={800} />
             </p>
             <p className="text-[11px] font-body text-text-muted mb-3">
@@ -290,7 +290,7 @@ export default function OverviewTab() {
             </p>
             <button
               onClick={() => navigate(`/gene/${symbol}/interactions`)}
-              className="flex items-center gap-1 text-xs font-body text-cyan hover:text-cyan-dim transition-colors cursor-pointer bg-transparent border-none"
+              className="flex items-center gap-1 text-xs font-body text-primary hover:text-primary transition-colors cursor-pointer bg-transparent border-none"
             >
               View Network <ArrowRight className="w-3 h-3" />
             </button>
