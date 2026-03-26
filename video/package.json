@@ -1,0 +1,26 @@
+{
+  "name": "genexplor-demo-video",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts GeneXplorDemo out/demo.mp4",
+    "preview": "remotion preview src/index.ts",
+    "capture": "node scripts/capture-screenshots.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.438",
+    "@remotion/cli": "^4.0.438",
+    "@remotion/paths": "^4.0.438",
+    "@remotion/transitions": "^4.0.438",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remotion": "^4.0.438"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "playwright": "^1.58.2",
+    "typescript": "^6.0.2"
+  }
+}

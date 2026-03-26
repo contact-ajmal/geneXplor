@@ -1,0 +1,330 @@
+export interface SceneConfig {
+  id: string;
+  title: string;
+  subtitle: string;
+  screenshotFile: string;
+  durationInSeconds: number;
+  zoomTarget?: { x: number; y: number; scale: number };
+  callouts?: Array<{
+    text: string;
+    x: number;
+    y: number;
+    delaySeconds: number;
+  }>;
+  details?: string[];
+  tags?: string[];
+  panDirection?: 'up' | 'down' | 'none';
+  /** Audio narration file (without extension) */
+  audioFile?: string;
+}
+
+// Durations = narration audio length + 2.5s (0.5s start delay + 2s breathing room)
+export const SCENES: SceneConfig[] = [
+  {
+    id: 'intro',
+    title: '',
+    subtitle: '',
+    screenshotFile: 'homepage-hero.png',
+    durationInSeconds: 15,
+    audioFile: 'intro',
+  },
+  {
+    id: 'homepage',
+    title: 'Home Page',
+    subtitle: 'Start with any gene, disease, variant, or location',
+    screenshotFile: 'homepage-hero.png',
+    durationInSeconds: 17.5,
+    panDirection: 'down',
+    tags: ['Genes', 'Diseases', 'Variants', 'Locations'],
+    audioFile: 'homepage',
+    details: [
+      'Search by gene name (BRCA1), disease (breast cancer), or variant ID',
+      'Instant suggestions as you type — no need to know exact names',
+      'One click takes you to a full gene dashboard',
+      'Quick access buttons for commonly researched genes',
+    ],
+  },
+  {
+    id: 'homepage-sources',
+    title: '8 Databases, One Search',
+    subtitle: 'No more switching between Ensembl, ClinVar, gnomAD, and UniProt',
+    screenshotFile: 'homepage-full.png',
+    durationInSeconds: 30.5,
+    tags: ['Ensembl', 'ClinVar', 'gnomAD', 'UniProt', 'PubMed', 'AlphaFold'],
+    audioFile: 'homepage-sources',
+    details: [
+      'Gene structure and location from Ensembl',
+      'Clinical variant classifications from ClinVar',
+      'Population frequency data from gnomAD',
+      'Protein sequences and function from UniProt',
+      'Latest research papers from PubMed',
+      '3D protein structures from AlphaFold',
+    ],
+  },
+  {
+    id: 'smart-search',
+    title: 'Smart Search',
+    subtitle: 'Find any gene in seconds — even if you only know the disease',
+    screenshotFile: 'search-autocomplete.png',
+    durationInSeconds: 20.5,
+    zoomTarget: { x: 50, y: 35, scale: 1.6 },
+    audioFile: 'smart-search',
+    details: [
+      'Don\'t know the gene symbol? Search by disease name instead',
+      'Suggestions appear instantly as you type',
+      'Aliases and alternate names are included',
+      'Recent searches saved for quick access',
+    ],
+  },
+  {
+    id: 'search-results',
+    title: 'Search Results',
+    subtitle: 'See exactly why each gene matched your query',
+    screenshotFile: 'search-results.png',
+    durationInSeconds: 13,
+    audioFile: 'search-results',
+    details: [
+      'Each result shows gene name, location, and type',
+      'Match reason tags tell you why it appeared',
+      'Spelling suggestions if you made a typo',
+    ],
+  },
+  {
+    id: 'dashboard-overview',
+    title: 'Gene Dashboard — BRCA1',
+    subtitle: 'Everything known about a gene — in one place',
+    screenshotFile: 'dashboard-overview.png',
+    durationInSeconds: 21,
+    tags: ['50 Variants', '2 Diseases', '31K+ Papers', '10 Pathways'],
+    audioFile: 'dashboard-overview',
+    details: [
+      'See variant count, disease links, and publication volume instantly',
+      'AI-generated plain-language summary of what the gene does',
+      'Direct links to original databases for verification',
+      'Add to your personal watchlist with one click',
+    ],
+  },
+  {
+    id: 'variants',
+    title: 'Variant Explorer',
+    subtitle: 'Browse every known variant — filter to what matters',
+    screenshotFile: 'variants-tab.png',
+    durationInSeconds: 19,
+    audioFile: 'variants',
+    details: [
+      'All ClinVar and gnomAD variants in one sortable table',
+      'Filter by clinical significance or consequence type',
+      'See allele frequency, linked conditions, and HGVS notation',
+      'Click a row to dive into variant details',
+    ],
+  },
+  {
+    id: 'variant-detail',
+    title: 'Variant Detail',
+    subtitle: 'Full clinical picture for any single variant',
+    screenshotFile: 'variant-detail-modal.png',
+    durationInSeconds: 17.5,
+    zoomTarget: { x: 50, y: 50, scale: 1.25 },
+    audioFile: 'variant-detail',
+    details: [
+      'Clinical significance, linked conditions, and review status',
+      'HGVS coding and protein notation for lab reports',
+      'How rare is it? Allele frequency with plain-language interpretation',
+      'Simulate its biological impact step by step',
+      'See how it distributes across world populations',
+    ],
+  },
+  {
+    id: 'variant-analytics',
+    title: 'Variant Analytics',
+    subtitle: 'Understand the variant landscape at a glance',
+    screenshotFile: 'variant-analytics.png',
+    durationInSeconds: 16,
+    audioFile: 'variant-analytics',
+  },
+  {
+    id: 'protein-3d',
+    title: '3D Protein Structure',
+    subtitle: 'See where variants land on the actual protein',
+    screenshotFile: 'protein-3d.png',
+    durationInSeconds: 21,
+    audioFile: 'protein-3d',
+    details: [
+      'AlphaFold-predicted 3D structure you can rotate and zoom',
+      'See which protein regions are well-predicted vs uncertain',
+      'Switch to variant view: pathogenic residues highlighted in red',
+      'Protein domain map shows functional regions (RING, BRCT, etc.)',
+      'Understand why a mutation in a specific domain matters',
+    ],
+  },
+  {
+    id: 'population-map',
+    title: 'Population Frequencies',
+    subtitle: 'How common is this variant across world populations?',
+    screenshotFile: 'population-map.png',
+    durationInSeconds: 17,
+    audioFile: 'population-map',
+    details: [
+      'World map showing variant frequency in 9 populations',
+      'Instantly see if a variant is population-specific',
+      'Useful for interpreting clinical significance in context',
+      'Switch between variants to compare distributions',
+    ],
+  },
+  {
+    id: 'interactions',
+    title: 'Interaction Network',
+    subtitle: 'Which proteins does this gene work with?',
+    screenshotFile: 'interactions.png',
+    durationInSeconds: 15.5,
+    audioFile: 'interactions',
+    details: [
+      'Visual network of protein-protein interactions',
+      'Filter by evidence strength',
+      'Click any partner protein to jump to its full dashboard',
+      'Discover related genes you may not have considered',
+    ],
+  },
+  {
+    id: 'pathways',
+    title: 'Biological Pathways',
+    subtitle: 'Which biological processes does this gene participate in?',
+    screenshotFile: 'pathways.png',
+    durationInSeconds: 15.5,
+    audioFile: 'pathways',
+    details: [
+      'See all known pathway memberships at a glance',
+      'BRCA1: DNA repair, cell cycle checkpoint, homologous recombination',
+      'Understand the biological context of the gene\'s function',
+    ],
+  },
+  {
+    id: 'timeline',
+    title: 'Discovery Timeline',
+    subtitle: 'When were variants discovered? Is research accelerating?',
+    screenshotFile: 'timeline.png',
+    durationInSeconds: 15,
+    audioFile: 'timeline',
+  },
+  {
+    id: 'publications',
+    title: 'Publications & Research Pulse',
+    subtitle: 'Is this gene getting more or less research attention?',
+    screenshotFile: 'publications.png',
+    durationInSeconds: 13,
+    audioFile: 'publications',
+  },
+  {
+    id: 'diseases',
+    title: 'Disease Associations',
+    subtitle: 'Which conditions are linked to this gene — and how strongly?',
+    screenshotFile: 'diseases.png',
+    durationInSeconds: 15,
+    audioFile: 'diseases',
+    details: [
+      'All ClinVar-linked diseases with variant counts',
+      'See how many pathogenic variants drive each association',
+      'BRCA1: breast cancer, ovarian cancer, Fanconi anemia',
+    ],
+  },
+  {
+    id: 'reconciliation',
+    title: 'Cross-Database Reconciliation',
+    subtitle: 'Do ClinVar and gnomAD agree? Find the conflicts.',
+    screenshotFile: 'reconciliation.png',
+    durationInSeconds: 19.5,
+    audioFile: 'reconciliation',
+    details: [
+      'Automatically flags variants where databases disagree',
+      'Example: classified as pathogenic but common in gnomAD',
+      'Concordance score tells you how consistent the data is',
+      'Helps prioritize which variants need closer review',
+    ],
+  },
+  {
+    id: 'simulator',
+    title: 'Variant Impact Simulator',
+    subtitle: 'Watch how a mutation flows from DNA to clinical outcome',
+    screenshotFile: 'simulator.png',
+    durationInSeconds: 19,
+    audioFile: 'simulator',
+    details: [
+      'Animated walkthrough of a variant\'s biological impact',
+      'See the mutated base, changed codon, and altered amino acid',
+      'Understand why a missense mutation disrupts protein function',
+      'Ends with clinical significance and linked diseases',
+    ],
+  },
+  {
+    id: 'report',
+    title: 'Export & Clinical Reports',
+    subtitle: 'Download everything — formatted for your workflow',
+    screenshotFile: 'report.png',
+    durationInSeconds: 22,
+    tags: ['PDF', 'CSV', 'JSON', 'Markdown'],
+    audioFile: 'report',
+    details: [
+      'Export variant data as CSV for spreadsheet analysis',
+      'Generate PDF reports with gene overview and variant summary',
+      'ACMG-formatted clinical reports — ready for lab use',
+      'Share a direct link with colleagues',
+    ],
+  },
+  {
+    id: 'gene-story',
+    title: 'Gene Story Mode',
+    subtitle: 'The same data — told as a readable, scrollable narrative',
+    screenshotFile: 'gene-story.png',
+    durationInSeconds: 19,
+    audioFile: 'gene-story',
+    details: [
+      'Perfect for students, patients, or non-specialist colleagues',
+      'Translates biotype, significance, and consequence into plain English',
+      'Embedded interactive charts and maps within the story',
+      'Share the story link for accessible gene education',
+    ],
+  },
+  {
+    id: 'compare',
+    title: 'Gene Comparison',
+    subtitle: 'How do two genes stack up? Side-by-side analysis.',
+    screenshotFile: 'compare.png',
+    durationInSeconds: 18,
+    audioFile: 'compare',
+    details: [
+      'Compare any two genes — variants, diseases, publications, protein',
+      'See which diseases overlap and which are unique',
+      'Useful for panel design and differential analysis',
+    ],
+  },
+  {
+    id: 'trending',
+    title: 'Trending Genes',
+    subtitle: 'Which genes are gaining research attention right now?',
+    screenshotFile: 'trending.png',
+    durationInSeconds: 14.5,
+    audioFile: 'trending',
+  },
+  {
+    id: 'watchlist',
+    title: 'Watchlist',
+    subtitle: 'Keep track of the genes that matter to your research',
+    screenshotFile: 'watchlist.png',
+    durationInSeconds: 15,
+    audioFile: 'watchlist',
+    details: [
+      'Save genes with notes like "check F508del status"',
+      'Tag genes by project: oncology, rare-disease, etc.',
+      'Switch between card, table, and comparison views',
+      'Export/import as JSON to share with your team',
+    ],
+  },
+  {
+    id: 'outro',
+    title: '',
+    subtitle: '',
+    screenshotFile: 'homepage-hero.png',
+    durationInSeconds: 20.5,
+    audioFile: 'outro',
+  },
+];
