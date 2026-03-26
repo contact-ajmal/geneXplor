@@ -10,3 +10,4 @@ __pycache__/
 .DS_Store
 .claude/
 video/out/
+geneXplor-web/
